@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="index.js"></script>    
+</head>
+<style>
+.mainview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  .mainview > *  {
+    flex: 0 0 auto;
+    margin: 4px 0;
+  }
+
+.childview sp-textfield, .childview sp-checkbox, .childview sp-detail {
+    flex: 1 1 auto;
+}
+.childview sp-button {
+    flex: 0 0 auto;
+}
+#divGroup {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+#columnGroup {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+</style>
+<body>
+  <div class="mainview">
+    <div class="childview">
+        <sp-heading style="font-size: medium;">Clipboard</sp-heading>
+        <sp-divider style="margin-bottom: 5px;"></sp-divider>
+        <sp-textfield id="copyinput" type="text" placeholder="Enter input text to copy"></sp-textfield>
+        <div id="divGroup">
+        <sp-action-button id="copyToClipboard" >Copy to Clipboard</sp-action-button>
+        <sp-action-button id="getFromClipboard">Get Content from Clipboard</sp-action-button>
+        </div>
+        <div id="columnGroup">
+        <sp-detail>Result:</sp-detail>
+        <sp-textfield id="contentresult"></sp-textfield>
+        </div>
+        
+    </div>
+    <div class="childview">
+        <sp-heading style="font-size: medium;">Network</sp-heading>
+        <sp-divider></sp-divider>
+        <sp-detail>Image from Web:</sp-detail>
+        <img src='https://source.unsplash.com/random' width="100" height="100">
+    </div>
+    <div class="childview">
+        <sp-heading style="font-size: medium;">Inter Plugin Communication</sp-heading >
+        <sp-divider style="margin-bottom: 5px;"></sp-divider>
+        <sp-textfield id="pluginInput" type="text" placeholder="Enter plugin id"></sp-textfield>
+        <sp-action-button id="showOtherPanel" >Show input Plugin panel</sp-action-button>
+    </div>
+</div>
+</body>
+</html>

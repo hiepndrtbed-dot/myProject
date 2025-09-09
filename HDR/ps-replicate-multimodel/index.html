@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Replicate Generator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Replicate Generator</h1>
+    <section class="settings">
+      <label>Replicate API Token
+        <input id="apiToken" type="password" placeholder="r8_... paste token" />
+      </label>
+      <details>
+        <summary>Models</summary>
+        <div id="modelsConfig"></div>
+        <button id="addModelBtn" class="secondary">+ Add Model</button>
+      </details>
+      <label>Prompt
+        <textarea id="prompt" rows="3" placeholder="Describe your edit/generation"></textarea>
+      </label>
+      <div class="row">
+        <label><input type="checkbox" id="respectSelection" checked /> Only selection (mask result)</label>
+      </div>
+      <div class="row">
+        <button id="runBtn">Run on Models</button>
+        <button id="rerunBtn" class="secondary" disabled>Re-run</button>
+      </div>
+      <div id="status"></div>
+    </section>
+
+    <section>
+      <h2>Results</h2>
+      <div id="resultsGrid" class="grid"></div>
+    </section>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="main.js" type="module"></script>
+</body>
+</html>
