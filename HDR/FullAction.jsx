@@ -25,7 +25,6 @@ if (status == true) {
 //processing
 function run() {
     // DIALOG
-    abc
     var dialog = new Window("dialog")
     dialog.text = "RUN ALL ACTION"
     dialog.orientation = "column";
