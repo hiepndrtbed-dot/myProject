@@ -11,7 +11,7 @@ try {
 
 }
 // checkSnapshot()
-try { doc.artLayers[0].visible = false; } catch (error) { }
+try { doc.artLayers[doc.artLayers.length - 4].visible = false; } catch (error) { }
 var layerDarken = doc.artLayers[doc.artLayers.length - 3]
 doc.activeLayer = layerDarken;
 loadSelectionChannel();
