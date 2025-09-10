@@ -87,3 +87,89 @@ function showOnly(layerName) {
 
 // Ví dụ: bật Option 1
 // showOnly("Option 1");
+// dialog1
+var dialog1 = new Window("dialog")
+dialog1.text = "RUN ALL ACTION"
+dialog1.orientation = "column";
+dialog1.alignChildren = ["center", "top"];
+dialog1.spacing = 10
+dialog1.margins = 10
+
+// dialog1.active = true;
+// GROUP1
+// ======
+var group1 = dialog1.add("group", undefined, { name: "group1" });
+group1.orientation = "column";
+group1.alignment = ["left", "center"];
+group1.spacing = 3;
+group1.margins = 0;
+
+//Merge Exposure
+var buttonMergeExposure = group1.add("button", undefined, undefined, { name: "Merge Exposure" });
+buttonMergeExposure.text = "Merge Exposure (2)";
+buttonMergeExposure.alignment = ["left", "center"];
+buttonMergeExposure.preferredSize.width = 170;
+buttonMergeExposure.tabStop = false; // <- không cho focus
+
+
+//Align and merge Exposure
+var buttonAlign = group1.add("button", undefined, undefined, { name: "Align and merge Exposure" });
+buttonAlign.text = "ALign and Merge Exposure (A)";
+buttonAlign.alignment = ["left", "center"];
+buttonAlign.preferredSize.width = 170;
+buttonAlign.tabStop = false; // <- không cho focus
+
+
+//Close Frame.
+var buttonClose = group1.add("button", undefined, undefined, { name: "Cancel" });
+buttonClose.text = "Cancel";
+buttonClose.preferredSize.width = 170;
+buttonClose.active = true
+
+//MERGE EXPOSURE
+buttonMergeExposure.addEventListener("click", function () {
+    dialog1.close()
+    var targetScript = File(currentFolder + "/mergeImage2.jsx");
+    if (targetScript.exists) {
+        $.evalFile(targetScript);
+    } else {
+        alert("❌ Không tìm thấy file: " + targetScript.fsName);
+    }
+})
+
+//ALIGN AND MERGE EXPOSURE
+buttonAlign.addEventListener("click", function () {
+    dialog1.close()
+    loadAction("ALign", "DataAction(HDR).atn")
+    var targetScript = File(currentFolder + "/MergeImage.jsx");
+    if (targetScript.exists) {
+        $.evalFile(targetScript);
+    } else {
+        alert("❌ Không tìm thấy file: " + targetScript.fsName);
+    }
+})
+
+
+
+
+//Đóng form
+buttonClose.addEventListener("click", function () {
+    dialog1.close()
+})
+
+//Xử lý xự kiện bằng bàng phím
+dialog1.addEventListener("keydown", triggerBtnRun);
+function triggerBtnRun(e) {
+    // alert(e.keyName)
+    if (e.keyName == "1") {
+        buttonMergeExposure.dispatchEvent(new Event("click"))
+    }
+    else if (e.keyName == "2") {
+        buttonAlign.dispatchEvent(new Event("click"))
+    }
+    else {
+        alert("Input fail!!!!")
+    }
+}
+dialog1.show();
+

@@ -6,9 +6,6 @@ const doc = activeDocument;
 try {
     makeHistory("Window");
 } catch (error) {
-    deleteSnapShot("Window")
-    makeHistory("Window");
-
 }
 // checkSnapshot()
 try { doc.artLayers[doc.artLayers.length - 4].visible = false; } catch (error) { }
