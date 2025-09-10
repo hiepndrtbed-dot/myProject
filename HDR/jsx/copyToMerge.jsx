@@ -27,7 +27,6 @@ for (var i = 0; i < lengthDoc; i++) {
     }
 }
 
-
 // Hàm đo độ sáng tại tâm layer (chỉ khi layer đó hiển thị)
 function getPointBrightnessExclusive(layer) {
     var doc = app.activeDocument;
