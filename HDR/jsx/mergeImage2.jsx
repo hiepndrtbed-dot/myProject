@@ -44,7 +44,6 @@ function addMaskWhite() {
 
 }
 
-
 function selectMaskLayerName(nameLayer) {
     var idslct = charIDToTypeID("slct");
     var desc1737 = new ActionDescriptor();
