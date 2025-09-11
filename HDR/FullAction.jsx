@@ -20,6 +20,7 @@ if (targetScript.exists) {
 
 if (status == true) {
     doc.suspendHistory("By Hiep!", "run()");
+    // run();
 }
 
 //processing
@@ -193,329 +194,120 @@ function run() {
     buttonClose.preferredSize.width = 170;
     buttonClose.active = true
 
-    //Copy Exposure
-    buttonCopyExposure.addEventListener("click", function () {
-        dialog.close()
-        var targetScript = File(currentFolder + "/copyToMerge.jsx");
-
+    // Hàm helper: chạy file jsx
+    function runScript(path) {
+        var targetScript = File(path);
         if (targetScript.exists) {
             $.evalFile(targetScript);
         } else {
             alert("❌ Không tìm thấy file: " + targetScript.fsName);
         }
-    })
+    }
 
-    //ALIGN AND MERGE EXPOSURE
+    // Hàm helper: gắn listener cho button chạy file
+    function bindBtn(btn, filePath) {
+        btn.addEventListener("click", function () {
+            dialog.close();
+            runScript(filePath);
+        });
+    }
+
+    // --- Map button ↔ file ---
+    bindBtn(buttonCopyExposure, currentFolder + "/copyToMerge.jsx");
+    bindBtn(buttonMergeExposure, currentFolder + "/mergeImage2.jsx");
+    bindBtn(buttonFillCeilingMolding, currentFolder + "/Whitening.jsx");
+    bindBtn(buttonFillWall, currentFolder + "/wallColor.jsx");
+    bindBtn(buttonFillWall2, currentFolder + "/wallColor2.jsx");
+    bindBtn(buttonAddTV, currentFolder + "/InsertElectronic.jsx");
+    bindBtn(buttonAddGrass, currentFolder + "/insertGrass.jsx");
+    bindBtn(buttonWindow, currentFolder + "/insertWindow.jsx");
+    bindBtn(buttonAddRed, currentFolder + "/+redYellow.jsx");
+    bindBtn(buttonSky, currentFolder + "/insertSky.jsx");
+    bindBtn(buttonAddSkyDTD, currentFolder + "/insertSkyDTD.jsx");
+    bindBtn(buttonAddLight, currentFolder + "/insertFlight.jsx");
+    bindBtn(buttonLoSuoi, currentFolder + "/insertFire.jsx");
+    bindBtn(buttonSaveTif, currentFolder + "/saveTifandJPG.jsx");
+    bindBtn(buttonSaveTifDTD, currentFolder + "/saveTifand2JPG(DTD).jsx");
+    bindBtn(buttonReplaceColor, currentFolder + "/replaceColor.jsx");
+    bindBtn(buttonHueSaturation, currentFolder + "/hueSaturation.jsx");
+    bindBtn(buttonResetData, currentFolder + "/removeDataTxt.jsx");
+    bindBtn(buttonLogout, scriptFolder + "/py/logout.jsx");
+
+    // --- Các button có xử lý đặc biệt ---
+    // Align + Merge Exposure
     buttonAlign.addEventListener("click", function () {
-        dialog.close()
-        loadAction("ALign", "DataAction(HDR).atn")
-        var targetScript = File(currentFolder + "/MergeImage.jsx");
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
+        dialog.close();
+        loadAction("ALign", "DataAction(HDR).atn");
+        runScript(currentFolder + "/MergeImage.jsx");
+    });
 
-    //MERGE EXPOSURE
-    buttonMergeExposure.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/mergeImage2.jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Fill Ceiling and Molding
-    buttonFillCeilingMolding.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/Whitening.jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Fill Wall 1
-    buttonFillWall.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/wallColor.jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Fill Wall 2
-    buttonFillWall2.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/wallColor2.jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Fill Electronic
-    buttonAddTV.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/InsertElectronic.jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-    //Add Grass
-    buttonAddGrass.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/insertGrass.jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    // Fill Window
-    buttonWindow.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/insertWindow.jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Tang Red and Yellow
-    buttonAddRed.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/+redYellow.jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Add sky
-    buttonSky.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/insertSky.jsx");
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Add sky DTD
-    buttonAddSkyDTD.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/insertSkyDTD.jsx");
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Add Light
-    buttonAddLight.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/insertFlight.jsx");
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Luu vung chon.
+    // Save Selection Detail
     buttonSaveSelectionDetail.addEventListener("click", function () {
-        dialog.close()
-        loadAction("Selection Detail", "DataAction(HDR).atn")
+        dialog.close();
+        loadAction("Selection Detail", "DataAction(HDR).atn");
+    });
 
-    })
-
-    //DTD
+    // DTD
     buttonDTD.addEventListener("click", function () {
-        dialog.close()
+        dialog.close();
         if (hasSelection()) {
-            loadAction("DTD", "DataAction(HDR).atn")
+            loadAction("DTD", "DataAction(HDR).atn");
         } else {
             alert("Chon vung chon cua so");
         }
+    });
 
-    })
-    //Check highligh
+    // Check Light
     buttonCheckLight.addEventListener("click", function () {
-        dialog.close()
-        loadAction("Check Light", "DataAction(HDR).atn")
-    })
+        dialog.close();
+        loadAction("Check Light", "DataAction(HDR).atn");
+    });
 
-    //Dust & Stratches..
-    buttonLoSuoi.addEventListener("click", function () {
-        dialog.close()
-        var targetScript = File(currentFolder + "/insertFire.jsx");
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Merge L
+    // Merge L
     buttonMerge.addEventListener("click", function () {
-        dialog.close()
-        // loadAction("Merge and rename", "DataAction(HDR).atn");
+        dialog.close();
         selectChoseMultiLayer(doc.layers[0].name, doc.layers[doc.layers.length - 1].name);
         doc.activeLayer.isBackgroundLayer = true;
-    })
+    });
 
-    //Save tif and jpg
-    buttonSaveTif.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/saveTifandJPG.jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Save tif and jpg DTD
-    buttonSaveTifDTD.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/saveTifand2JPG(DTD).jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Replace Color
-    buttonReplaceColor.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/replaceColor.jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Hue saturation
-    buttonHueSaturation.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/hueSaturation.jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Hue saturation
-    buttonResetData.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(currentFolder + "/removeDataTxt.jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //logout
-    buttonLogout.addEventListener("click", function () {
-        dialog.close()
-
-        var targetScript = File(scriptFolder + "/py/logout.jsx");
-
-        if (targetScript.exists) {
-            $.evalFile(targetScript);
-        } else {
-            alert("❌ Không tìm thấy file: " + targetScript.fsName);
-        }
-    })
-
-    //Merge Indor
+    // Merge Indor
     buttonIndor.addEventListener("click", function () {
-        dialog.close()
+        dialog.close();
         try {
             doc.layers.getByName("Sky").visible = false;
-            loadAction("FINALIZE (INDOR)", "DataAction(HDR).atn");
+            loadAction("MERGE (INDOR)", "DataAction(HDR).atn");
             doc.activeLayer.move(doc.layers.getByName("Sky"), ElementPlacement.PLACEAFTER);
             doc.layers.getByName("Sky").visible = true;
-            doc.activeLayer.name = "MERGE (INDOR)";
-
+            doc.activeLayer.name = "MERGE 1";
         } catch (error) {
-            loadAction("FINALIZE (INDOR)", "DataAction(HDR).atn")
-            doc.activeLayer.name = "MERGE (INDOR)";
+            loadAction("MERGE (INDOR)", "DataAction(HDR).atn");
+            doc.activeLayer.name = "MERGE 1";
         }
-    })
+    });
 
-    //Merge Outdor
+    // Merge Outdor
     outDor.addEventListener("click", function () {
-        dialog.close()
+        dialog.close();
         try {
-            doc.layers.getByName("Sky").visible = false
-            loadAction("FINALIZE (OUTDOR)", "DataAction(HDR).atn")
+            doc.layers.getByName("Sky").visible = false;
+            loadAction("MERGE (OUTDOR)", "DataAction(HDR).atn");
             doc.activeLayer.move(doc.layers.getByName("Sky"), ElementPlacement.PLACEAFTER);
             doc.layers.getByName("Sky").visible = true;
-            doc.activeLayer.name = "MERGE (OUTDOR)";
-
+            doc.activeLayer.name = "MERGE 1";
         } catch (error) {
-            loadAction("FINALIZE (OUTDOR)", "DataAction(HDR).atn")
-            doc.activeLayer.name = "MERGE (OUTDOR)";
+            loadAction("MERGE (OUTDOR)", "DataAction(HDR).atn");
+            doc.activeLayer.name = "MERGE 1";
         }
-    })
+    });
 
-    //Đóng form
+    // Đóng form
     buttonClose.addEventListener("click", function () {
-        dialog.close()
-    })
+        dialog.close();
+    });
 
     //Xử lý xự kiện bằng bàng phím
     dialog.addEventListener("keydown", triggerBtnRun);
-    function triggerBtnRun(e) {
+    /*function triggerBtnRun(e) {
         // alert(e.keyName)
         if (e.keyName == "1") {
             buttonCopyExposure.dispatchEvent(new Event("click"))
@@ -598,6 +390,44 @@ function run() {
         else {
             alert("Input fail!!!!")
         }
+    }*/
+
+    function triggerBtnRun(e) {
+        const actions = {
+            "1": buttonCopyExposure,
+            "2": buttonMergeExposure,
+            "3": buttonFillCeilingMolding,
+            "4": buttonFillWall,
+            "0": buttonFillWall2,
+            "5": buttonSky,
+            "6": buttonDTD,
+            "7": buttonAddSkyDTD,
+            "8": buttonReplaceColor,
+            "9": buttonHueSaturation,
+            "T": buttonAddTV,
+            "G": buttonAddGrass,
+            "W": buttonWindow,
+            "Y": buttonAddRed,
+            "R": buttonResetData,
+            "L": buttonAddLight,
+            "D": buttonSaveSelectionDetail,
+            "F": buttonLoSuoi,
+            "S": buttonSaveTif,
+            "X": buttonSaveTifDTD,
+            "M": buttonMerge,
+            "A": buttonAlign,
+            "C": buttonCheckLight,
+            "I": buttonIndor,
+            "O": outDor,
+            "Escape": buttonClose
+        };
+
+        const btn = actions[e.keyName];
+        if (btn) {
+            btn.dispatchEvent(new Event("click"));
+        } else {
+            alert(e.keyName + " Input fail!!!!");
+        }
     }
 
     //Group version
@@ -659,6 +489,7 @@ function purgeAll() {
     desc7726.putEnumerated(idnull, idPrgI, idAl);
     executeAction(idPrge, desc7726, DialogModes.NO);
 }
+
 
 function loadAction(actionName, action) {
     //--------------------------------------------------------------------------------------------------------

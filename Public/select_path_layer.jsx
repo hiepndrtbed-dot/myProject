@@ -7,11 +7,15 @@ function frame() {
     // btnPnl = dlg.add("panel", undefined, "Layer");
     buildListLayer = btnPnl.add("dropdownlist", undefined, listLayer());
     buildListLayer.selection = "abc";
-    buildListLayer.preferredSize = [80, 20];
+    buildListLayer.preferredSize = [100, 30]; // tăng kích thước
+    buildListLayer.graphics.font = ScriptUI.newFont("Arial", "BOLD", 20); // font to hơn
+
+
     // btnPnl = dlg.add("panel", undefined, "Path");
     buildListPath = btnPnl.add("dropdownlist", undefined, listPath());
-    buildListLayer.selection = 0;
-    buildListPath.preferredSize = [80, 20];
+    buildListPath.selection = 0;
+    buildListPath.preferredSize = [100, 30]; // tăng kích thước
+    buildListPath.graphics.font = ScriptUI.newFont("Arial", "BOLD", 20); // font to hơn
 
     cancelBtn = btnPnl.add("button", undefined, "Cancel", { name: "cancel" });
 
@@ -21,6 +25,8 @@ function frame() {
         selectLayer(selectListLayer);
         dlg.close();
     }
+
+
     //lua chon theo list path
     buildListPath.onChange = function () {
         var selectList = buildListPath.selection;
@@ -40,7 +46,7 @@ function listPath() {
     for (var i = 0; i <= lengthPath - 1; i++) {
         var namePath = activeDocument.pathItems[i].name;
         // if (setSelectionPath(namePath) == false) {
-            lispath.push(namePath);
+        lispath.push(namePath);
         // }
     }
     return lispath;
@@ -60,7 +66,7 @@ function listLayer() {
         var lengthlayer = activeDocument.activeLayer.layers.length;
         for (var index = 0; index <= lengthlayer - 1; index++) {
             var nameLayer = activeDocument.activeLayer.layers[index].name;
-                listlayer.push(nameLayer);
+            listlayer.push(nameLayer);
         }
     }
     return listlayer;

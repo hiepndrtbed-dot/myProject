@@ -133,7 +133,11 @@ function createSolidWithColorPicker(layerName) {
 if (!hasSelection()) {
     alert("Chua co vung chon!");
 } else {
-    doc.activeLayer = doc.backgroundLayer;
+    try {
+        doc.activeLayer = doc.artLayers["MERGE 1"];
+    } catch (error) {
+        doc.activeLayer = doc.backgroundLayer;
+    }
     if (!hasChannel(nameChannel)) {
         saveAlphaChnl(nameChannel);
         prepareSelection(expandSelection, feather);

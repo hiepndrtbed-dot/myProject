@@ -14,7 +14,11 @@ var nameChannel = "Tran_ChiPhao";
 if (!hasSelection()) {
     alert("Chua co vung chon!");
 } else {
-    doc.activeLayer = doc.backgroundLayer;
+    try {
+        doc.activeLayer = doc.artLayers["MERGE 1"];
+    } catch (error) {
+        doc.activeLayer = doc.backgroundLayer;
+    }
     if (!checkSelectionName(nameChannel)) {
         saveAlphaChnl(nameChannel);
         doc.selection.feather(feather);
@@ -23,7 +27,7 @@ if (!hasSelection()) {
         activeDocument.activeLayer.adjustLevels(0, 255, middleLevelsValue, 0, 255)
         blendingOptions(0, 0, 255, 255, 0, 0, destWhiteMin, 255);// blendingOptions(0, 47, 189, 255, 0, 36, 233, 255);
         setColorLayer("Bl  ");
-        doc.activeLayer.move(doc.layers[0],ElementPlacement.PLACEBEFORE);
+        doc.activeLayer.move(doc.layers[0], ElementPlacement.PLACEBEFORE);
     } else {
         addSelectionToChannelName(nameChannel);
         doc.selection.feather(feather);
