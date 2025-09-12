@@ -85,3 +85,13 @@ function addMask() {
     desc358.putEnumerated(idUsng, idUsrM, idRvlS);
     executeAction(idMk, desc358, DialogModes.NO);
 }
+
+function hasSelection() {
+    var hasSelection = false;
+    var ref = new ActionReference();
+    ref.putProperty(stringIDToTypeID("property"), stringIDToTypeID("selection"));
+    ref.putEnumerated(stringIDToTypeID("document"), stringIDToTypeID("ordinal"), stringIDToTypeID("targetEnum"));
+    var desc = executeActionGet(ref);
+    if (desc.count) hasSelection = true;
+    return hasSelection;
+}

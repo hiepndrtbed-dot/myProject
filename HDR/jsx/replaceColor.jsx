@@ -21,7 +21,7 @@ const doc = activeDocument;
         action("replaceColor");
     }
 })();
-
+mask
 function layerViaCopy(nameLayer) {
     var idCpTL = charIDToTypeID("CpTL");
     executeAction(idCpTL, undefined, DialogModes.NO);
@@ -84,4 +84,14 @@ function addMask() {
     var idRvlS = charIDToTypeID("RvlS");
     desc358.putEnumerated(idUsng, idUsrM, idRvlS);
     executeAction(idMk, desc358, DialogModes.NO);
+}
+
+function hasSelection() {
+    var hasSelection = false;
+    var ref = new ActionReference();
+    ref.putProperty(stringIDToTypeID("property"), stringIDToTypeID("selection"));
+    ref.putEnumerated(stringIDToTypeID("document"), stringIDToTypeID("ordinal"), stringIDToTypeID("targetEnum"));
+    var desc = executeActionGet(ref);
+    if (desc.count) hasSelection = true;
+    return hasSelection;
 }
