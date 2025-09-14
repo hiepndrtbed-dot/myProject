@@ -10,6 +10,7 @@ const doc = activeDocument;
     } catch (error) {
         doc.activeLayer = doc.backgroundLayer;
     }
+    if (activeDocument.quickMaskMode == true) { activeDocument.quickMaskMode = false; }
     if (!hasSelection()) { alert("Chua co vung chon!"); return; }
     if (selectLayer("replaceColor")) {
         mergeVisible();
@@ -64,7 +65,6 @@ function selectLayer(layerName) {
 
     return result;
 }
-
 //add mask
 function addMask() {
     var idMk = charIDToTypeID("Mk  ");

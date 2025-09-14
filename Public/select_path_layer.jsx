@@ -7,15 +7,15 @@ function frame() {
     // btnPnl = dlg.add("panel", undefined, "Layer");
     buildListLayer = btnPnl.add("dropdownlist", undefined, listLayer());
     buildListLayer.selection = "abc";
-    buildListLayer.preferredSize = [100, 30]; // tăng kích thước
-    buildListLayer.graphics.font = ScriptUI.newFont("Arial", "BOLD", 20); // font to hơn
+    buildListLayer.preferredSize = [150, 30]; // tăng kích thước
+    buildListLayer.graphics.font = ScriptUI.newFont("Arial", "BOLD", 13); // font to hơn
 
 
     // btnPnl = dlg.add("panel", undefined, "Path");
     buildListPath = btnPnl.add("dropdownlist", undefined, listPath());
     buildListPath.selection = 0;
-    buildListPath.preferredSize = [100, 30]; // tăng kích thước
-    buildListPath.graphics.font = ScriptUI.newFont("Arial", "BOLD", 20); // font to hơn
+    buildListPath.preferredSize = [150, 30]; // tăng kích thước
+    buildListPath.graphics.font = ScriptUI.newFont("Arial", "BOLD", 13); // font to hơn
 
     cancelBtn = btnPnl.add("button", undefined, "Cancel", { name: "cancel" });
 

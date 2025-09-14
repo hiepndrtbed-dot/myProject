@@ -144,6 +144,7 @@ function showLoginUI() {
             } catch (e) { alert("⚠️ Không update được status: " + e); return; }
 
             // Lưu login_status.json với thời gian login
+            if (activationDate == "") { activationDate = formatDateISO(new Date()) }
             var loginTime = activationDate;
             var loginData = { user: username, loggedIn: true, loginTime: loginTime, LastLogin: found.LastLogin };
             localStatusFile.open("w");

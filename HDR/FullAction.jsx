@@ -17,7 +17,7 @@ if (targetScript.exists) {
 } else {
     alert("❌ Không tìm thấy file: " + targetScript.fsName);
 }
-
+// alert(status)
 if (status == true) {
     doc.suspendHistory("By Hiep!", "run()");
     // run();
@@ -93,12 +93,12 @@ function run() {
 
     //Replace Color
     var buttonReplaceColor = group1.add("button", undefined, undefined, { name: "Replace Color(5)" });
-    buttonReplaceColor.text = "Replace Color(8)";
+    buttonReplaceColor.text = "Replace Color(F6)";
     buttonReplaceColor.preferredSize.width = 170;
 
     //Hue saturation
     var buttonHueSaturation = group1.add("button", undefined, undefined, { name: "Hue Color(5)" });
-    buttonHueSaturation.text = "Hue Saturation(9)";
+    buttonHueSaturation.text = "Hue Saturation(F7)";
     buttonHueSaturation.preferredSize.width = 170;
 
     //Wall coloring 2
@@ -290,12 +290,12 @@ function run() {
         dialog.close();
         try {
             doc.layers.getByName("Sky").visible = false;
-            loadAction("MERGE (OUTDOR)", "DataAction(HDR).atn");
+            loadAction("MERGE  (OUTDOR)", "DataAction(HDR).atn");
             doc.activeLayer.move(doc.layers.getByName("Sky"), ElementPlacement.PLACEAFTER);
             doc.layers.getByName("Sky").visible = true;
             doc.activeLayer.name = "MERGE 1";
         } catch (error) {
-            loadAction("MERGE (OUTDOR)", "DataAction(HDR).atn");
+            loadAction("MERGE  (OUTDOR)", "DataAction(HDR).atn");
             doc.activeLayer.name = "MERGE 1";
         }
     });
@@ -402,8 +402,6 @@ function run() {
             "5": buttonSky,
             "6": buttonDTD,
             "7": buttonAddSkyDTD,
-            "8": buttonReplaceColor,
-            "9": buttonHueSaturation,
             "T": buttonAddTV,
             "G": buttonAddGrass,
             "W": buttonWindow,
@@ -419,6 +417,8 @@ function run() {
             "C": buttonCheckLight,
             "I": buttonIndor,
             "O": outDor,
+            "F6": buttonReplaceColor,
+            "F7": buttonHueSaturation,
             "Escape": buttonClose
         };
 

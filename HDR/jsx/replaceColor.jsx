@@ -10,6 +10,7 @@ const doc = activeDocument;
     } catch (error) {
         doc.activeLayer = doc.backgroundLayer;
     }
+    if (activeDocument.quickMaskMode == true) { activeDocument.quickMaskMode = false; }
     if (!hasSelection()) { alert("Chua co vung chon!"); return; }
     if (selectLayer("replaceColor")) {
         mergeVisible();
@@ -21,7 +22,6 @@ const doc = activeDocument;
         action("replaceColor");
     }
 })();
-mask
 function layerViaCopy(nameLayer) {
     var idCpTL = charIDToTypeID("CpTL");
     executeAction(idCpTL, undefined, DialogModes.NO);
