@@ -24,8 +24,7 @@ if (!localStatusFile.exists) {
 
         // Xóa file login_status.json
         localStatusFile.remove();
-
-        alert("✅ Logout khoi tai khoang!");
+        alert("✅ Logout khoi tai khoan!");
     } catch (e) {
         alert("❌ Loi khi logout: " + e);
     }

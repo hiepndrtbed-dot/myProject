@@ -139,12 +139,17 @@ function run() {
 
     //Save selection detail
     var buttonSaveSelectionDetail = group1.add("button", undefined, undefined, { name: "Flip_Canvas_Product_White" });
-    buttonSaveSelectionDetail.text = "Selection Detail (D)"
+    buttonSaveSelectionDetail.text = "Save Selection Detail (D)"
     buttonSaveSelectionDetail.preferredSize.width = 170;
+
+    //Save selection detail
+    var buttonSelectionDetail = group1.add("button", undefined, undefined, { name: "Flip_Canvas_Product_White" });
+    buttonSelectionDetail.text = "Selection Detail (J)"
+    buttonSelectionDetail.preferredSize.width = 170;
 
     //Replace color Red + yellow
     var buttonAddRed = group1.add("button", undefined, undefined, { name: "deleteSetAction 75%" });
-    buttonAddRed.text = "+ Yellow Red  (Y)";
+    buttonAddRed.text = "+ Yellow Red (Y)";
     buttonAddRed.preferredSize.width = 170;
 
     //Check cuvels
@@ -231,6 +236,7 @@ function run() {
     bindBtn(buttonReplaceColor, currentFolder + "/replaceColor.jsx");
     bindBtn(buttonHueSaturation, currentFolder + "/hueSaturation.jsx");
     bindBtn(buttonResetData, currentFolder + "/removeDataTxt.jsx");
+    bindBtn(buttonSelectionDetail, currentFolder + "/selectionDetails.jsx");
     bindBtn(buttonLogout, scriptFolder + "/py/logout.jsx");
 
     // --- Các button có xử lý đặc biệt ---
@@ -409,6 +415,7 @@ function run() {
             "R": buttonResetData,
             "L": buttonAddLight,
             "D": buttonSaveSelectionDetail,
+            "J": buttonSelectionDetail,
             "F": buttonLoSuoi,
             "S": buttonSaveTif,
             "X": buttonSaveTifDTD,
