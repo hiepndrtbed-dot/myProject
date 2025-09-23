@@ -147,6 +147,11 @@ function run() {
     buttonSelectionDetail.text = "Selection Detail (J)"
     buttonSelectionDetail.preferredSize.width = 170;
 
+    //Copy Path
+    var buttonCopyPath = group1.add("button", undefined, undefined, { name: "Flip_Canvas_Product_White" });
+    buttonCopyPath.text = "Copy Path (F8)"
+    buttonCopyPath.preferredSize.width = 170;
+
     //Replace color Red + yellow
     var buttonAddRed = group1.add("button", undefined, undefined, { name: "deleteSetAction 75%" });
     buttonAddRed.text = "+ Yellow Red (Y)";
@@ -237,6 +242,7 @@ function run() {
     bindBtn(buttonHueSaturation, currentFolder + "/hueSaturation.jsx");
     bindBtn(buttonResetData, currentFolder + "/removeDataTxt.jsx");
     bindBtn(buttonSelectionDetail, currentFolder + "/selectionDetails.jsx");
+    bindBtn(buttonCopyPath, currentFolder + "/copyPathTodocument.jsx");
     bindBtn(buttonLogout, scriptFolder + "/py/logout.jsx");
 
     // --- Các button có xử lý đặc biệt ---
@@ -426,6 +432,7 @@ function run() {
             "O": outDor,
             "F6": buttonReplaceColor,
             "F7": buttonHueSaturation,
+            "F8": buttonCopyPath,
             "Escape": buttonClose
         };
 

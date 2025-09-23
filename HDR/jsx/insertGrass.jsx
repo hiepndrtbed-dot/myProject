@@ -54,6 +54,7 @@ var path = "/Library PE/Library/Grass/";
         doc.activeLayer.opacity = 85;
         setLevels(0.8);
         setFeatherMask(1);
+        setHue(-15);
         selectMask();
         resetBackground()
     } catch (error) { }
@@ -287,4 +288,89 @@ function setLevels(middle) {
     list1.putObject(cTID('LvlA'), desc2);
     desc1.putList(cTID('Adjs'), list1);
     executeAction(cTID('Lvls'), desc1, dialogMode);
+}
+
+function setHue(hue) {
+    var idHStr = charIDToTypeID("HStr");
+    var desc82863 = new ActionDescriptor();
+    var idpresetKind = stringIDToTypeID("presetKind");
+    var idpresetKindType = stringIDToTypeID("presetKindType");
+    var idpresetKindCustom = stringIDToTypeID("presetKindCustom");
+    desc82863.putEnumerated(idpresetKind, idpresetKindType, idpresetKindCustom);
+    var idGeneratedPreset = stringIDToTypeID("GeneratedPreset");
+    desc82863.putBoolean(idGeneratedPreset, false);
+    var idClrz = charIDToTypeID("Clrz");
+    desc82863.putBoolean(idClrz, false);
+    var idOriginalColors = stringIDToTypeID("OriginalColors");
+    var list1331 = new ActionList();
+    var desc82864 = new ActionDescriptor();
+    var idH = charIDToTypeID("H   ");
+    desc82864.putInteger(idH, 0);
+    var idStrt = charIDToTypeID("Strt");
+    desc82864.putInteger(idStrt, 100);
+    var idLght = charIDToTypeID("Lght");
+    desc82864.putInteger(idLght, 50);
+    var idOriginalColor = stringIDToTypeID("OriginalColor");
+    list1331.putObject(idOriginalColor, desc82864);
+    var desc82865 = new ActionDescriptor();
+    var idH = charIDToTypeID("H   ");
+    desc82865.putInteger(idH, 60);
+    var idStrt = charIDToTypeID("Strt");
+    desc82865.putInteger(idStrt, 100);
+    var idLght = charIDToTypeID("Lght");
+    desc82865.putInteger(idLght, 50);
+    var idOriginalColor = stringIDToTypeID("OriginalColor");
+    list1331.putObject(idOriginalColor, desc82865);
+    var desc82866 = new ActionDescriptor();
+    var idH = charIDToTypeID("H   ");
+    desc82866.putInteger(idH, 120);
+    var idStrt = charIDToTypeID("Strt");
+    desc82866.putInteger(idStrt, 100);
+    var idLght = charIDToTypeID("Lght");
+    desc82866.putInteger(idLght, 50);
+    var idOriginalColor = stringIDToTypeID("OriginalColor");
+    list1331.putObject(idOriginalColor, desc82866);
+    var desc82867 = new ActionDescriptor();
+    var idH = charIDToTypeID("H   ");
+    desc82867.putInteger(idH, 180);
+    var idStrt = charIDToTypeID("Strt");
+    desc82867.putInteger(idStrt, 100);
+    var idLght = charIDToTypeID("Lght");
+    desc82867.putInteger(idLght, 50);
+    var idOriginalColor = stringIDToTypeID("OriginalColor");
+    list1331.putObject(idOriginalColor, desc82867);
+    var desc82868 = new ActionDescriptor();
+    var idH = charIDToTypeID("H   ");
+    desc82868.putInteger(idH, 240);
+    var idStrt = charIDToTypeID("Strt");
+    desc82868.putInteger(idStrt, 100);
+    var idLght = charIDToTypeID("Lght");
+    desc82868.putInteger(idLght, 50);
+    var idOriginalColor = stringIDToTypeID("OriginalColor");
+    list1331.putObject(idOriginalColor, desc82868);
+    var desc82869 = new ActionDescriptor();
+    var idH = charIDToTypeID("H   ");
+    desc82869.putInteger(idH, 300);
+    var idStrt = charIDToTypeID("Strt");
+    desc82869.putInteger(idStrt, 100);
+    var idLght = charIDToTypeID("Lght");
+    desc82869.putInteger(idLght, 50);
+    var idOriginalColor = stringIDToTypeID("OriginalColor");
+    list1331.putObject(idOriginalColor, desc82869);
+    desc82863.putList(idOriginalColors, list1331);
+    var idAdjs = charIDToTypeID("Adjs");
+    var list1332 = new ActionList();
+    var desc82870 = new ActionDescriptor();
+    var idH = charIDToTypeID("H   ");
+    desc82870.putInteger(idH, 0);
+    var idStrt = charIDToTypeID("Strt");
+    desc82870.putInteger(idStrt, hue);
+    var idLght = charIDToTypeID("Lght");
+    desc82870.putInteger(idLght, 0);
+    var idHsttwo = charIDToTypeID("Hst2");
+    list1332.putObject(idHsttwo, desc82870);
+    desc82863.putList(idAdjs, list1332);
+    executeAction(idHStr, desc82863, DialogModes.NO);
+
+
 }

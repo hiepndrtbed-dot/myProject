@@ -8,7 +8,7 @@ const nameLayer = "WALL ";
 const feather = 1;
 const expandSelection = 1;
 const middleLevelsValue = 1.2;
-const destWhiteMin = 180;
+const destWhiteMin = 230;
 const nameChannel = "Wall ";
 
 (function Main() {

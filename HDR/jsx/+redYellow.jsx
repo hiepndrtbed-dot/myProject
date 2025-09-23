@@ -6,7 +6,11 @@ const doc = activeDocument;
 
 (function () {
     if (doc.layers[doc.layers.length - 2].name != "replaceColor") {
-        doc.activeLayer = doc.backgroundLayer;
+        try {
+            doc.activeLayer = doc.artLayers["MERGE 1"];
+        } catch (error) {
+            doc.activeLayer = doc.backgroundLayer;
+        }
         // === Thông số chỉnh màu ===
         var shadow = { r: 20, g: 0, b: -20 };
         var midtone = { r: 0, g: 0, b: -10 };
@@ -41,7 +45,7 @@ const doc = activeDocument;
 
 //Invert
 function invert() {
-        executeAction(charIDToTypeID("Invr"), undefined, DialogModes.NO);
+    executeAction(charIDToTypeID("Invr"), undefined, DialogModes.NO);
 }
 
 // === Tạo Adjustment Layer: Color Balance ===

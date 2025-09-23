@@ -16,7 +16,7 @@ const doc = activeDocument;
         mergeVisible();
         action("replaceColor");
         addMask();
-        doc.activeLayer.merge();
+        // doc.activeLayer.merge();
     } else {
         layerViaCopy("replaceColor");
         action("replaceColor");

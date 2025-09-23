@@ -5,19 +5,30 @@ preferences.rulerUnits = Units.PIXELS
 app.preferences.typeunits = TypeUnits.PIXELS
 const doc = activeDocument;
 maskall();
-createAlphaChannelBlack("Details");
-selectRGB();
+// createAlphaChannelBlack("Details");
+// selectRGB();
 var lengthGroup = doc.layerSets.length;
+var checkLengGroupNew = doc.layerSets.length;
 for (var i = 0; i < lengthGroup; i++) {
     loadSelectionByMask(doc.layerSets[i].id);
-    addSelectionToChannelName("Details");
+    if (lengthGroup == 1) {
+        saveAlphaChnl("San");
+        doc.layerSets[i].remove();
+        break;
+    }
+    if (lengthGroup == checkLengGroupNew) {
+        saveAlphaChnl("Details")
+    }
+    else {
+        addSelectionToChannelName("Details");
+    }
     doc.layerSets[i].remove();
     lengthGroup--;
     i--;
     doc.selection.deselect();
 }
 doc.selection.load(doc.channels.getByName("Details"));
-
+doc.channels.getByName("Details").remove();
 
 if (activeDocument.quickMaskMode == false) { activeDocument.quickMaskMode = true; }
 
@@ -37,6 +48,17 @@ function maskall() {
 
     step1();
 };
+
+function saveAlphaChnl(name) {
+    var desc977 = new ActionDescriptor();
+    var ref38 = new ActionReference();
+    ref38.putProperty(charIDToTypeID("Chnl"), charIDToTypeID("fsel"));
+    desc977.putReference(charIDToTypeID("null"), ref38);
+    desc977.putString(charIDToTypeID("Nm  "), name);
+    executeAction(charIDToTypeID("Dplc"), desc977, DialogModes.NO);
+    return activeDocument.channels.getByName(name);
+}
+
 
 function addSelectionToChannelName(channelName) {
     var ch = doc.channels.getByName(channelName);

@@ -6,16 +6,19 @@ preferences.rulerUnits = Units.PIXELS
 app.preferences.typeunits = TypeUnits.PIXELS
 const doc = activeDocument;
 
+var fileToDelete = new File(doc.fullName);
 var curentNameDocument = doc.name;
 var lengthPath = activeDocument.pathItems.length;
 for (var i = 0; i < lengthPath; i++) {
     selectPath(activeDocument.pathItems[i].name);
     copy();
-    activeDocument = documents[0];
-    deselectPath();
+    activeDocument = documents[documents.length - 2];
     Paste();
-    activeDocument = documents[1];
+    deselectPath();
+    activeDocument = documents[documents.length - 1];
 }
+doc.close(SaveOptions.DONOTSAVECHANGES);
+var deleted = fileToDelete.remove();
 
 function copy(enabled, withDialog) {
     cTID = function (s) { return app.charIDToTypeID(s); };

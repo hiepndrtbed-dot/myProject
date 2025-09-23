@@ -8,7 +8,7 @@ var nameLayer = "BLACK && WHITE";
 var feather = 1;
 var hueValue = -90;
 var middleLevelsValue = 1.2;
-var destWhiteMin = 180;
+var destWhiteMin = 230;
 var nameChannel = "Tran_ChiPhao";
 
 if (!hasSelection()) {

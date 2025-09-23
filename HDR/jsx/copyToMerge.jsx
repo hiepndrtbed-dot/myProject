@@ -124,7 +124,7 @@ buttonAlign.tabStop = false; // <- không cho focus
 var buttonClose = group1.add("button", undefined, undefined, { name: "Cancel" });
 buttonClose.text = "Cancel";
 buttonClose.preferredSize.width = 170;
-buttonClose.active = true
+// buttonClose.active = true
 
 //MERGE EXPOSURE
 buttonMergeExposure.addEventListener("click", function () {
