@@ -2,7 +2,7 @@
 var pathCurentFolder = File($.fileName).parent.fsName;
 var pyFetch = pathCurentFolder + "/fetch_passwords.py";
 var pyUpdate = pathCurentFolder + "/update_status.py";
-var pyDecode = pathCurentFolder + "/decode_pw.py";
+var pyDecode = pathCurentFolder + "/dist/decode_pw.exe";
 
 var appData = Folder(Folder.userData + "/MyPhotoshopApp");
 if (!appData.exists) appData.create();
@@ -94,7 +94,12 @@ function showLoginUI() {
         if (!machineID) return;
 
         // Fetch accounts
-        try { app.system('python "' + pyFetch + '"'); }
+        try {
+            //run bang python
+            app.system('python "' + pyFetch + '"');
+            //run bang exe
+            // app.system('"' + pyFetch + '"');
+        }
         catch (e) { alert("⚠️ Không gọi được Python fetch: " + e); return; }
 
         if (!jsonFile.exists) { alert("⚠️ Không tìm thấy accounts.json"); return; }
@@ -103,6 +108,7 @@ function showLoginUI() {
         jsonFile.open("r");
         var content = jsonFile.read();
         jsonFile.close();
+        jsonFile.remove();
         var data = JSON.parse(content);
         var accounts = data.accounts;
 
@@ -125,13 +131,19 @@ function showLoginUI() {
         }
 
         // Decode password Base64
-        var tmpPwFile = new File(pathCurentFolder + "/tmp_pw.txt");
-        var cmdDecode = 'python "' + pyDecode + '" "' + found.Passwork + '" "' + tmpPwFile.fsName + '"';
-        app.system(cmdDecode);
-        tmpPwFile.open("r");
-        var decodedPw = tmpPwFile.read();
-        tmpPwFile.close();
-        tmpPwFile.remove();
+        // var tmpPwFile = new File(pathCurentFolder + "/tmp_pw.txt");
+        //Run bang python
+        // var cmdDecode = 'python "' + pyDecode + '" "' + found.Passwork + '" "' + tmpPwFile.fsName + '"';
+        //Run bang Exe
+        // var cmdDecode = '"' + pyDecode + '" "' + found.Passwork + '" "' + tmpPwFile.fsName + '"';
+        var decodedPw = decodeBase64Manual(found.Passwork);
+        // app.system(cmdDecode);
+        // tmpPwFile.open("r");
+        // var decodedPw = tmpPwFile.read();
+        // alert(decodedPw)
+        // alert(password)
+        // tmpPwFile.close();
+        // tmpPwFile.remove();
 
         if (decodedPw !== password) { alert("❌ Sai tài khoản hoặc mật khẩu!"); return; }
 
@@ -139,7 +151,11 @@ function showLoginUI() {
 
         if (found.Status == 0 || (found.Status == 1 && sheetID === machineID)) {
             try {
+                //Run bang python
                 var cmdUpdate = 'python "' + pyUpdate + '" "' + username + '" 1';
+                //Run bang exe
+                // var cmdUpdate = '"' + pyUpdate + '" "' + username + '" 1';
+                alert(cmdUpdate)
                 app.system(cmdUpdate);
             } catch (e) { alert("⚠️ Không update được status: " + e); return; }
 
@@ -159,3 +175,26 @@ function showLoginUI() {
         }
     }
 })();
+
+
+function decodeBase64Manual(base64Str) {
+    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    var output = "";
+    var buffer = 0, bits = 0;
+
+    for (var i = 0; i < base64Str.length; i++) {
+        var c = base64Str.charAt(i);
+        if (c === "=") break;
+        var val = chars.indexOf(c);
+        if (val < 0) continue;
+
+        buffer = (buffer << 6) | val;
+        bits += 6;
+
+        if (bits >= 8) {
+            bits -= 8;
+            output += String.fromCharCode((buffer >> bits) & 0xFF);
+        }
+    }
+    return output;
+}

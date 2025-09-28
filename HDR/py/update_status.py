@@ -2,18 +2,16 @@ import subprocess
 import sys
 from uuid import getnode
 from datetime import datetime
+import requests
 
-# Kiểm tra requests
-try:
-    import requests
-except ImportError:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"])
-    import requests
+# # Kiểm tra requests
+# try:
+#     import requests
+# except ImportError:
+#     subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"])
+#     import requests
 
-# URL = "https://script.google.com/macros/s/AKfycbzVIlhiKqRCXyG2n4v3HyOgYlXk3vaOjCNdbgKIdo-i_CYKFNOBP9_pIXZrsfk8kyhxEg/exec"
 URL = "https://script.google.com/macros/s/AKfycbwKSF9848A3fXps2Zf3_GBq_dDSfoPOrjU8I-Wh9MXRgk4BNWhRZNpN5bwHP4AR6nCd-Q/exec"
-
-
 
 def update_status(user: str, status: int):
     computer_id = str(getnode())

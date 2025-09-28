@@ -4,17 +4,17 @@ import os
 import json
 import base64
 import tempfile
+import requests
 
 # Kiểm tra requests
-try:
-    import requests
-except ImportError:
-    print("❌ Thư viện requests chưa cài. Đang cài đặt...")
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"])
-    import requests
+# try:
+#     import requests
+# except ImportError:
+#     print("❌ Thư viện requests chưa cài. Đang cài đặt...")
+#     subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"])
+#     import requests
 
 # URL Web App của bạn
-# URL = "https://script.google.com/macros/s/AKfycbzVIlhiKqRCXyG2n4v3HyOgYlXk3vaOjCNdbgKIdo-i_CYKFNOBP9_pIXZrsfk8kyhxEg/exec"
 URL = "https://script.google.com/macros/s/AKfycbwKSF9848A3fXps2Zf3_GBq_dDSfoPOrjU8I-Wh9MXRgk4BNWhRZNpN5bwHP4AR6nCd-Q/exec"
 
 try:

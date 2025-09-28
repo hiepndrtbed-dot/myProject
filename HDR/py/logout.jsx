@@ -18,8 +18,10 @@ if (!localStatusFile.exists) {
         var loginData = JSON.parse(content);
         var username = loginData.user;
 
-        // Gọi Python để cập nhật Status=0
+        // Run bang python
         var cmd = "python \"" + pyUpdate + "\" \"" + username + "\" 0";
+        //Run bang exe
+        // var cmd = "\"" + pyUpdate + "\" \"" + username + "\" 0";
         app.system(cmd);
 
         // Xóa file login_status.json
