@@ -1,7 +1,7 @@
 ﻿// #target photoshop
 var pathCurentFolder = File($.fileName).parent.fsName;
-var pyFetch = pathCurentFolder + "/fetch_passwords.py";
-var pyUpdate = pathCurentFolder + "/update_status.py";
+var pyFetch = pathCurentFolder + "/dist/fetch_passwords.exe";
+var pyUpdate = pathCurentFolder + "/dist/update_status.exe";
 var pyDecode = pathCurentFolder + "/dist/decode_pw.exe";
 
 var appData = Folder(Folder.userData + "/MyPhotoshopApp");
@@ -10,59 +10,6 @@ if (!appData.exists) appData.create();
 var localStatusFile = new File(appData + "/login_status.json");
 var tempDir = Folder.temp.fsName;
 var jsonFile = new File(tempDir + "/accounts.json");
-
-// Hàm lấy machine ID từ Python
-function getMachineID() {
-    var tmpFile = new File(pathCurentFolder + "/machine_id.txt");
-    try {
-        app.system('python -c "from uuid import getnode; f=open(\'' + tmpFile.fsName + '\',\'w\'); f.write(str(getnode()).strip()); f.close()"');
-        tmpFile.open("r");
-        var id = tmpFile.read();
-        tmpFile.close();
-        tmpFile.remove();
-        return id.replace(/\s/g, '');
-    } catch (e) { alert("⚠️ Lỗi lấy machine ID: " + e); return null; }
-}
-
-// Hàm format date ISO (ExtendScript không hỗ trợ toISOString)
-function formatDateISO(date) {
-    function pad(n) { return n < 10 ? '0' + n : n; }
-    return date.getFullYear() + '-'
-        + pad(date.getMonth() + 1) + '-'
-        + pad(date.getDate()) + 'T'
-        + pad(date.getHours()) + ':'
-        + pad(date.getMinutes()) + ':'
-        + pad(date.getSeconds());
-}
-
-// Hàm tính số ngày giữa 2 ngày (yyyy-MM-dd)
-function daysBetween(dateStr) {
-    var datePart = dateStr.split("T")[0]; // "2025-09-02"
-    var parts = datePart.split('-');
-    var lastLoginDate = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2])); // UTC
-    var today = new Date();
-    var todayUTC = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
-    var diffDays = Math.floor((todayUTC - lastLoginDate) / (1000 * 60 * 60 * 24));
-    return diffDays// số ngày
-}
-
-// UI login
-function showLoginUI() {
-    var win = new Window("dialog", "Login Photoshop");
-    win.alignChildren = ["fill", "top"]; win.spacing = 5; win.margins = 5;
-
-    win.add("statictext", undefined, "User:");
-    var userInput = win.add("edittext", undefined, ""); userInput.characters = 10;
-
-    win.add("statictext", undefined, "Password:");
-    var pwInput = win.add("edittext", undefined, ""); pwInput.characters = 10; pwInput.password = true;
-
-    var btnGroup = win.add("group"); btnGroup.alignment = "center";
-    btnGroup.add("button", undefined, "Login", { name: "ok" });
-    btnGroup.add("button", undefined, "Cancel", { name: "cancel" });
-
-    return (win.show() == 1) ? { username: userInput.text, password: pwInput.text } : null;
-}
 
 (function () {
     // Nếu đã có login local
@@ -96,9 +43,9 @@ function showLoginUI() {
         // Fetch accounts
         try {
             //run bang python
-            app.system('python "' + pyFetch + '"');
+            // app.system('python "' + pyFetch + '"');
             //run bang exe
-            // app.system('"' + pyFetch + '"');
+            app.system('"' + pyFetch + '"');
         }
         catch (e) { alert("⚠️ Không gọi được Python fetch: " + e); return; }
 
@@ -152,10 +99,9 @@ function showLoginUI() {
         if (found.Status == 0 || (found.Status == 1 && sheetID === machineID)) {
             try {
                 //Run bang python
-                var cmdUpdate = 'python "' + pyUpdate + '" "' + username + '" 1';
+                // var cmdUpdate = 'python "' + pyUpdate + '" "' + username + '" 1';
                 //Run bang exe
-                // var cmdUpdate = '"' + pyUpdate + '" "' + username + '" 1';
-                alert(cmdUpdate)
+                var cmdUpdate = 'cmd /c start /wait "" "' + pyUpdate + '" "' + username + '" 1';
                 app.system(cmdUpdate);
             } catch (e) { alert("⚠️ Không update được status: " + e); return; }
 
@@ -175,6 +121,60 @@ function showLoginUI() {
         }
     }
 })();
+
+
+// Hàm lấy machine ID từ Python
+function getMachineID() {
+    var tmpFile = new File(pathCurentFolder + "/machine_id.txt");
+    try {
+        app.system('python -c "from uuid import getnode; f=open(\'' + tmpFile.fsName + '\',\'w\'); f.write(str(getnode()).strip()); f.close()"');
+        tmpFile.open("r");
+        var id = tmpFile.read();
+        tmpFile.close();
+        tmpFile.remove();
+        return id.replace(/\s/g, '');
+    } catch (e) { alert("⚠️ Lỗi lấy machine ID: " + e); return null; }
+}
+
+// Hàm format date ISO (ExtendScript không hỗ trợ toISOString)
+function formatDateISO(date) {
+    function pad(n) { return n < 10 ? '0' + n : n; }
+    return date.getFullYear() + '-'
+        + pad(date.getMonth() + 1) + '-'
+        + pad(date.getDate()) + 'T'
+        + pad(date.getHours()) + ':'
+        + pad(date.getMinutes()) + ':'
+        + pad(date.getSeconds());
+}
+
+// Hàm tính số ngày giữa 2 ngày (yyyy-MM-dd)
+function daysBetween(dateStr) {
+    var datePart = dateStr.split("T")[0]; // "2025-09-02"
+    var parts = datePart.split('-');
+    var lastLoginDate = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2])); // UTC
+    var today = new Date();
+    var todayUTC = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
+    var diffDays = Math.floor((todayUTC - lastLoginDate) / (1000 * 60 * 60 * 24));
+    return diffDays// số ngày
+}
+
+// UI login
+function showLoginUI() {
+    var win = new Window("dialog", "Login Photoshop");
+    win.alignChildren = ["fill", "top"]; win.spacing = 5; win.margins = 5;
+
+    win.add("statictext", undefined, "User:");
+    var userInput = win.add("edittext", undefined, ""); userInput.characters = 10;
+
+    win.add("statictext", undefined, "Password:");
+    var pwInput = win.add("edittext", undefined, ""); pwInput.characters = 10; pwInput.password = true;
+
+    var btnGroup = win.add("group"); btnGroup.alignment = "center";
+    btnGroup.add("button", undefined, "Login", { name: "ok" });
+    btnGroup.add("button", undefined, "Cancel", { name: "cancel" });
+
+    return (win.show() == 1) ? { username: userInput.text, password: pwInput.text } : null;
+}
 
 
 function decodeBase64Manual(base64Str) {

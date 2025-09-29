@@ -1,8 +1,11 @@
+import os
 import subprocess
 import sys
 from uuid import getnode
 from datetime import datetime
 import requests
+
+os.chdir(os.path.dirname(sys.argv[0]))
 
 # # Kiểm tra requests
 # try:

@@ -2,7 +2,7 @@
 // #target photoshop
 
 var currentFolder = File($.fileName).parent.fsName;
-var pyUpdate = currentFolder + "/update_status.py";
+var pyUpdate = currentFolder + "/dist/update_status.exe";
 var appData = Folder(Folder.userData + "/MyPhotoshopApp");
 if (!appData.exists) appData.create();  // tao thu muc neu chua ton tai
 var localStatusFile = new File(appData + "/login_status.json");
@@ -19,9 +19,9 @@ if (!localStatusFile.exists) {
         var username = loginData.user;
 
         // Run bang python
-        var cmd = "python \"" + pyUpdate + "\" \"" + username + "\" 0";
+        // var cmd = "python \"" + pyUpdate + "\" \"" + username + "\" 0";
         //Run bang exe
-        // var cmd = "\"" + pyUpdate + "\" \"" + username + "\" 0";
+        var cmd = 'cmd /c start /wait "" "' + pyUpdate + '" "' + username + '" 0';
         app.system(cmd);
 
         // Xóa file login_status.json
