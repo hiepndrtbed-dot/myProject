@@ -45,7 +45,8 @@ var jsonFile = new File(tempDir + "/accounts.json");
             //run bang python
             // app.system('python "' + pyFetch + '"');
             //run bang exe
-            app.system('"' + pyFetch + '"');
+            // app.system('"' + pyFetch + '"');
+            app.system('cmd /c start /wait "" "' + pyFetch + '"');
         }
         catch (e) { alert("⚠️ Không gọi được Python fetch: " + e); return; }
 
@@ -118,6 +119,13 @@ var jsonFile = new File(tempDir + "/accounts.json");
         }
         else if (found.Status == 1 && sheetID !== machineID) {
             alert("⚠️ User đã đăng nhập trên máy khác! Vui lòng logout trên máy khác trước khi đăng nhập trên máy này.");
+            var result = showSelectLoginUserUI(sheetID);
+            if (result == 1) {
+                var cmd = 'cmd /c start /wait "" "' + pyUpdate + '" "' + username + '" 0';
+                app.system(cmd);
+                // Xóa file login_status.json
+                alert("✅ Logout khoi tai khoan! tai may " + sheetID);
+            }
         }
     }
 })();
@@ -165,6 +173,7 @@ function showLoginUI() {
 
     win.add("statictext", undefined, "User:");
     var userInput = win.add("edittext", undefined, ""); userInput.characters = 10;
+    userInput.active = true;
 
     win.add("statictext", undefined, "Password:");
     var pwInput = win.add("edittext", undefined, ""); pwInput.characters = 10; pwInput.password = true;
@@ -176,6 +185,16 @@ function showLoginUI() {
     return (win.show() == 1) ? { username: userInput.text, password: pwInput.text } : null;
 }
 
+
+function showSelectLoginUserUI(nameComputer) {
+    var win = new Window("dialog", "Select User!");
+    win.alignChildren = ["fill", "top"]; win.spacing = 5; win.margins = 5;
+    win.add("statictext", undefined, "Bạn có muốn thoát tài khoản tại máy" + nameComputer);
+    var btnGroup = win.add("group"); btnGroup.alignment = "center"
+    btnGroup.add("button", undefined, "Yes", { name: "ok" });
+    btnGroup.add("button", undefined, "No", { name: "cancel" });
+    return (win.show() == 1) ? 1 : 0;
+}
 
 function decodeBase64Manual(base64Str) {
     var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
