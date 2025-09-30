@@ -30,8 +30,8 @@ function run() {
     dialog.text = "RUN ALL ACTION"
     dialog.orientation = "column";
     dialog.alignChildren = ["center", "top"];
-    dialog.spacing = 10
-    dialog.margins = 10
+    dialog.spacing = 10;
+    dialog.margins = 10;
 
     // dialog.active = true;
     // GROUP1
@@ -101,6 +101,16 @@ function run() {
     buttonHueSaturation.text = "Hue Saturation(F7)";
     buttonHueSaturation.preferredSize.width = 170;
 
+    //ColorBalance
+    var buttonColorBalance = group1.add("button", undefined, undefined, { name: "Hue Color(5)" });
+    buttonColorBalance.text = "(-) HueSaturation + yellow (F9)";
+    buttonColorBalance.preferredSize.width = 170;
+
+    //ColorBalance
+    var buttonReduceHueSaturation= group1.add("button", undefined, undefined, { name: "Hue Color(5)" });
+    buttonReduceHueSaturation.text = "ColorBalance(F5)";
+    buttonReduceHueSaturation.preferredSize.width = 170;
+
     //Wall coloring 2
     var buttonFillWall2 = group1.add("button", undefined, undefined, { name: "Wall color 2" });
     buttonFillWall2.text = "Wall color 2 (0)"
@@ -154,7 +164,7 @@ function run() {
 
     //Replace color Red + yellow
     var buttonAddRed = group1.add("button", undefined, undefined, { name: "deleteSetAction 75%" });
-    buttonAddRed.text = "+ Yellow Red (Y)";
+    buttonAddRed.text = "(+) Yellow Red (Y)";
     buttonAddRed.preferredSize.width = 170;
 
     //Check cuvels
@@ -240,6 +250,8 @@ function run() {
     bindBtn(buttonSaveTifDTD, currentFolder + "/saveTifand2JPG(DTD).jsx");
     bindBtn(buttonReplaceColor, currentFolder + "/replaceColor.jsx");
     bindBtn(buttonHueSaturation, currentFolder + "/hueSaturation.jsx");
+    bindBtn(buttonColorBalance, currentFolder + "/colorBalance.jsx");
+    bindBtn(buttonReduceHueSaturation, currentFolder + "/-hueSaturation.jsx");
     bindBtn(buttonResetData, currentFolder + "/removeDataTxt.jsx");
     bindBtn(buttonSelectionDetail, currentFolder + "/selectionDetails.jsx");
     bindBtn(buttonCopyPath, currentFolder + "/copyPathTodocument.jsx");
@@ -316,94 +328,8 @@ function run() {
     buttonClose.addEventListener("click", function () {
         dialog.close();
     });
-
     //Xử lý xự kiện bằng bàng phím
     dialog.addEventListener("keydown", triggerBtnRun);
-    /*function triggerBtnRun(e) {
-        // alert(e.keyName)
-        if (e.keyName == "1") {
-            buttonCopyExposure.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "2") {
-            buttonMergeExposure.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "3") {
-            buttonFillCeilingMolding.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "4") {
-            buttonFillWall.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "0") {
-            buttonFillWall2.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "5") {
-            buttonSky.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "6") {
-            buttonDTD.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "7") {
-            buttonAddSkyDTD.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "8") {
-            buttonReplaceColor.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "9") {
-            buttonHueSaturation.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "T") {
-            buttonAddTV.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "G") {
-            buttonAddGrass.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "W") {
-            buttonWindow.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "Y") {
-            buttonAddRed.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "R") {
-            buttonResetData.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "L") {
-            buttonAddLight.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "D") {
-            buttonSaveSelectionDetail.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "F") {
-            buttonLoSuoi.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "S") {
-            buttonSaveTif.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "X") {
-            buttonSaveTifDTD.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "M") {
-            buttonMerge.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "A") {
-            buttonAlign.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "C") {
-            buttonCheckLight.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "I") {
-            buttonIndor.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "O") {
-            outDor.dispatchEvent(new Event("click"))
-        }
-        else if (e.keyName == "Escape") {
-            buttonClose.dispatchEvent(new Event("click"))
-        }
-        else {
-            alert("Input fail!!!!")
-        }
-    }*/
-
     function triggerBtnRun(e) {
         const actions = {
             "1": buttonCopyExposure,
@@ -432,6 +358,8 @@ function run() {
             "O": outDor,
             "F6": buttonReplaceColor,
             "F7": buttonHueSaturation,
+            "F5": buttonColorBalance,
+            "F9": buttonReduceHueSaturation,
             "F8": buttonCopyPath,
             "Escape": buttonClose
         };

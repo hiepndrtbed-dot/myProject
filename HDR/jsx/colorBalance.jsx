@@ -14,12 +14,12 @@ const doc = activeDocument;
     if (!hasSelection()) { alert("Chua co vung chon!"); return; }
     if (selectLayer("replaceColor")) {
         mergeVisible();
-        action("hueSaturation");
-        addMask();applyMask();
+        actionCharID("ClrB");
+        addMask();
         // doc.activeLayer.merge();
     } else {
         layerViaCopy("replaceColor");
-        action("hueSaturation");
+        actionCharID("ClrB");
     }
 })();
 
@@ -33,6 +33,11 @@ function action(action) {
     executeAction(idReplaceColor, undefined, DialogModes.ALL);
 }
 
+function actionCharID(actionName) {
+    var id = charIDToTypeID(actionName);
+    executeAction(id, undefined, DialogModes.ALL);
+
+}
 function mergeVisible(params) {
     var idMrgV = charIDToTypeID("MrgV");
     var desc25388 = new ActionDescriptor();
@@ -84,24 +89,6 @@ function addMask() {
     var idRvlS = charIDToTypeID("RvlS");
     desc358.putEnumerated(idUsng, idUsrM, idRvlS);
     executeAction(idMk, desc358, DialogModes.NO);
-}
-
-function applyMask() {
-    var c2t = function (s) {
-        return app.charIDToTypeID(s);
-    };
-
-    var s2t = function (s) {
-        return app.stringIDToTypeID(s);
-    };
-
-    var descriptor = new ActionDescriptor();
-    var reference = new ActionReference();
-
-    reference.putEnumerated(s2t("channel"), s2t("ordinal"), s2t("targetEnum"));
-    descriptor.putReference(c2t("null"), reference);
-    descriptor.putBoolean(s2t("apply"), true);
-    executeAction(s2t("delete"), descriptor, DialogModes.NO);
 }
 
 function hasSelection() {

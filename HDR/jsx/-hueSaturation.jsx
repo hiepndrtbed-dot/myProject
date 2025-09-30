@@ -1,3 +1,4 @@
+
 //By Duc Hiep - Acad DN Version 1.0 -- FINALIZE
 const versionTo = " By Acad -- Version 1.5 -- "
 preferences.rulerUnits = Units.PIXELS
@@ -14,12 +15,14 @@ const doc = activeDocument;
     if (!hasSelection()) { alert("Chua co vung chon!"); return; }
     if (selectLayer("replaceColor")) {
         mergeVisible();
-        action("hueSaturation");
-        addMask();applyMask();
-        // doc.activeLayer.merge();
+        addMask(); applyMask();
+        hueSaturation(0, -70, 0);
+        cameraRawFilter(3, 1);
+        doc.activeLayer.merge();
     } else {
         layerViaCopy("replaceColor");
-        action("hueSaturation");
+        hueSaturation(0, -70, 0);
+        cameraRawFilter(3, 1);
     }
 })();
 
@@ -112,4 +115,40 @@ function hasSelection() {
     var desc = executeActionGet(ref);
     if (desc.count) hasSelection = true;
     return hasSelection;
+}
+function hueSaturation(hue, saturation, lightness) {
+    var desc = new ActionDescriptor();
+    var list = new ActionList();
+    var desc2 = new ActionDescriptor();
+
+    // Thiết lập thông số Hue/Saturation
+    desc2.putInteger(charIDToTypeID("H   "), hue);       // Hue: 0
+    desc2.putInteger(charIDToTypeID("Strt"), saturation);      // Saturation: +70
+    desc2.putInteger(charIDToTypeID("Lght"), lightness);       // Lightness: 0
+
+    list.putObject(charIDToTypeID("Hst2"), desc2);
+    desc.putList(charIDToTypeID("Adjs"), list);
+
+    // Không bật Colorize
+    desc.putBoolean(charIDToTypeID("Clrz"), false);
+
+    // Áp dụng trực tiếp lên layer pixel hiện tại
+    executeAction(charIDToTypeID("HStr"), desc, DialogModes.NO);
+
+}
+
+function cameraRawFilter(temp, tint) {
+    var idAdobeCameraRawFilter = stringIDToTypeID("Adobe Camera Raw Filter");
+    var desc = new ActionDescriptor();
+
+    // White Balance: Custom
+    desc.putEnumerated(charIDToTypeID("WBal"), charIDToTypeID("WBal"), charIDToTypeID("Cst "));
+
+    // Temperature và Tint
+    desc.putInteger(charIDToTypeID("Temp"), temp);  // Temperature +3
+    desc.putInteger(charIDToTypeID("Tint"), tint);  // Tint +1
+
+    // Thực thi Camera Raw Filter
+    executeAction(idAdobeCameraRawFilter, desc, DialogModes.NO);
+
 }

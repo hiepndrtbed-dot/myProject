@@ -68,12 +68,41 @@ const doc = activeDocument;
         Algn("ADSTops");//"ADSCentersV" Ngang;
         doc.selection.deselect();
         actionMenu("freeTransform");
+        selectMaskLayerName("Color Fill 1");
+        selectMask();
     } catch (error) {
 
     }
 
 })();
 
+function selectMaskLayerName(nameLayer) {
+    var idslct = charIDToTypeID("slct");
+    var desc1737 = new ActionDescriptor();
+    var idnull = charIDToTypeID("null");
+    var ref454 = new ActionReference();
+    var idLyr = charIDToTypeID("Lyr ");
+    ref454.putName(idLyr, nameLayer);
+    desc1737.putReference(idnull, ref454);
+    var idMkVs = charIDToTypeID("MkVs");
+    desc1737.putBoolean(idMkVs, false);
+    executeAction(idslct, desc1737, DialogModes.NO);
+}
+
+function selectMask() {
+    var idslct = charIDToTypeID("slct");
+    var desc444 = new ActionDescriptor();
+    var idnull = charIDToTypeID("null");
+    var ref248 = new ActionReference();
+    var idChnl = charIDToTypeID("Chnl");
+    var idChnl = charIDToTypeID("Chnl");
+    var idMsk = charIDToTypeID("Msk ");
+    ref248.putEnumerated(idChnl, idChnl, idMsk);
+    desc444.putReference(idnull, ref248);
+    var idMkVs = charIDToTypeID("MkVs");
+    desc444.putBoolean(idMkVs, false);
+    executeAction(idslct, desc444, DialogModes.NO);
+}
 //add mask
 function addMask() {
     var idMk = charIDToTypeID("Mk  ");

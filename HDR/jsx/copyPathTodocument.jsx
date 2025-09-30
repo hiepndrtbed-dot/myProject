@@ -1,5 +1,4 @@
 //list pathitems
-#target photoshop
 //By Duc Hiep - Acad DN Version 1.0 -- FINALIZE
 const versionTo = " By Acad -- Version 1.5 -- "
 preferences.rulerUnits = Units.PIXELS

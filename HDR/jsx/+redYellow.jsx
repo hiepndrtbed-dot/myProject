@@ -21,8 +21,8 @@ const doc = activeDocument;
         doc.artLayers.add().name = "Color";
         doc.activeLayer.move(doc.layers["+Red & Yellow"], ElementPlacement.PLACEBEFORE);
         doc.activeLayer.blendMode = BlendMode.COLORBLEND;
-        doc.activeLayer = doc.artLayers.getByName("+Red & Yellow");
-        selectMask();
+        // doc.activeLayer = doc.artLayers.getByName("+Red & Yellow");
+        // selectMask();
         selecTool("paintbrushTool");
     } else {
         doc.activeLayer = doc.artLayers.getByName("replaceColor");
@@ -36,8 +36,8 @@ const doc = activeDocument;
         doc.artLayers.add().name = "Color";
         doc.activeLayer.move(doc.layers["+Red & Yellow"], ElementPlacement.PLACEBEFORE);
         doc.activeLayer.blendMode = BlendMode.COLORBLEND;
-        doc.activeLayer = doc.artLayers.getByName("+Red & Yellow");
-        selectMask();
+        // doc.activeLayer = doc.artLayers.getByName("+Red & Yellow");
+        // selectMask();
         selecTool("paintbrushTool");
     }
 })();

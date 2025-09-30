@@ -24,8 +24,6 @@ try {
     deleteSnapShot("Curent")
     makeHistory("Curent");
 }
-
-
 selectHistory("Window");
 doc.activeLayer = doc.layers[0];
 doc.selection.selectAll();
@@ -41,6 +39,7 @@ executeAction(idpasteInto, undefined, DialogModes.NO);
 doc.activeLayer.name = "Window";
 // setCurves(0, 0, 250, 255, 0, 0, 255, 250); 
 setFeatherMask(1)
+actionCharID("Lvls");
 
 //save selection Channel
 function saveChannel(name) {
@@ -77,50 +76,50 @@ function setFeatherMask(userMaskFeather) {
 
 setCurves(0, 0, 240, 255, 0, 0, 255, 240);
 function setCurves(horizontal, vertical, horizontal2, vertical2, horizontal3, vertical3, horizontal4, vertical4) {
-	var c2t = function (s) {
-		return app.charIDToTypeID(s);
-	};
+    var c2t = function (s) {
+        return app.charIDToTypeID(s);
+    };
 
-	var s2t = function (s) {
-		return app.stringIDToTypeID(s);
-	};
+    var s2t = function (s) {
+        return app.stringIDToTypeID(s);
+    };
 
-	var descriptor = new ActionDescriptor();
-	var descriptor2 = new ActionDescriptor();
-	var descriptor3 = new ActionDescriptor();
-	var descriptor4 = new ActionDescriptor();
-	var descriptor5 = new ActionDescriptor();
-	var descriptor6 = new ActionDescriptor();
-	var descriptor7 = new ActionDescriptor();
-	var list = new ActionList();
-	var list2 = new ActionList();
-	var list3 = new ActionList();
-	var reference = new ActionReference();
-	var reference2 = new ActionReference();
+    var descriptor = new ActionDescriptor();
+    var descriptor2 = new ActionDescriptor();
+    var descriptor3 = new ActionDescriptor();
+    var descriptor4 = new ActionDescriptor();
+    var descriptor5 = new ActionDescriptor();
+    var descriptor6 = new ActionDescriptor();
+    var descriptor7 = new ActionDescriptor();
+    var list = new ActionList();
+    var list2 = new ActionList();
+    var list3 = new ActionList();
+    var reference = new ActionReference();
+    var reference2 = new ActionReference();
 
-	descriptor.putEnumerated( s2t( "presetKind" ), s2t( "presetKindType" ), s2t( "presetKindCustom" ));
-	reference.putEnumerated( s2t( "channel" ), s2t( "channel" ), s2t( "red" ));
-	descriptor2.putReference( s2t( "channel" ), reference );
-	descriptor3.putDouble( s2t( "horizontal" ), horizontal );
-	descriptor3.putDouble( s2t( "vertical" ), vertical );
-	list2.putObject( c2t( "Pnt " ), descriptor3 );
-	descriptor4.putDouble( s2t( "horizontal" ), horizontal2 );
-	descriptor4.putDouble( s2t( "vertical" ), vertical2 );
-	list2.putObject( c2t( "Pnt " ), descriptor4 );
-	descriptor2.putList( s2t( "curve" ), list2 );
-	list.putObject( s2t( "curvesAdjustment" ), descriptor2 );
-	reference2.putEnumerated( s2t( "channel" ), s2t( "channel" ), s2t( "blue" ));
-	descriptor5.putReference( s2t( "channel" ), reference2 );
-	descriptor6.putDouble( s2t( "horizontal" ), horizontal3 );
-	descriptor6.putDouble( s2t( "vertical" ), vertical3 );
-	list3.putObject( c2t( "Pnt " ), descriptor6 );
-	descriptor7.putDouble( s2t( "horizontal" ), horizontal4 );
-	descriptor7.putDouble( s2t( "vertical" ), vertical4 );
-	list3.putObject( c2t( "Pnt " ), descriptor7 );
-	descriptor5.putList( s2t( "curve" ), list3 );
-	list.putObject( s2t( "curvesAdjustment" ), descriptor5 );
-	descriptor.putList( s2t( "adjustment" ), list );
-	executeAction( s2t( "curves" ), descriptor, DialogModes.NO );
+    descriptor.putEnumerated(s2t("presetKind"), s2t("presetKindType"), s2t("presetKindCustom"));
+    reference.putEnumerated(s2t("channel"), s2t("channel"), s2t("red"));
+    descriptor2.putReference(s2t("channel"), reference);
+    descriptor3.putDouble(s2t("horizontal"), horizontal);
+    descriptor3.putDouble(s2t("vertical"), vertical);
+    list2.putObject(c2t("Pnt "), descriptor3);
+    descriptor4.putDouble(s2t("horizontal"), horizontal2);
+    descriptor4.putDouble(s2t("vertical"), vertical2);
+    list2.putObject(c2t("Pnt "), descriptor4);
+    descriptor2.putList(s2t("curve"), list2);
+    list.putObject(s2t("curvesAdjustment"), descriptor2);
+    reference2.putEnumerated(s2t("channel"), s2t("channel"), s2t("blue"));
+    descriptor5.putReference(s2t("channel"), reference2);
+    descriptor6.putDouble(s2t("horizontal"), horizontal3);
+    descriptor6.putDouble(s2t("vertical"), vertical3);
+    list3.putObject(c2t("Pnt "), descriptor6);
+    descriptor7.putDouble(s2t("horizontal"), horizontal4);
+    descriptor7.putDouble(s2t("vertical"), vertical4);
+    list3.putObject(c2t("Pnt "), descriptor7);
+    descriptor5.putList(s2t("curve"), list3);
+    list.putObject(s2t("curvesAdjustment"), descriptor5);
+    descriptor.putList(s2t("adjustment"), list);
+    executeAction(s2t("curves"), descriptor, DialogModes.NO);
 }
 
 
@@ -171,3 +170,9 @@ function deleteSnapShot(name) {
     desc381.putReference(charIDToTypeID("null"), ref21);
     executeAction(charIDToTypeID("Dlt "), desc381, DialogModes.NO);
 };
+
+function actionCharID(actionName) {
+    var id = charIDToTypeID(actionName);
+    executeAction(id, undefined, DialogModes.ALL);
+
+}

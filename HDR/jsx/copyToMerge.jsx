@@ -16,14 +16,15 @@ for (var i = 0; i < lengthDoc; i++) {
     if (sourceDoc.name !== targetName) {
         app.activeDocument = sourceDoc;
         var layer = sourceDoc.activeLayer;
-
         // Copy sang document đích
-        var copiedLayer = layer.duplicate(targetDoc, ElementPlacement.PLACEATEND);
-        sourceDoc.close(SaveOptions.DONOTSAVECHANGES);
-        lengthDoc--;
-        i--;
-        copiedLayers.push(copiedLayer);
-        layerCount++;
+        if (app.activeDocument.name != "Untitled-1") {
+            var copiedLayer = layer.duplicate(targetDoc, ElementPlacement.PLACEATEND);
+            sourceDoc.close(SaveOptions.DONOTSAVECHANGES);
+            lengthDoc--;
+            i--;
+            copiedLayers.push(copiedLayer);
+            layerCount++;
+        }
     }
 }
 
@@ -89,7 +90,7 @@ function showOnly(layerName) {
 // showOnly("Option 1");
 // dialog1
 var dialog1 = new Window("dialog")
-dialog1.text = "RUN ALL ACTION"
+dialog1.text = "ACTION"
 dialog1.orientation = "column";
 dialog1.alignChildren = ["center", "top"];
 dialog1.spacing = 10
@@ -109,7 +110,9 @@ var buttonMergeExposure = group1.add("button", undefined, undefined, { name: "Me
 buttonMergeExposure.text = "Merge Exposure (2)";
 buttonMergeExposure.alignment = ["left", "center"];
 buttonMergeExposure.preferredSize.width = 170;
-buttonMergeExposure.tabStop = false; // <- không cho focus
+// buttonMergeExposure.tabStop = false; // <- không cho focus
+buttonMergeExposure.active = true
+
 
 
 //Align and merge Exposure
@@ -117,7 +120,7 @@ var buttonAlign = group1.add("button", undefined, undefined, { name: "Align and 
 buttonAlign.text = "ALign and Merge Exposure (A)";
 buttonAlign.alignment = ["left", "center"];
 buttonAlign.preferredSize.width = 170;
-buttonAlign.tabStop = false; // <- không cho focus
+// buttonAlign.tabStop = false; // <- không cho focus
 
 
 //Close Frame.
@@ -148,9 +151,6 @@ buttonAlign.addEventListener("click", function () {
         alert("❌ Không tìm thấy file: " + targetScript.fsName);
     }
 })
-
-
-
 
 //Đóng form
 buttonClose.addEventListener("click", function () {

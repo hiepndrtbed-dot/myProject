@@ -51,7 +51,6 @@ var jsonFile = new File(tempDir + "/accounts.json");
         catch (e) { alert("⚠️ Không gọi được Python fetch: " + e); return; }
 
         if (!jsonFile.exists) { alert("⚠️ Không tìm thấy accounts.json"); return; }
-
         // Đọc file JSON
         jsonFile.open("r");
         var content = jsonFile.read();
@@ -132,7 +131,7 @@ var jsonFile = new File(tempDir + "/accounts.json");
 
 
 // Hàm lấy machine ID từ Python
-function getMachineID() {
+function getMachineIDi() {
     var tmpFile = new File(pathCurentFolder + "/machine_id.txt");
     try {
         app.system('python -c "from uuid import getnode; f=open(\'' + tmpFile.fsName + '\',\'w\'); f.write(str(getnode()).strip()); f.close()"');
@@ -144,6 +143,34 @@ function getMachineID() {
     } catch (e) { alert("⚠️ Lỗi lấy machine ID: " + e); return null; }
 }
 
+function getMachineID() {
+    var tmpFile = new File(Folder.temp + "/machine_id.txt");
+    try {
+        var cmd = 'cmd /c wmic csproduct get uuid > "' + tmpFile.fsName + '"';
+        app.system(cmd);
+
+        // Chờ file xuất hiện
+        var waited = 0, maxWait = 3000;
+        while (!tmpFile.exists && waited < maxWait) {
+            $.sleep(100);
+            waited += 100;
+        }
+
+        if (!tmpFile.exists) throw "Không tạo được machine_id.txt";
+
+        tmpFile.open("r");
+        var lines = tmpFile.read().split("\n");
+        tmpFile.close();
+        tmpFile.remove();
+
+        // UUID thường nằm ở dòng thứ 2
+        var uuid = lines[1] ? lines[1].replace(/\s/g, '') : null;
+        return uuid || "UNKNOWN";
+    } catch (e) {
+        alert("⚠️ Không lấy được Machine ID: " + e);
+        return null;
+    }
+}
 // Hàm format date ISO (ExtendScript không hỗ trợ toISOString)
 function formatDateISO(date) {
     function pad(n) { return n < 10 ? '0' + n : n; }
@@ -184,7 +211,6 @@ function showLoginUI() {
 
     return (win.show() == 1) ? { username: userInput.text, password: pwInput.text } : null;
 }
-
 
 function showSelectLoginUserUI(nameComputer) {
     var win = new Window("dialog", "Select User!");
