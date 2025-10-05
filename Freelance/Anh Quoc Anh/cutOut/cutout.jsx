@@ -67,6 +67,12 @@
     formatDropdown.add("item", "PDF");
     formatDropdown.selection = 0;
 
+    //Custom name
+    var customName = dialog.add("group");
+    customName.add("statictext", undefined, "Add name: ").size = labelSize;
+    var inputCustomName = customName.add("edittext", undefined, "", { multiline: false });
+    inputCustomName.preferredSize.width = 100;
+
     var buttonGroup = dialog.add("group");
     buttonGroup.alignment = "right";
     var cancelButton = buttonGroup.add("button", undefined, "Cancel");
@@ -84,6 +90,8 @@
         var valueSlider = slider1.value;
         var valueSlider2 = slider2.value;
         var selectSubject = selectSubjectDropdown.selection;
+        var nameCustom = inputCustomName.text;
+        // alert(nameCustom);
         if (!inputFolder.exists) {
             alert("Please select folder Input!");
             return;
@@ -95,7 +103,7 @@
         }
 
         dialog.close();
-        processImages(inputFolder, outputFolder, selectSubject, valueSlider, valueSlider2, formatIndex);
+        processImages(inputFolder, outputFolder, selectSubject, valueSlider, valueSlider2, formatIndex, nameCustom);
         progressWindow.close();
     };
 
@@ -114,7 +122,7 @@
     };
     dialog.show();
 
-    function processImages(inputFolder, outputFolder, selectSubject, valueSlider, valueSlider2, formatIndex) {
+    function processImages(inputFolder, outputFolder, selectSubject, valueSlider, valueSlider2, formatIndex, nameCustom) {
         // Reset unit to Pixels
         preferences.rulerUnits = Units.PIXELS;
         app.preferences.typeunits = TypeUnits.PIXELS;
@@ -163,7 +171,7 @@
                         }
                     }
                     //end xu ly
-                    saveImage(outputFolder, formatIndex, "QuocAnh_" + i)
+                    saveImage(outputFolder, formatIndex, nameCustom +"_" + i)
                     doc.close(SaveOptions.DONOTSAVECHANGES);
                     progressbar1.value = valueProcessing;
                     valueProcessing = valueProcessing + 100 / files.length;

@@ -1,35 +1,50 @@
-// By Duc Hiep - Acad DN Version 1.5 -- OPTIMIZED
-preferences.rulerUnits = Units.PIXELS;
-app.preferences.typeUnits = TypeUnits.PIXELS;
-var doc = app.activeDocument;
+//By Duc Hiep - Acad DN Version 1.0 -- FINALIZE
+preferences.rulerUnits = Units.PIXELS
+app.preferences.typeunits = TypeUnits.PIXELS
 
-const nameLayer = "WALL2";
+const nameLayer = "WALL ";
 const feather = 1;
 const expandSelection = 1;
 const middleLevelsValue = 1;
 const destWhiteMin = 230;
-const nameChannel = "Wall2";
+const nameChannel = "Wall ";
 
-// Helpers
-function cTID(s) { return app.charIDToTypeID(s); }
-function sTID(s) { return app.stringIDToTypeID(s); }
+(function Main() {
+    if (!hasSelection()) {
+        alert("Chua co vung chon!");
+    } else {
+        try {
+            doc.activeLayer = doc.artLayers["MERGE 1"];
+        } catch (error) {
+            doc.activeLayer = doc.backgroundLayer;
+        }
+        var nameRandum = randomOneToTen();
+        saveAlphaChnl(nameChannel + nameRandum);
+        prepareSelection(expandSelection, feather);
+        layerViaCopy(nameLayer + nameRandum);
+        // activeDocument.activeLayer.adjustLevels(0, 255, middleLevelsValue, 0, 255);
+        makeLevelsAdjustment(middleLevelsValue);
+        app.activeDocument.activeLayer.grouped = true;
+        blendingOptions(0, 0, 255, 255, 0, 0, destWhiteMin, 255);// blendingOptions(0, 47, 189, 255, 0, 36, 233, 255);
+        setColorLayer("Grn ");
+        createSolidWithColorPicker("My Solid Color")
+        doc.activeLayer.blendMode = BlendMode.COLORBLEND;
+        app.activeDocument.activeLayer.grouped = true;
+    }
+})();
 
-function hasSelection() {
-    var ref = new ActionReference();
-    ref.putProperty(sTID("property"), sTID("selection"));
-    ref.putEnumerated(sTID("document"), sTID("ordinal"), sTID("targetEnum"));
-    var desc = executeActionGet(ref);
-    return desc.count > 0;
+function randomOneToTen() {
+    return Math.floor(Math.random() * 100) + 1;
 }
 
-
-
-function hasChannel(name) {
-    var chs = app.activeDocument.channels;
-    for (var i = 0; i < chs.length; i++) {
-        if (chs[i].name === name) return true;
-    }
-    return false;
+function saveAlphaChnl(name) {
+    var desc977 = new ActionDescriptor();
+    var ref38 = new ActionReference();
+    ref38.putProperty(charIDToTypeID("Chnl"), charIDToTypeID("fsel"));
+    desc977.putReference(charIDToTypeID("null"), ref38);
+    desc977.putString(charIDToTypeID("Nm  "), name);
+    executeAction(charIDToTypeID("Dplc"), desc977, DialogModes.NO);
+    return activeDocument.channels.getByName(name);
 }
 
 function prepareSelection(expand, featherVal) {
@@ -37,70 +52,102 @@ function prepareSelection(expand, featherVal) {
     doc.selection.feather(featherVal);
 }
 
-function saveAlphaChnl(name) {
-    var desc = new ActionDescriptor();
-    var ref = new ActionReference();
-    ref.putProperty(cTID("Chnl"), cTID("fsel"));
-    desc.putReference(cTID("null"), ref);
-    desc.putString(cTID("Nm  "), name);
-    executeAction(cTID("Dplc"), desc, DialogModes.NO);
-    return activeDocument.channels.getByName(name);
+function setLevels(middle) {
+    cTID = function (s) { return app.charIDToTypeID(s); };
+    sTID = function (s) { return app.stringIDToTypeID(s); };
+    var enabled;
+    var withDialog;
+    var dialogMode = (withDialog ? DialogModes.ALL : DialogModes.NO);
+    var desc1 = new ActionDescriptor();
+    desc1.putEnumerated(sTID("presetKind"), sTID("presetKindType"), sTID("presetKindCustom"));
+    var list1 = new ActionList();
+    var desc2 = new ActionDescriptor();
+    var ref1 = new ActionReference();
+    ref1.putEnumerated(cTID('Chnl'), cTID('Chnl'), cTID('Cmps'));
+    desc2.putReference(cTID('Chnl'), ref1);
+    desc2.putDouble(cTID('Gmm '), middle);
+    list1.putObject(cTID('LvlA'), desc2);
+    desc1.putList(cTID('Adjs'), list1);
+    executeAction(cTID('Lvls'), desc1, dialogMode);
 }
 
+// blendingOptions(0, 47, 189, 255, 0, 36, 233, 255);
+function blendingOptions(srcBlackMin, srcBlackMax, srcWhiteMin, srcWhiteMax, destBlackMin, destBlackMax, destWhiteMin, Dstt) {
+    var c2t = function (s) {
+        return app.charIDToTypeID(s);
+    };
+
+    var s2t = function (s) {
+        return app.stringIDToTypeID(s);
+    };
+
+    var descriptor = new ActionDescriptor();
+    var descriptor2 = new ActionDescriptor();
+    var descriptor3 = new ActionDescriptor();
+    var list = new ActionList();
+    var reference = new ActionReference();
+    var reference2 = new ActionReference();
+
+    reference.putEnumerated(s2t("layer"), s2t("ordinal"), s2t("targetEnum"));
+    descriptor.putReference(c2t("null"), reference);
+    reference2.putEnumerated(s2t("channel"), s2t("channel"), s2t("gray"));
+    descriptor3.putReference(s2t("channel"), reference2);
+    descriptor3.putInteger(s2t("srcBlackMin"), srcBlackMin);
+    descriptor3.putInteger(s2t("srcBlackMax"), srcBlackMax);
+    descriptor3.putInteger(s2t("srcWhiteMin"), srcWhiteMin);
+    descriptor3.putInteger(s2t("srcWhiteMax"), srcWhiteMax);
+    descriptor3.putInteger(s2t("destBlackMin"), destBlackMin);
+    descriptor3.putInteger(s2t("destBlackMax"), destBlackMax);
+    descriptor3.putInteger(s2t("destWhiteMin"), destWhiteMin);
+    descriptor3.putInteger(c2t("Dstt"), Dstt);
+    list.putObject(s2t("blendRange"), descriptor3);
+    descriptor2.putList(s2t("blendRange"), list);
+    descriptor.putObject(s2t("to"), s2t("layer"), descriptor2);
+    executeAction(s2t("set"), descriptor, DialogModes.NO);
+}
+
+function layerViaCopyMove(nameLayer, targetLayer) {
+    var layerDuplicate = doc.activeLayer.duplicate(targetLayer, ElementPlacement.PLACEBEFORE);
+    layerDuplicate.name = nameLayer;
+    doc.activeLayer = layerDuplicate;
+    addMask();
+    applyMask();
+}
+
+function layerViaCopy(nameLayer) {
+    var idCpTL = charIDToTypeID("CpTL");
+    executeAction(idCpTL, undefined, DialogModes.NO);
+    activeDocument.activeLayer.name = nameLayer;
+}
+//Kiem tra ton tai channel với tên .....
+function checkSelectionName(nameChannel) {
+    var result = false;
+    try {
+        var channelRef = app.activeDocument.channels.getByName(nameChannel);
+        if (channelRef) {
+            result = true;
+        }
+    } catch (error) { }
+    return result;
+}
+
+//Kiem tra co ton tai vung chon
+function hasSelection() {
+    var hasSelection = false;
+    var ref = new ActionReference();
+    ref.putProperty(stringIDToTypeID("property"), stringIDToTypeID("selection"));
+    ref.putEnumerated(stringIDToTypeID("document"), stringIDToTypeID("ordinal"), stringIDToTypeID("targetEnum"));
+    var desc = executeActionGet(ref);
+    if (desc.count) hasSelection = true;
+    return hasSelection;
+}
+
+//Add selection channel 
 function addSelectionToChannelName(channelName) {
     var ch = doc.channels.getByName(channelName);
     doc.selection.store(ch, SelectionType.EXTEND);
 }
 
-function layerViaCopy(nameLayer) {
-    executeAction(cTID("CpTL"), undefined, DialogModes.NO);
-    activeDocument.activeLayer.name = nameLayer;
-}
-
-function blendingOptions(srcBlackMin, srcBlackMax, srcWhiteMin, srcWhiteMax,
-    destBlackMin, destBlackMax, destWhiteMin, Dstt) {
-
-    var d = new ActionDescriptor();
-    var d2 = new ActionDescriptor();
-    var d3 = new ActionDescriptor();
-    var list = new ActionList();
-    var ref = new ActionReference();
-    var ref2 = new ActionReference();
-
-    ref.putEnumerated(sTID("layer"), sTID("ordinal"), sTID("targetEnum"));
-    d.putReference(cTID("null"), ref);
-
-    ref2.putEnumerated(sTID("channel"), sTID("channel"), sTID("gray"));
-    d3.putReference(sTID("channel"), ref2);
-
-    d3.putInteger(sTID("srcBlackMin"), srcBlackMin);
-    d3.putInteger(sTID("srcBlackMax"), srcBlackMax);
-    d3.putInteger(sTID("srcWhiteMin"), srcWhiteMin);
-    d3.putInteger(sTID("srcWhiteMax"), srcWhiteMax);
-    d3.putInteger(sTID("destBlackMin"), destBlackMin);
-    d3.putInteger(sTID("destBlackMax"), destBlackMax);
-    d3.putInteger(sTID("destWhiteMin"), destWhiteMin);
-    d3.putInteger(cTID("Dstt"), Dstt);
-
-    list.putObject(sTID("blendRange"), d3);
-    d2.putList(sTID("blendRange"), list);
-    d.putObject(sTID("to"), sTID("layer"), d2);
-
-    executeAction(sTID("set"), d, DialogModes.NO);
-}
-
-function setColorLayer(color) {
-    var desc = new ActionDescriptor();
-    var ref = new ActionReference();
-    ref.putEnumerated(cTID("Lyr "), cTID("Ordn"), cTID("Trgt"));
-    desc.putReference(cTID("null"), ref);
-
-    var descClr = new ActionDescriptor();
-    descClr.putEnumerated(cTID("Clr "), cTID("Clr "), cTID(color));
-    desc.putObject(cTID("T   "), cTID("Lyr "), descClr);
-
-    executeAction(cTID("setd"), desc, DialogModes.NO);
-}
 
 function createSolidWithColorPicker(layerName) {
 
@@ -130,35 +177,156 @@ function createSolidWithColorPicker(layerName) {
     if (layerName) app.activeDocument.activeLayer.name = layerName;
 }
 
-// ========== MAIN ==========
-
-if (!hasSelection()) {
-    alert("Chua co vung chon!");
-} else {
-    try {
-        doc.activeLayer = doc.artLayers["MERGE 1"];
-    } catch (error) {
-        doc.activeLayer = doc.backgroundLayer;
-    }
-    if (!hasChannel(nameChannel)) {
-        saveAlphaChnl(nameChannel);
-        prepareSelection(expandSelection, feather);
-        layerViaCopy(nameLayer);
-        doc.activeLayer.adjustLevels(0, 255, middleLevelsValue, 0, 255);
-        blendingOptions(0, 0, 255, 255, 0, 0, destWhiteMin, 255);
-        setColorLayer("Grn ");
-        createSolidWithColorPicker("My Solid Color");
-        doc.activeLayer.blendMode = BlendMode.COLORBLEND;
-        doc.activeLayer.grouped = true;
-    } else {
-        addSelectionToChannelName(nameChannel);
-        prepareSelection(expandSelection, feather);
-        layerViaCopy(nameLayer);
-        doc.activeLayer.adjustLevels(0, 255, middleLevelsValue, 0, 255);
-        var solidLayer = doc.layers.getByName("My Solid Color");
-        solidLayer.grouped = false;
-        doc.activeLayer.move(doc.layers.getByName(nameLayer), ElementPlacement.PLACEBEFORE);
-        doc.activeLayer.merge();
-        solidLayer.grouped = true;
-    }
+function createSolicolor(name) {
+    var idMk = charIDToTypeID("Mk  ");
+    var desc1514 = new ActionDescriptor();
+    var idnull = charIDToTypeID("null");
+    var ref72 = new ActionReference();
+    var idcontentLayer = stringIDToTypeID("contentLayer");
+    ref72.putClass(idcontentLayer);
+    desc1514.putReference(idnull, ref72);
+    var idUsng = charIDToTypeID("Usng");
+    var desc1515 = new ActionDescriptor();
+    var idNm = charIDToTypeID("Nm  ");
+    desc1515.putString(idNm, name);
+    var idMd = charIDToTypeID("Md  ");
+    var idBlnM = charIDToTypeID("BlnM");
+    var idClr = charIDToTypeID("Clr ");
+    desc1515.putEnumerated(idMd, idBlnM, idClr);
+    var idGrup = charIDToTypeID("Grup");
+    desc1515.putBoolean(idGrup, true);
+    var idType = charIDToTypeID("Type");
+    var desc1516 = new ActionDescriptor();
+    var idClr = charIDToTypeID("Clr ");
+    var desc1517 = new ActionDescriptor();
+    var idRd = charIDToTypeID("Rd  ");
+    desc1517.putDouble(idRd, 0.000000);
+    var idGrn = charIDToTypeID("Grn ");
+    desc1517.putDouble(idGrn, 0.000000);
+    var idBl = charIDToTypeID("Bl  ");
+    desc1517.putDouble(idBl, 0.000000);
+    var idRGBC = charIDToTypeID("RGBC");
+    desc1516.putObject(idClr, idRGBC, desc1517);
+    var idsolidColorLayer = stringIDToTypeID("solidColorLayer");
+    desc1515.putObject(idType, idsolidColorLayer, desc1516);
+    var idcontentLayer = stringIDToTypeID("contentLayer");
+    desc1514.putObject(idUsng, idcontentLayer, desc1515);
+    executeAction(idMk, desc1514, DialogModes.ALL);
 }
+//add mask
+function addMask() {
+    var idMk = charIDToTypeID("Mk  ");
+    var desc358 = new ActionDescriptor();
+    var idNw = charIDToTypeID("Nw  ");
+    var idChnl = charIDToTypeID("Chnl");
+    desc358.putClass(idNw, idChnl);
+    var idAt = charIDToTypeID("At  ");
+    var ref208 = new ActionReference();
+    var idChnl = charIDToTypeID("Chnl");
+    var idChnl = charIDToTypeID("Chnl");
+    var idMsk = charIDToTypeID("Msk ");
+    ref208.putEnumerated(idChnl, idChnl, idMsk);
+    desc358.putReference(idAt, ref208);
+    var idUsng = charIDToTypeID("Usng");
+    var idUsrM = charIDToTypeID("UsrM");
+    var idRvlS = charIDToTypeID("RvlS");
+    desc358.putEnumerated(idUsng, idUsrM, idRvlS);
+    executeAction(idMk, desc358, DialogModes.NO);
+}
+
+function applyMask() {
+    var c2t = function (s) {
+        return app.charIDToTypeID(s);
+    };
+
+    var s2t = function (s) {
+        return app.stringIDToTypeID(s);
+    };
+
+    var descriptor = new ActionDescriptor();
+    var reference = new ActionReference();
+
+    reference.putEnumerated(s2t("channel"), s2t("ordinal"), s2t("targetEnum"));
+    descriptor.putReference(c2t("null"), reference);
+    descriptor.putBoolean(s2t("apply"), true);
+    executeAction(s2t("delete"), descriptor, DialogModes.NO);
+}
+
+//Gry "Vlt "Bl  "Grn "Ylw "Orng" 
+function setColorLayer(color) {
+    var idsetd = charIDToTypeID("setd");
+    var desc18 = new ActionDescriptor();
+    var idnull = charIDToTypeID("null");
+    var ref8 = new ActionReference();
+    var idLyr = charIDToTypeID("Lyr ");
+    var idOrdn = charIDToTypeID("Ordn");
+    var idTrgt = charIDToTypeID("Trgt");
+    ref8.putEnumerated(idLyr, idOrdn, idTrgt);
+    desc18.putReference(idnull, ref8);
+    var idT = charIDToTypeID("T   ");
+    var desc19 = new ActionDescriptor();
+    var idClr = charIDToTypeID("Clr ");
+    var idClr = charIDToTypeID("Clr ");
+    var idBl = charIDToTypeID(color);
+    desc19.putEnumerated(idClr, idClr, idBl);
+    var idLyr = charIDToTypeID("Lyr ");
+    desc18.putObject(idT, idLyr, desc19);
+    executeAction(idsetd, desc18, DialogModes.NO);
+}
+
+
+function makeLevelsAdjustment(middle) {
+    var idMk = charIDToTypeID("Mk  ");
+    var desc1 = new ActionDescriptor();
+    var idnull = charIDToTypeID("null");
+    var ref1 = new ActionReference();
+    var idAdjL = charIDToTypeID("AdjL");
+    ref1.putClass(idAdjL);
+    desc1.putReference(idnull, ref1);
+
+    var idUsng = charIDToTypeID("Usng");
+    var desc2 = new ActionDescriptor();
+
+    var idType = charIDToTypeID("Type");
+    var desc3 = new ActionDescriptor();
+
+    // Tạo cấu hình Levels
+    var idAdjs = charIDToTypeID("Adjs");
+    var list1 = new ActionList();
+    var desc4 = new ActionDescriptor();
+
+    // Channel RGB
+    var idChnl = charIDToTypeID("Chnl");
+    var ref2 = new ActionReference();
+    var idChnlRGB = charIDToTypeID("Chnl");
+    var idRGB = charIDToTypeID("RGB ");
+    ref2.putEnumerated(idChnlRGB, idChnlRGB, idRGB);
+    desc4.putReference(idChnl, ref2);
+
+    // Input levels: black, white
+    var idInpt = charIDToTypeID("Inpt");
+    var list2 = new ActionList();
+    list2.putInteger(0);    // black input
+    list2.putInteger(255);  // white input
+    desc4.putList(idInpt, list2);
+
+    // Gamma (midtone)
+    var idGmm = charIDToTypeID("Gmm ");
+    desc4.putDouble(idGmm, middle); // midtone = 1.2
+
+    // Output levels: black, white
+    var idOtpt = charIDToTypeID("Otpt");
+    var list3 = new ActionList();
+    list3.putInteger(0);    // black output
+    list3.putInteger(255);  // white output
+    desc4.putList(idOtpt, list3);
+
+    list1.putObject(charIDToTypeID("LvlA"), desc4);
+    desc3.putList(idAdjs, list1);
+
+    desc2.putObject(idType, charIDToTypeID("Lvls"), desc3);
+    desc1.putObject(idUsng, idAdjL, desc2);
+
+    executeAction(idMk, desc1, DialogModes.NO);
+}
+

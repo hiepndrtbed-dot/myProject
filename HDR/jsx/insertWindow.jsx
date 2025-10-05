@@ -1,8 +1,6 @@
 //By Duc Hiep - Acad DN Version 1.0 -- FINALIZE
-const versionTo = " By Acad -- Version 1.5 -- "
-preferences.rulerUnits = Units.PIXELS
-app.preferences.typeunits = TypeUnits.PIXELS
-const doc = activeDocument;
+preferences.rulerUnits = Units.PIXELS;
+app.preferences.typeunits = TypeUnits.PIXELS;
 // try {
 //     makeHistory("Window");
 // } catch (error) {
@@ -10,36 +8,37 @@ const doc = activeDocument;
 //     makeHistory("Window");
 
 // }
-
-doc.activeLayer = doc.layers[0];
-try {
-    doc.channels.getByName("Window").remove();
-    saveChannel("Window");
-} catch (error) {
-    saveChannel("Window");
-}
-try {
-    makeHistory("Curent");
-} catch (error) {
-    deleteSnapShot("Curent")
-    makeHistory("Curent");
-}
-selectHistory("Window");
-doc.activeLayer = doc.layers[0];
-doc.selection.selectAll();
-doc.selection.copy();
-selectHistory("Curent");
-var idpasteInto = stringIDToTypeID("pasteInto");
-executeAction(idpasteInto, undefined, DialogModes.NO);
-// doc.selection.load(doc.channels.getByName("Window"));
-// doc.selection.expand(20);
-// doc.selection.invert();
-// doc.selection.clear();
-// doc.selection.invert()
-doc.activeLayer.name = "Window";
-// setCurves(0, 0, 250, 255, 0, 0, 255, 250); 
-setFeatherMask(1)
-actionCharID("Lvls");
+(function () {
+    doc.activeLayer = doc.layers[0];
+    try {
+        doc.channels.getByName("Window").remove();
+        saveChannel("Window");
+    } catch (error) {
+        saveChannel("Window");
+    }
+    try {
+        makeHistory("Curent");
+    } catch (error) {
+        deleteSnapShot("Curent")
+        makeHistory("Curent");
+    }
+    selectHistory("Window");
+    doc.activeLayer = doc.layers[0];
+    doc.selection.selectAll();
+    doc.selection.copy();
+    selectHistory("Curent");
+    var idpasteInto = stringIDToTypeID("pasteInto");
+    executeAction(idpasteInto, undefined, DialogModes.NO);
+    // doc.selection.load(doc.channels.getByName("Window"));
+    // doc.selection.expand(20);
+    // doc.selection.invert();
+    // doc.selection.clear();
+    // doc.selection.invert()
+    doc.activeLayer.name = "Window";
+    // setCurves(0, 0, 250, 255, 0, 0, 255, 250); 
+    setFeatherMask(1)
+    actionCharID("Lvls");
+})();
 
 //save selection Channel
 function saveChannel(name) {
@@ -74,7 +73,7 @@ function setFeatherMask(userMaskFeather) {
     executeAction(s2t("set"), descriptor, DialogModes.NO);
 }
 
-setCurves(0, 0, 240, 255, 0, 0, 255, 240);
+// setCurves(0, 0, 240, 255, 0, 0, 255, 240);
 function setCurves(horizontal, vertical, horizontal2, vertical2, horizontal3, vertical3, horizontal4, vertical4) {
     var c2t = function (s) {
         return app.charIDToTypeID(s);

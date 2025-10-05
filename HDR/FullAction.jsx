@@ -162,6 +162,11 @@ function run() {
     buttonCopyPath.text = "Copy Path (F8)"
     buttonCopyPath.preferredSize.width = 170;
 
+    //Copy Path
+    var buttonRunActionPath = group1.add("button", undefined, undefined, { name: "Run action path" });
+    buttonRunActionPath.text = "Run action Path (F4)"
+    buttonRunActionPath.preferredSize.width = 170;
+
     //Replace color Red + yellow
     var buttonAddRed = group1.add("button", undefined, undefined, { name: "deleteSetAction 75%" });
     buttonAddRed.text = "(+) Yellow Red (Y)";
@@ -255,6 +260,7 @@ function run() {
     bindBtn(buttonResetData, currentFolder + "/removeDataTxt.jsx");
     bindBtn(buttonSelectionDetail, currentFolder + "/selectionDetails.jsx");
     bindBtn(buttonCopyPath, currentFolder + "/copyPathTodocument.jsx");
+    bindBtn(buttonRunActionPath, currentFolder + "/autoAction.jsx");
     bindBtn(buttonLogout, scriptFolder + "/py/logout.jsx");
 
     // --- Các button có xử lý đặc biệt ---
@@ -361,6 +367,7 @@ function run() {
             "F5": buttonColorBalance,
             "F9": buttonReduceHueSaturation,
             "F8": buttonCopyPath,
+            "F4": buttonRunActionPath,
             "Escape": buttonClose
         };
 
