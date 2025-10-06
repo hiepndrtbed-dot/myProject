@@ -1,8 +1,6 @@
 //By Duc Hiep - Acad DN Version 1.0 -- FINALIZE
-const versionTo = " By Duc Hiep -- Version 1.0.1 -- "
 preferences.rulerUnits = Units.PIXELS
 app.preferences.typeunits = TypeUnits.PIXELS
-const doc = activeDocument;
 var nameTxt = "/file_infoSky.txt"
 var path = "/Library PE/Library/Sky/Exterior/";
 
@@ -10,6 +8,8 @@ var path = "/Library PE/Library/Sky/Exterior/";
 
     doc.artLayers.add().name = "Sky";
     slectionSky();
+    var widthSelection = doc.selection.bounds[2]- doc.selection.bounds[0];
+    var heightSelection = doc.selection.bounds[3]- doc.selection.bounds[1];
     addMask();
   
     //Lay thu muc hien tao
@@ -49,10 +49,10 @@ var path = "/Library PE/Library/Sky/Exterior/";
         // activeDocument.selection.copy();
         // activeDocument.close(SaveOptions.DONOTSAVECHANGES);
         // doc.paste();
-        resizeImage(doc.width, doc.height);
+        resizeImage(widthSelection, heightSelection);
         doc.activeLayer.merge();
         setMaskLink(false);
-        doc.selection.selectAll();
+        loadSelectionMask();
         Algn("ADSCentersH");//"ADSCentersV" Doc;
         Algn("ADSCentersV");//"ADSCentersV" Ngang;
         doc.selection.deselect();

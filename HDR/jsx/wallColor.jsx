@@ -1,7 +1,6 @@
 // By Duc Hiep - Acad DN Version 1.5 -- OPTIMIZED
 preferences.rulerUnits = Units.PIXELS;
 app.preferences.typeUnits = TypeUnits.PIXELS;
-var doc = app.activeDocument;
 
 const nameLayer = "WALL2";
 const feather = 1;

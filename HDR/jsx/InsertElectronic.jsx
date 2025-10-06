@@ -1,10 +1,6 @@
 //By Duc Hiep - Acad DN Version 1.0 -- FINALIZE
-const versionTo = " By Duc Hiep -- Version 1.0.1 -- "
 preferences.rulerUnits = Units.PIXELS
-app.preferences.typeunits = TypeUnits.PIXELS
-const doc = activeDocument;
-
-
+app.preferences.typeunits = TypeUnits.PIXELS;
 (function () {
     if (hasSelection()) {
         var nameTxt = "/file_infoElectronic.txt"

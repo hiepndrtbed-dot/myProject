@@ -1,9 +1,6 @@
 //By Duc Hiep - Acad DN Version 1.0 -- FINALIZE
-const versionTo = " By Duc Hiep -- Version 1.0.1 -- "
 preferences.rulerUnits = Units.PIXELS
 app.preferences.typeunits = TypeUnits.PIXELS
-const doc = activeDocument;
-
 var nameTxt = "/file_infoAddFire.txt"
 var path = "/Library PE/Library/Fireplace/";
 

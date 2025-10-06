@@ -1,6 +1,6 @@
 //By Duc Hiep - Acad DN Version 1.0 -- FINALIZE
 preferences.rulerUnits = Units.PIXELS
-app.preferences.typeunits = TypeUnits.PIXELS
+app.preferences.typeunits = TypeUnits.PIXELS;
 
 const nameLayer = "WALL ";
 const feather = 1;

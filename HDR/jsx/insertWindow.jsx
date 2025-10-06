@@ -175,3 +175,22 @@ function actionCharID(actionName) {
     executeAction(id, undefined, DialogModes.ALL);
 
 }
+
+
+function resizeImage(width, height) {
+    WIDTH = width;
+    HEIGHT = height;
+    bounds = activeDocument.activeLayer.bounds;
+    layerWidth = bounds[2].as('px') - bounds[0].as('px');
+    layerHeight = bounds[3].as('px') - bounds[1].as('px');
+    layerRatio = layerWidth / layerHeight;
+    newWidth = WIDTH;
+    newHeight = ((1.0 * WIDTH) / layerRatio);
+    if (newHeight >= HEIGHT) {
+        newWidth = layerRatio * HEIGHT;
+        newHeight = HEIGHT;
+    }
+    resizePercent = newWidth / layerWidth * 100;
+    app.activeDocument.activeLayer.resize(resizePercent, resizePercent, AnchorPosition.MIDDLECENTER);
+
+}

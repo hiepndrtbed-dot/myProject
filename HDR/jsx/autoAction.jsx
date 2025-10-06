@@ -1,8 +1,6 @@
 //By Duc Hiep - Acad DN Version 1.0 -- FINALIZE
-const versionTo = " By Acad -- Version 1.5 -- "
 preferences.rulerUnits = Units.PIXELS
-app.preferences.typeunits = TypeUnits.PIXELS
-const doc = activeDocument;
+app.preferences.typeunits = TypeUnits.PIXELS;
 
 (function main() {
     //list pathitems
