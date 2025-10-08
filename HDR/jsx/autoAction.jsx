@@ -15,8 +15,8 @@ app.preferences.typeunits = TypeUnits.PIXELS;
         var keywordsWindow = ["cua", "cửa", "window", "windows"];
         // Danh sách cấu hình: [keywords, fileName]
         var checks = [
-            [keywordsWall, "wallColor.jsx"],
             [keywordsTran, "Whitening.jsx"],
+            [keywordsWall, "wallColor.jsx"],
             [keywordsWindow, "insertWindow.jsx"]
         ];
 
@@ -30,29 +30,3 @@ app.preferences.typeunits = TypeUnits.PIXELS;
         }
     }
 })();
-
-
-function checkString(str, arr_) {
-    // Đưa về chữ thường để dễ so sánh
-    str = str.toLowerCase();
-    // Kiểm tra từng từ khóa
-    for (var i = 0; i < arr_.length; i++) {
-        if (str.indexOf(arr_[i]) !== -1) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function deselectPath() {
-    var idDslc = charIDToTypeID("Dslc");
-    var desc2657 = new ActionDescriptor();
-    var idnull = charIDToTypeID("null");
-    var ref325 = new ActionReference();
-    var idPath = charIDToTypeID("Path");
-    var idOrdn = charIDToTypeID("Ordn");
-    var idTrgt = charIDToTypeID("Trgt");
-    ref325.putEnumerated(idPath, idOrdn, idTrgt);
-    desc2657.putReference(idnull, ref325);
-    executeAction(idDslc, desc2657, DialogModes.NO);
-}

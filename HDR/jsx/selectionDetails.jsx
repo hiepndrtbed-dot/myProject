@@ -12,6 +12,7 @@ for (var i = 0; i < lengthGroup; i++) {
     if (lengthGroup == 1) {
         saveAlphaChnl("San");
         doc.layerSets[i].remove();
+        doc.selection.deselect();
         break;
     }
     if (lengthGroup == checkLengGroupNew) {
@@ -25,10 +26,10 @@ for (var i = 0; i < lengthGroup; i++) {
     i--;
     doc.selection.deselect();
 }
-doc.selection.load(doc.channels.getByName("Details"));
-doc.channels.getByName("Details").remove();
+// doc.selection.load(doc.channels.getByName("Details"));
+// doc.channels.getByName("Details").remove();
 
-if (activeDocument.quickMaskMode == false) { activeDocument.quickMaskMode = true; }
+// if (activeDocument.quickMaskMode == false) { activeDocument.quickMaskMode = true; }
 
 function maskall() {
     // Mask All Objects

@@ -133,34 +133,7 @@ function actionMenu(action) {
     New Document - "newDocument"  
     Revert - "revert"*/
 }
-//Kiem tra co ton tai vung chon
-function hasSelection() {
-    var hasSelection = false;
-    var ref = new ActionReference();
-    ref.putProperty(stringIDToTypeID("property"), stringIDToTypeID("selection"));
-    ref.putEnumerated(stringIDToTypeID("document"), stringIDToTypeID("ordinal"), stringIDToTypeID("targetEnum"));
-    var desc = executeActionGet(ref);
-    if (desc.count) hasSelection = true;
-    return hasSelection;
-}
 
-function resizeImage(width, height) {
-    WIDTH = width;
-    HEIGHT = height;
-    bounds = activeDocument.activeLayer.bounds;
-    layerWidth = bounds[2].as('px') - bounds[0].as('px');
-    layerHeight = bounds[3].as('px') - bounds[1].as('px');
-    layerRatio = layerWidth / layerHeight;
-    newWidth = WIDTH;
-    newHeight = ((1.0 * WIDTH) / layerRatio);
-    if (newHeight >= HEIGHT) {
-        newWidth = layerRatio * HEIGHT;
-        newHeight = HEIGHT;
-    }
-    resizePercent = newWidth / layerWidth * 100;
-    app.activeDocument.activeLayer.resize(resizePercent, resizePercent, AnchorPosition.MIDDLECENTER);
-
-}
 
 
 //Group layer

@@ -2,7 +2,7 @@
 preferences.rulerUnits = Units.PIXELS;
 app.preferences.typeUnits = TypeUnits.PIXELS;
 
-const nameLayer = "WALL2";
+var nameLayer = "WALL2";
 const feather = 1;
 const expandSelection = 1;
 const middleLevelsValue = 1.2;

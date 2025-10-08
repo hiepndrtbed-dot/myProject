@@ -38,6 +38,7 @@ app.preferences.typeunits = TypeUnits.PIXELS;
     // setCurves(0, 0, 250, 255, 0, 0, 255, 250); 
     setFeatherMask(1)
     actionCharID("Lvls");
+    loadSelectionByMask(doc.activeLayer.id);
 })();
 
 //save selection Channel
