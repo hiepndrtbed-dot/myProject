@@ -19,8 +19,8 @@ if (targetScript.exists) {
 }
 // alert(status)
 if (status == true) {
-    doc.suspendHistory("By Hiep!", "run()");
-    // run();
+    // doc.suspendHistory("By Hiep!", "run()");
+    run();
 }
 
 //processing
@@ -394,7 +394,7 @@ function run() {
 }
 // purgeAll();
 function checkNameLayerToMger() {
-    var keywordCheck = ["wall", "color", "black", "+red & yellow"];
+    var keywordCheck = ["wall", "color", "black", "+red & yellow", "grass", "sky","merge"];
     for (var x = 0; x < doc.artLayers.length; x++) {
         if (checkString(doc.artLayers[doc.artLayers.length - 3].name, keywordCheck)) break;
         doc.artLayers[doc.artLayers.length - 3].merge();

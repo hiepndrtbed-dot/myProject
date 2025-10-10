@@ -3,7 +3,7 @@ preferences.rulerUnits = Units.PIXELS;
 app.preferences.typeUnits = TypeUnits.PIXELS;
 
 var nameLayer = "WALL2";
-const feather = 1;
+var feather = 1;
 const expandSelection = 1;
 const middleLevelsValue = 1.2;
 const destWhiteMin = 230;
@@ -22,6 +22,7 @@ const nameSolid = "My Solid Color(single)";
             saveAlphaChnl(nameChannel);
             prepareSelection(expandSelection, feather);
             layerViaCopy(nameLayer);
+            activeDocument.activeLayer.adjustLevels(0, 255, middleLevelsValue, 0, 255)
             blendingOptions(0, 0, 255, 255, 0, 0, destWhiteMin, 255);
             setColorLayer("Grn ");
             createSolidWithColorPicker(nameSolid);
@@ -31,6 +32,7 @@ const nameSolid = "My Solid Color(single)";
             addSelectionToChannelName(nameChannel);
             prepareSelection(expandSelection, feather);
             layerViaCopy(nameLayer);
+            activeDocument.activeLayer.adjustLevels(0, 255, middleLevelsValue, 0, 255)
             var solidLayer = doc.artLayers.getByName(nameSolid);
             solidLayer.grouped = false;
             doc.activeLayer.move(doc.layers.getByName(nameLayer), ElementPlacement.PLACEBEFORE);

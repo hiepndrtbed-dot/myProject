@@ -23,6 +23,7 @@ app.preferences.typeunits = TypeUnits.PIXELS;
         // Duyệt qua từng cấu hình
         for (var j = 0; j < checks.length; j++) {
             if (checkString(namePath, checks[j][0]) == true) {
+                // alert(namePath);
                 var targetScript = File(currentFolder + "/" + checks[j][1]);
                 $.evalFile(targetScript);
                 break; // chạy xong thì thoát

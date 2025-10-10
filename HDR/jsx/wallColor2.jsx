@@ -3,7 +3,7 @@ preferences.rulerUnits = Units.PIXELS
 app.preferences.typeunits = TypeUnits.PIXELS;
 
 const nameLayer = "WALL ";
-const feather = 1;
+var feather = 1;
 const expandSelection = 1;
 const middleLevelsValue = 1;
 const destWhiteMin = 230;
@@ -23,12 +23,12 @@ const nameChannel = "Wall ";
         prepareSelection(expandSelection, feather);
         layerViaCopy(nameLayer + nameRandum);
         // activeDocument.activeLayer.adjustLevels(0, 255, middleLevelsValue, 0, 255);
-        makeLevelsAdjustment(middleLevelsValue);
-        app.activeDocument.activeLayer.grouped = true;
         blendingOptions(0, 0, 255, 255, 0, 0, destWhiteMin, 255);// blendingOptions(0, 47, 189, 255, 0, 36, 233, 255);
         setColorLayer("Grn ");
         createSolidWithColorPicker("My Solid Color")
         doc.activeLayer.blendMode = BlendMode.COLORBLEND;
+        app.activeDocument.activeLayer.grouped = true;
+        makeLevelsAdjustment(middleLevelsValue);
         app.activeDocument.activeLayer.grouped = true;
     }
 })();

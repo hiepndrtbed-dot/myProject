@@ -34,6 +34,5 @@ if (!hasSelection()) {
         activeDocument.activeLayer.adjustLevels(0, 255, middleLevelsValue, 0, 255)
         doc.activeLayer.move(doc.layers.getByName(nameLayer), ElementPlacement.PLACEBEFORE);
         doc.activeLayer.merge();
-        alert(1)
     }
 }

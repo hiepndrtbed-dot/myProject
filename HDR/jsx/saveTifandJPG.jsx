@@ -20,10 +20,15 @@
         doc.saveAs(tifFile, tifOptions, true);
 
         // Lưu JPEG
+
         var jpgOptions = new JPEGSaveOptions();
-        jpgOptions.quality = 12;
+        jpgOptions.embedColorProfile = true;                     // Nhúng profile màu (giữ màu chính xác)
+        jpgOptions.formatOptions = FormatOptions.STANDARDBASELINE; // Đảm bảo tương thích cao nhất
+        jpgOptions.matte = MatteType.NONE;                       // Không áp nền (tránh dính màu nền)
+        jpgOptions.quality = 12;                                 // Chất lượng cao nhất
         doc.saveAs(jpgFile, jpgOptions, true);
         doc.close(SaveOptions.DONOTSAVECHANGES);
+
 
         // // Đóng tất cả tài liệu mà không lưu
         // while (app.documents.length > 0) {
@@ -31,7 +36,7 @@
         // }
 
         // Mở Adobe Bridge bằng BridgeTalk
-        if (app.documents.length > 0) { return; }
+        if (app.documents.length > 0) { return; } //Thoat lenh neu document nhieu hon 1.
         BridgeTalk.launch("bridge");
         var bt = new BridgeTalk();
         bt.target = "bridge";

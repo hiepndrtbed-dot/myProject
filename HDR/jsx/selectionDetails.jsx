@@ -1,4 +1,3 @@
-#target photoshop
 //By Duc Hiep - Acad DN Version 1.0 -- FINALIZE
 preferences.rulerUnits = Units.PIXELS
 app.preferences.typeunits = TypeUnits.PIXELS
@@ -80,17 +79,7 @@ function selectRGB() {
     executeAction(idslct, desc219, DialogModes.NO);
 }
 
-function loadSelectionByMask(id) {
-    var desc1 = new ActionDescriptor();
-    var ref1 = new ActionReference();
-    ref1.putProperty(charIDToTypeID('Chnl'), stringIDToTypeID("selection"));
-    desc1.putReference(charIDToTypeID('null'), ref1);
-    var ref2 = new ActionReference();
-    ref2.putEnumerated(charIDToTypeID('Chnl'), charIDToTypeID('Chnl'), charIDToTypeID('Msk '));
-    ref2.putIdentifier(charIDToTypeID('Lyr '), id);
-    desc1.putReference(charIDToTypeID('T   '), ref2);
-    executeAction(charIDToTypeID('setd'), desc1, DialogModes.NO);
-};
+
 
 function createAlphaChannelBlack(name) {
     var idMk = charIDToTypeID("Mk  ");

@@ -17,12 +17,12 @@ const doc = activeDocument;
         mergeVisible();
         addMask(); applyMask();
         hueSaturation(0, -90, 0);
-        cameraRawFilter(3, 1);
+        cameraRawFilter(6, 2);
         doc.activeLayer.merge();
     } else {
         layerViaCopy("replaceColor");
         hueSaturation(0, -90, 0);
-        cameraRawFilter(3, 1);
+        cameraRawFilter(6, 2);
     }
 })();
 
