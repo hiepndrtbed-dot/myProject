@@ -821,7 +821,7 @@ function cameraRawFilter(temp, tint) {
 }
 
 function showLevels() { executeAction(charIDToTypeID("Lvls"), undefined, DialogModes.ALL); }
-dfsdfsdf
+
 //AutoVertical: 4:doc 3:ngang 5:canh tay 2:Ngang doc
 function cameraRawFilterALL(temp, tint, contrast, texture, autoVertical, dialogModes) {
     var dialogMode = (dialogModes ? DialogModes.ALL : DialogModes.NO);
