@@ -1,0 +1,15 @@
+var idsetd = charIDToTypeID( "setd" );
+    var desc239 = new ActionDescriptor();
+    var idnull = charIDToTypeID( "null" );
+        var ref1 = new ActionReference();
+        var idHstS = charIDToTypeID( "HstS" );
+        var idHstB = charIDToTypeID( "HstB" );
+        ref1.putProperty( idHstS, idHstB );
+    desc239.putReference( idnull, ref1 );
+    var idT = charIDToTypeID( "T   " );
+        var ref2 = new ActionReference();
+        var idHstS = charIDToTypeID( "HstS" );
+        var idCrnH = charIDToTypeID( "CrnH" );
+        ref2.putProperty( idHstS, idCrnH );
+    desc239.putReference( idT, ref2 );
+executeAction( idsetd, desc239, DialogModes.NO );

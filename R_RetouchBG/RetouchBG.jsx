@@ -1,0 +1,1888 @@
+﻿#target photoshop;
+const versionTo = " By Acad -- Version: 1.01 -- "
+const doc = activeDocument;
+preferences.rulerUnits = Units.PIXELS;
+app.preferences.typeunits = TypeUnits.PIXELS;
+
+const selection = "Acad_Selection_Background"
+const namePath = "Work Path"
+var fileImages = "//172.16.0.13/Academy/Automation_by_Academy/Images/Background/"; //Ha Noi
+// var fileImages = "//172.16.2.2/Academy/Automation_by_Academy/Images/Background/"; //Da Nang
+// var fileImages = "E:/ACA/BACKGROUND/"; // Plugin
+(function () {
+	//========================= Link Check login =====================
+
+	//========================= Location Ha Noi ======================
+
+	// var flagLogin = new File("//172.16.0.13/Academy/Hiep/log.txt")
+	// var logKeyAccount = new File("//172.16.0.13/apps/Log/accountBG.csv")
+	// var logUser = new File("~/AppData/Roaming/Adobe/Adobe Photoshop CC 2019/Adobe Photoshop CC 2019 Settings/LogUsBG.csv")
+
+	//========================= Location Da Nang ====================
+
+	// var flagLogin = new File("//172.16.2.2/Academy/Hiep/log.txt")
+	// var logKeyAccount = new File("//172.16.2.2/Public Data/Academy/LogAction/accountBG.csv")
+	// var logUser = new File("~/AppData/Roaming/Adobe/Adobe Photoshop CC 2019/Adobe Photoshop CC 2019 Settings/LogUsBG.csv")
+
+	//========================= Disk ===============================
+	// var logKeyAccount = new File("E:/ACA/Js/Public/accountBG.csv")
+	// var logUser = new File("E:/ACA/Js/Public/LogUsBG.csv")
+	//==============================================================
+
+
+	// if (logKeyAccount.exists /*&& flagLogin.exists*/) {
+	// 	logKeyAccount.open("r")
+	// 	logText = logKeyAccount.readln()
+	// 	if (logUser.exists) {
+	// 		logUser.open("r")
+	// 		user = logUser.readln()
+	// 		if (user != "") {
+	// 			var flag = false
+	// 			//So sanh điều kiện người dùng
+	// 			while (logText != "") {
+	// 				logText = logKeyAccount.readln()
+	// 				if (user == logText.split(",")[2]) {
+	// 					// alert("cho phep dung!")
+	// 					flag = true
+	// 					break
+	// 				}
+	// 			}
+	// 			//Check Flag nếu true thì cho phép sử dụng.
+	// 			if (flag == true) {
+	// 				// logAction("logRetouchBackground")
+	// 				main()
+	// 			} else {
+	// 				alert("Liên hệ người cấp user!")
+	// 			}
+	// 		} else {
+	// 			frame()
+	// 		}
+
+	// 	} else {//Yeu cau nhap key va tao file user ban dau
+	// 		frame()
+	// 	}
+	// 	logUser.close()
+	// 	logKeyAccount.close()
+	// }
+
+	function frame() {
+		// DIALOG
+		// ======
+		var dialog = new Window("dialog");
+		dialog.text = "Input Key";
+		dialog.orientation = "column";
+		dialog.alignChildren = ["center", "top"];
+		dialog.spacing = 5;
+		dialog.margins = 10;
+
+		// VALIDATE
+		// ========
+		var validate = dialog.add("group", undefined, { name: "validate" });
+		validate.orientation = "row";
+		validate.alignChildren = ["left", "center"];
+		validate.spacing = 10;
+		validate.margins = 0;
+
+		var validateText = validate.add("statictext", undefined, undefined, { name: "validateText" });
+		validateText.preferredSize.width = 150;
+		validateText.justify = "center";
+		validateText.text = "Nhập Key để mở khóa!";
+
+		// BODY
+		// ====
+		var body = dialog.add("group", undefined, { name: "body" });
+		body.orientation = "row";
+		body.alignChildren = ["left", "center"];
+		body.spacing = 10;
+		body.margins = 0;
+
+		var edittext1 = body.add('edittext {justify: "center", properties: {name: "edittext1", enterKeySignalsOnChange: true}}');
+		edittext1.preferredSize.width = 150;
+		edittext1.preferredSize.height = 0;
+		edittext1.active = true
+
+		// GROUP1
+		// ======
+		var group1 = dialog.add("group", undefined, { name: "group1" });
+		group1.orientation = "row";
+		group1.alignChildren = ["left", "center"];
+		group1.spacing = 10;
+		group1.margins = 0;
+
+		var button1 = group1.add("button", undefined, undefined, { name: "Nhap_Key" });
+		button1.text = "Nhập Key";
+
+		var button2 = group1.add("button", undefined, undefined, { name: "Cancel" });
+		button2.text = "Hủy";
+
+		// BY
+
+		var by = dialog.add("statictext", undefined, undefined, { name: "by" });
+		by.preferredSize.width = 150;
+		by.preferredSize.height = 10
+		by.spacing = 15;
+		by.justify = "bottom";
+		by.text = "Aca - 1.01 -";
+
+
+		//Kiểm tra điều kiện Key được cung cấp.
+		button1.addEventListener("click", function () {
+			if (logKeyAccount.exists) {
+				logKeyAccount.open("r")
+				logText = logKeyAccount.read()
+				logKeyAccount.close()
+				logKeyAccount.open("r")
+				logTextLine = logKeyAccount.readln()
+				while (logTextLine != "") {
+					logTextLine = logKeyAccount.readln()
+					if (edittext1.text == logTextLine.split(",")[2] && edittext1.text != "") {
+						logTextLine.split(",")[2]
+						if (logTextLine.split(",")[3] == "1") {//Neu da duoc dang ky
+							validateText.graphics.foregroundColor = validateText.graphics.newPen(validateText.graphics.PenType.SOLID_COLOR, [1, 0, 0], 1);
+							validateText.text = "Key đã được sử dụng!"
+							edittext1.active = true
+							break
+						} else {
+							logUser.open("w")
+							status = logUser.writeln(edittext1.text)
+							if (status == false) {
+								validateText.graphics.foregroundColor = validateText.graphics.newPen(validateText.graphics.PenType.SOLID_COLOR, [1, 0, 0], 1);
+								validateText.text = "Kích hoạt chưa thành công!"
+								edittext1.active = true
+							} else {
+								logKeyAccount.close()
+								logKeyAccount.open("w")
+								changeString = logText.replace(logTextLine.split(",")[2] + ",", logTextLine.split(",")[2] + ",1")
+								logKeyAccount.writeln(changeString)
+								dialog.close()
+								alert("Kích hoạt thành công!")
+								break
+							}
+						}
+					} else {
+						edittext1.active = true
+						validateText.graphics.foregroundColor = validateText.graphics.newPen(validateText.graphics.PenType.SOLID_COLOR, [1, 0, 0], 1);
+						validateText.text = "Không đúng key!"
+					}
+				}
+				logUser.close()
+				logKeyAccount.close()
+			}
+		})
+		edittext1.addEventListener("click", function () {
+		})
+
+		//Xử lý xự kiện bằng bàng phím
+		dialog.addEventListener("keydown", triggerBtnRun);
+		function triggerBtnRun(e) {
+			// alert(e.keyName)
+			if (e.keyName == "Enter" || e.keyName == "Space") {
+				button1.dispatchEvent(new Event("click"))
+			}
+		}
+		dialog.show();
+	}
+})()
+
+//DN
+var flagLogin = new File("//172.16.2.2/Academy/Hiep/logNew.txt")
+//HN
+// var flagLogin = new File("//172.16.0.13/Academy/Hiep/logNew.txt")
+
+var date = new Date()
+var year = date.getFullYear();
+var month = date.getMonth() + 1;
+var day = date.getDate();
+var yearEnd = 2024;
+var monthEnd = 1;
+if ((year <= yearEnd || month > monthEnd) && year <= yearEnd && flagLogin.exists) {
+    main()
+} else {
+    // alert("Heo")
+}
+
+function main() {
+	logAction("logRetouchBackground")
+	// body...
+	if (setSelectedLayer("Darken Check") == false) {
+		visibleGroup("Resources")
+	}
+	selectLayer("Retouch BG");
+	var pointLayerBG = doc.activeLayer.bounds;
+	//Kiem tra Layer Retouch BG có co ton tai diem anh khong
+	if ((pointLayerBG[1] != 0 || pointLayerBG[2] != 0) && checkSelectionName(selection)) {
+		//Nếu path và selection thì xử lý đường chân tường
+		if (verifyPathNameExists(namePath) && checkSelectionName(selection)) {
+			app.activeDocument.pathItems[namePath].makeSelection(0.0);
+			app.activeDocument.pathItems[namePath].deselect();
+			//Trừ vùng chọn.
+			subtractSelection(selection);
+			//Layer via copy
+			action("CpTL");
+			action("CpTL");
+			doc.selection.load(doc.channels.getByName(selection));
+			doc.selection.expand(5);
+			action("Dlt ");
+			clippingMask();
+			doc.activeLayer.translate(0, 20);
+			action("Mrg2");
+			setSelectionLayer();
+			action("MrgL");
+		} else {
+			//Không tồn tại path workpath thì chạy làm sạch nền hơn.
+			// saveHistory();
+			selectLayer("Retouch BG");
+			if (checkSelectionName(selection)) {
+				doc.selection.load(activeDocument.channels.getByName(selection))
+			} else {
+				doc.activeLayer = doc.layerSets["Variant 1"].layerSets["Item 1"].artLayers["Product"];
+				loadSelectionMask()
+				doc.activeLayer = doc.layerSets["Variant 1"].layerSets["Background 1"].artLayers["Retouch BG"];
+			}
+
+			//Run CameraRaw 
+			doc.selection.expand(1);
+			doc.selection.feather(.5);
+			doc.selection.invert();
+			action("CpTL");
+			cameraRaw(100, 20);
+			addNoise(0.5, true, 39853633);
+			doc.activeLayer.merge()
+		}
+
+
+		//tồn tại AI Background
+	} else if (pointLayerBG[1] != 0 || pointLayerBG[2] != 0) {
+		doc.selection.selectAll()
+		doc.selection.clear()
+		try {
+			loadSelectionMask()
+			doc.selection.invert()
+			deleteMask()
+			saveChannel(selection)
+			doc.selection.deselect()
+			checkVariant()
+			try { app.activeDocument.pathItems[namePath].remove(); } catch (error) { }
+		} catch (error) {
+			checkVariant()
+			try { app.activeDocument.pathItems[namePath].remove(); } catch (error) { }
+		}
+	} else {
+		makeHistoryRandum();
+		checkVariant();
+		try { app.activeDocument.pathItems[namePath].remove(); } catch (error) { }
+	}
+}
+
+function checkVariant() {
+	// body...
+	var grVariantRetouch = null;
+	var grColorRetouch = null;
+	var grItemRetouch = null;
+	var grBgRetouch = null;
+	var layerRetouch = null;
+	var lengthVariant = doc.layerSets.length - 2;
+	var grBACKGROUND = doc.layerSets["BACKGROUND"]
+	if (lengthVariant == 1) {//neu chi ton tai variant 1
+		grVariantRetouch = doc.layerSets["Variant 1"];
+		grColorRetouch = grVariantRetouch.layerSets["Color 1"];
+		grItemRetouch = grVariantRetouch.layerSets["Item 1"];
+		grBgRetouch = grVariantRetouch.layerSets["Background 1"];
+		try {
+			layerRetouch = grVariantRetouch.layerSets["Item 1"].artLayers["Retouch BG"];
+		} catch (error) {
+			doc.activeLayer.move(grItemRetouch, ElementPlacement.INSIDE)
+			layerRetouch = grVariantRetouch.layerSets["Item 1"].artLayers["Retouch BG"];
+		}
+	} else {//neu ton tai nhieu variant
+		doc.activeLayer = doc.layerSets["Variant 1"];
+		try { var checkExistRetouchBG = doc.layerSets["Variant 1"].layerSets["Item 1"].artLayers["Retouch BG"]; } catch (error) { }
+		if (!doc.activeLayer.allLocked && checkExistRetouchBG) {//Variant 1 ton tai Retouch BG
+			grVariantRetouch = doc.layerSets["Variant 1"];
+			grColorRetouch = grVariantRetouch.layerSets["Color 1"];
+			grItemRetouch = grVariantRetouch.layerSets["Item 1"];
+			grBgRetouch = grVariantRetouch.layerSets["Background 1"];
+			try {
+				layerRetouch = grVariantRetouch.layerSets["Item 1"].artLayers["Retouch BG"];
+			} catch (error) {
+				doc.activeLayer.move(grItemRetouch, ElementPlacement.INSIDE)
+				layerRetouch = grVariantRetouch.layerSets["Item 1"].artLayers["Retouch BG"];
+			}
+			//check Varian * tồn tại mask không, nếu tồn tại thì lưu selection
+			existMaskProductVariant(2);
+			visibleGroup("Variant 2");
+		} else {//Variant 2 ton tai BG
+			lengthVariant = doc.layerSets.length - 2
+			for (var i = 2; i <= lengthVariant; i++) {
+				try { var checkExistRetouchBG = doc.layerSets["Variant " + i].layerSets["Item " + i].artLayers["Retouch BG"]; }
+				catch (error) {
+				}
+				doc.activeLayer = doc.layerSets["Variant " + i]
+				if (!doc.activeLayer.allLocked && checkExistRetouchBG) {
+					grVariantRetouch = doc.layerSets["Variant " + i];
+					grColorRetouch = grVariantRetouch.layerSets["Color " + i];
+					grItemRetouch = grVariantRetouch.layerSets["Item " + i];
+					grBgRetouch = grVariantRetouch.layerSets["Background " + i];
+					layerRetouch = grVariantRetouch.layerSets["Item " + i].artLayers["Retouch BG"];
+					visibleGroup()
+					// alert(1)
+					enableGroup("Variant " + i);
+					existMaskProductVariant(1);
+					break
+				}
+			}
+		}
+	}
+	if (layerRetouch != null) {
+		grBACKGROUND.visible = false
+		doc.activeLayer = grItemRetouch;
+		var lengItemRetouch = doc.activeLayer.layers.length;
+		for (var i = 1; i < lengItemRetouch; i++) {
+			if (doc.activeLayer.artLayers[i].name.search("Product") != (-1)) {
+				doc.activeLayer = doc.activeLayer.artLayers[i];
+				productCurent = i;
+				selectRGB()
+				//Nếu tồn tại mask và vector mask
+				if (hasMask() && hasVectorMask()) {
+					var nameHistory = makeHistoryRandum()
+					disableMask(); disableVectorMask();
+					var alignLeftProduct = doc.activeLayer.bounds[0]
+					var alignTopProduct = doc.activeLayer.bounds[1]
+					var alignRightProduct = doc.activeLayer.bounds[2]
+					var alignBottomProduct = doc.activeLayer.bounds[3]
+					selectHistory(nameHistory)
+				}
+				//Nếu tồn tại mask
+				else if (hasMask()) {
+					var nameHistory = makeHistoryRandum()
+					disableMask()
+					var alignLeftProduct = doc.activeLayer.bounds[0]
+					var alignTopProduct = doc.activeLayer.bounds[1]
+					var alignRightProduct = doc.activeLayer.bounds[2]
+					var alignBottomProduct = doc.activeLayer.bounds[3]
+					selectHistory(nameHistory)
+				}
+				//Nếu tồn tại vector mask
+				else if (hasVectorMask()) {
+					var nameHistory = makeHistoryRandum()
+					// disableVectorMask()
+					var alignLeftProduct = doc.activeLayer.bounds[0]
+					var alignTopProduct = doc.activeLayer.bounds[1]
+					var alignRightProduct = doc.activeLayer.bounds[2]
+					var alignBottomProduct = doc.activeLayer.bounds[3]
+					selectHistory(nameHistory)
+				} else {
+					var alignLeftProduct = doc.activeLayer.bounds[0]
+					var alignTopProduct = doc.activeLayer.bounds[1]
+					var alignRightProduct = doc.activeLayer.bounds[2]
+					var alignBottomProduct = doc.activeLayer.bounds[3]
+				}
+				break;
+			}
+		}
+		if (!hasMask()) {//Product khong ton tai mask
+			for (var index = 1; index < 2; index++) {
+				if (hasVectorMask()) {
+					try { doc.layerSets.getByName("Resources").artLayers.getByName("Darken Check").visible = false; } catch (err) { }
+					loadSelectionVectorMask();
+					try { doc.channels.getByName(selection).remove(); } catch (err) { }
+					selectionMask = saveChannel(selection);
+					// toSelection(alignLeftProduct, alignRightProduct, alignTopProduct, alignBottomProduct)
+					doc.selection.selectAll()
+					doc.selection.copy();
+					doc.selection.deselect();
+					doc.activeLayer = grBgRetouch;
+					pasteFoder();
+					doc.activeLayer = layerRetouch;
+					makeLayer("Temp")
+					mergeLayer();
+					doc.activeLayer.merge()
+					doc.activeLayer = grBgRetouch.artLayers[0];
+					doc.activeLayer.remove();
+					try { doc.layerSets.getByName("Resources").artLayers.getByName("Darken Check").visible = true; } catch (err) { }
+					doc.activeLayer = layerRetouch;
+					loadActionMask();
+					try { doc.selection.load(activeDocument.channels.getByName(selection)); } catch (error) { }
+					doc.selection.invert();
+					addMask();
+					selectRGB();
+					break;
+				}
+				if (checkSelectionName(selection) == true) {//Ton tai channel
+					try { doc.layerSets.getByName("Resources").artLayers.getByName("Darken Check").visible = false; } catch (err) { }
+					grColorRetouch.visible = false
+					doc.selection.deselect()
+					doc.activeLayer = layerRetouch
+					// action("CpTL")
+					makeLayer("Temp")
+					mergeLayer()
+					toSelection(alignLeftProduct, alignRightProduct, alignTopProduct, alignBottomProduct)
+					addMask()
+					applyMask()
+					action("Mrg2")
+					grColorRetouch.visible = true
+					doc.activeLayer = grColorRetouch
+					colorRetouchBG()
+					try { doc.layerSets.getByName("Resources").artLayers.getByName("Darken Check").visible = true; } catch (err) { }
+					doc.activeLayer = layerRetouch
+					loadAction()
+				} else if (hasSelection()) { //Ton tai vung chon
+					try { doc.channels.getByName(selection).remove(); } catch (err) { }
+					selectionMask = saveChannel(selection);
+					try { doc.layerSets.getByName("Resources").artLayers.getByName("Darken Check").visible = false; } catch (err) { }
+					grColorRetouch.visible = false
+					doc.selection.deselect()
+					doc.activeLayer = layerRetouch
+					makeLayer("Temp")
+					mergeLayer()
+					toSelection(alignLeftProduct, alignRightProduct, alignTopProduct, alignBottomProduct)
+					addMask()
+					applyMask()
+					action("Mrg2")
+					grColorRetouch.visible = true
+					doc.activeLayer = grColorRetouch
+					colorRetouchBG()
+					try { doc.layerSets.getByName("Resources").artLayers.getByName("Darken Check").visible = true; } catch (err) { }
+					doc.activeLayer = layerRetouch;
+					loadAction()
+				} else {//ko ton tai channel selection va ko co vung chon
+					autoCutout(true)
+					grColorRetouch.visible = false
+					try { doc.layerSets.getByName("Resources").artLayers.getByName("Darken Check").visible = false; } catch (err) { }
+				}
+			}//end for
+		} else {//Product co mask
+			//save selection mask
+			loadSelectionMask()
+			selectionMask = saveChannel(selection)
+			doc.selection.deselect()
+			var nameHistory = makeHistoryRandum()
+			disableMask()
+			try { doc.layerSets.getByName("Resources").artLayers.getByName("Darken Check").visible = false; } catch (err) { }
+			grColorRetouch.visible = false
+			doc.activeLayer = layerRetouch
+			mergeLayer()
+			deselectPath()
+			toSelection(alignLeftProduct, alignRightProduct, alignTopProduct, alignBottomProduct)
+			doc.selection.copy()
+			selectHistory(nameHistory)
+			doc.activeLayer = layerRetouch;
+			doc.activeLayer.remove()
+			doc.activeLayer = grBgRetouch
+			pasteFoder()
+			doc.activeLayer.name = "Retouch BG"
+			loadActionMask()
+			if (setSelectedLayer("Desaturated Background") == true) {
+				doc.selection.load(doc.channels.getByName(selection));
+				doc.selection.expand(1)
+				fillColor(0, 0, 0)
+				doc.selection.deselect()
+				doc.activeLayer = grBgRetouch
+				doc.activeLayer = doc.activeLayer.artLayers[0]
+			}
+		}
+		grBACKGROUND.visible = true
+	}//end If layerRetouch
+}
+function loadAction() {
+	try { doc.selection.load(activeDocument.channels.getByName(selection)) } catch (error) { }
+	if (doc.selection.bounds[3] != doc.height) {
+		doc.selection.expand(5)
+		doc.selection.feather(.5)
+		doc.selection.invert()
+		saveHistory()
+		addMask()
+		loadSelectionMask()
+		selectRGB()
+		layerViaCopy()
+		dust(8, 5)
+		merge()
+	} else {
+		doc.selection.expand(5)
+		doc.selection.feather(.5)
+		doc.selection.invert()
+		saveHistory()
+		addMask()
+		selectRGB()
+	}
+}
+
+//Color step background
+function colorRetouchBG() {
+	if (setSelectedLayer("BG_Blend_Softlight_Opacity_70") && setSelectedLayer("BG_Hue/Saturation")) {
+		if (checkSelectionName(selection) == true) {
+			doc.selection.load(doc.channels.getByName(selection));
+			doc.selection.expand(1);
+			setSelectedLayer("BG_Hue/Saturation")
+			fillColor(0, 0, 0);
+			setSelectedLayer("BG_Blend_Softlight_Opacity_70")
+			fillColor(0, 0, 0);
+			setColorHueBG(false, 0, 0, -8, "color12.jpg", 80, 80);
+			doc.selection.deselect();
+		}
+	}
+
+	// Desaturate BG 75%
+	else if (setSelectedLayer("Desaturate BG 75%") == true) {
+		if (checkSelectionName(selection) == true) {
+			addMaskWhiteAll()
+			doc.selection.load(doc.channels.getByName(selection));
+			doc.selection.expand(1);
+			fillColor(0, 0, 0);
+			doc.selection.deselect();
+		}
+	}
+
+	//Neu ton tai layer Desaturate Background trong group Color
+	else if (setSelectedLayer("Desaturated Background") == true) {
+		if (checkSelectionName(selection) == true) {
+			doc.selection.load(doc.channels.getByName(selection));
+			doc.selection.expand(1);
+			fillColor(0, 0, 0);
+			doc.selection.deselect();
+		}
+	} else {
+		//open dialog
+		var dlg = new Window("dialog", "Select Background Color");
+		dlg.text = "BACKGROUND RETOUCH"
+		// dialog.preferredSize.width = 700
+		dlg.orientation = "column"
+		dlg.alignChildren = ["left", "center"]
+
+		//Nhóm button 1
+		btnGroup = dlg.add("group");
+		btnGroup.orientation = "row"
+		btnGroup.alignChildren = ["left", "center"]
+
+		//Add bottom
+		try {
+			Color1Btn = btnGroup.add("button", undefined, "Color 1 ");
+			Color1Btn.preferredSize = [60, 20];
+			btnGroup.add("image", [0, 0, 30, 40], fileImages + "color1.png");
+			Color2Btn = btnGroup.add("button", undefined, "Color 2 ");
+			Color2Btn.preferredSize = [60, 20];
+			btnGroup.add("image", [0, 0, 30, 40], fileImages + "color2.png");
+			Color3Btn = btnGroup.add("button", undefined, "Color 3 ");
+			Color3Btn.preferredSize = [60, 20];
+			btnGroup.add("image", [0, 0, 30, 40], fileImages + "color3.png");
+			Color4Btn = btnGroup.add("button", undefined, "Color 4 ");
+			Color4Btn.preferredSize = [60, 20];
+			btnGroup.add("image", [0, 0, 30, 40], fileImages + "color4.png");
+		} catch (error) { }
+
+		//function cho Group 1
+		Color1Btn.onClick = function () {
+			dlg.close();
+			setColorHueBG(false, -7, -15, 15, "color1.jpg", 83, 83);
+		}
+
+		Color2Btn.onClick = function () {
+			dlg.close();
+			setColorHueBG(false, 0, -100, 28, "color2.jpg", 80, 80);
+		}
+
+		Color3Btn.onClick = function () {
+			dlg.close();
+			setColorHueBG(false, 0, -100, 51, "color3.jpg", 80, 80);
+		}
+
+		Color4Btn.onClick = function () {
+			dlg.close();
+			setColorHueBG(false, 80, -73, 8, "color4.jpg", 83, 83);
+		}
+
+		// Nhóm botton 2
+		btnGroup2 = dlg.add("group");
+		btnGroup2.orientation = "row"
+		btnGroup2.alignChildren = ["left", "center"]
+
+
+		// add botton 2
+		try {
+			Color1Btn2 = btnGroup2.add("button", undefined, "Color 5 ");
+			Color1Btn2.preferredSize = [60, 20];
+			btnGroup2.add("image", [0, 0, 30, 40], fileImages + "color5.png");
+			Color2Btn2 = btnGroup2.add("button", undefined, "Color 6 ");
+			Color2Btn2.preferredSize = [60, 20];
+			btnGroup2.add("image", [0, 0, 30, 40], fileImages + "color6.png");
+			Color3Btn2 = btnGroup2.add("button", undefined, "Color 7 ");
+			Color3Btn2.preferredSize = [60, 20];
+			btnGroup2.add("image", [0, 0, 30, 40], fileImages + "color7.png");
+			Color4Btn2 = btnGroup2.add("button", undefined, "Color 8 ");
+			Color4Btn2.preferredSize = [60, 20];
+			btnGroup2.add("image", [0, 0, 30, 40], fileImages + "color8.png");
+		} catch (error) { }
+
+		//function cho Group 2
+		Color1Btn2.onClick = function () {
+			dlg.close();
+			setColorHueBG(false, 0, -73, 8, "color5.jpg", 80, 80);
+		}
+
+		//color 6
+		Color2Btn2.onClick = function () {
+			dlg.close();
+			setColorHueBG(false, 0, -100, 28, "color6.jpg", 80, 80);
+		}
+
+		//color 7
+		Color3Btn2.onClick = function () {
+			dlg.close();
+			setColorHueBG(false, 13, 0, -2, "color7.jpg", 80, 80);
+		}
+
+		//color 8
+		Color4Btn2.onClick = function () {
+			dlg.close();
+			setColorHueBG(true, 240, 4, 26, "color8.jpg", 80, 80);
+		}
+
+		//END GROUP 2 =============================
+
+		//GROUP 3
+		btnGroup3 = dlg.add("group");
+		btnGroup3.orientation = "row"
+		btnGroup3.alignChildren = ["left", "center"]
+
+		// add botton 3
+		try {
+			Color1Btn3 = btnGroup3.add("button", undefined, "Color 9 ");
+			Color1Btn3.preferredSize = [60, 20];
+			btnGroup3.add("image", [0, 0, 30, 40], fileImages + "color9.png");
+			Color3Btn3 = btnGroup3.add("button", undefined, "Color 10");
+			Color3Btn3.preferredSize = [60, 20];
+			btnGroup3.add("image", [0, 0, 30, 40], fileImages + "color10.png");
+			Color3Btn3 = btnGroup3.add("button", undefined, "Color 11");
+			Color3Btn3.preferredSize = [60, 20];
+			btnGroup3.add("image", [0, 0, 30, 40], fileImages + "color11.png");
+			Color4Btn3 = btnGroup3.add("button", undefined, "Color 12");
+			Color4Btn3.preferredSize = [60, 20];
+			btnGroup3.add("image", [0, 0, 30, 40], fileImages + "color12.png");
+		} catch (error) { }
+
+		//function cho Group 3
+
+		//color 9
+		Color1Btn3.onClick = function () {
+			dlg.close();
+			setColorHueBG(false, 0, -100, 25, "color9.jpg", 80, 80);
+		}
+		//color 10
+		Color3Btn3.onClick = function () {
+			dlg.close();
+			setColorHueBG(false, 0, -74, 71, "color10.jpg", 80, 80);
+
+		}
+
+		//color 11
+		Color3Btn3.onClick = function () {
+			dlg.close();
+			setColorHueBG(false, 13, 0, -3, "color11.jpg", 80, 80);
+		}
+
+		//color 12
+		Color4Btn3.onClick = function () {
+			dlg.close();
+			setColorHueBG(false, 0, 0, -8, "color12.jpg", 80, 80);
+		}
+
+
+		///=============END GROUP 3 =======================
+
+		//Group 4
+		btnGroup4 = dlg.add("group");
+		btnGroup4.alignment = ["center", "top"]
+
+		OK = btnGroup4.add("button", undefined, undefined, { name: "OK" });
+		OK.text = "Chuyển Xám";
+
+		Cancel = btnGroup4.add("button", undefined, undefined, { name: "Cancel" });
+		Cancel.text = "Hủy"
+
+		var Vesion = dlg.add("group", undefined, { name: "Version" })
+		Vesion.orientation = "column"
+		Vesion.alignChildren = ["left", "bottom"]
+		Vesion.spacing = 10
+		Vesion.margins = 0
+		Vesion.alignment = ["left", "bottom"]
+
+		var version = Vesion.add("statictext", undefined, undefined, { name: "version" })
+		version.text = versionTo
+		version.alignment = ["left", "bottom"]
+
+		//show dialog
+		var myReturn = dlg.show();
+		//gia tri tra ve cua fame OK = 1  Cancel = 2
+		// alert(myReturn);
+		if (myReturn == 1) {
+			try {
+				setHue(false, 0, -100, 0);
+				doc.selection.load(activeDocument.channels.getByName(selection));
+				doc.selection.expand(1);
+				doc.selection.feather(0.5);
+				fillColor(0, 0, 0);
+				doc.selection.deselect();
+				doc.activeLayer.name = "Desaturated Background";
+			} catch (error) {
+				//alert("Chạy layer Desaturated Background hệ thống trước nhé!");
+			}
+		}
+
+	}
+}
+
+function placeEvent(null2, width, height) {
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+	var descriptor2 = new ActionDescriptor();
+
+	//descriptor.putInteger( s2t( "ID" ), ID );
+	descriptor.putPath(c2t("null"), null2);
+	descriptor.putEnumerated(s2t("freeTransformCenterState"), s2t("quadCenterState"), s2t("QCSAverage"));
+	descriptor2.putUnitDouble(s2t("horizontal"), s2t("percentUnit"), 0);
+	descriptor2.putUnitDouble(s2t("vertical"), s2t("percentUnit"), 0);
+	descriptor.putObject(s2t("offset"), s2t("offset"), descriptor2);
+	descriptor.putUnitDouble(s2t("width"), s2t("percentUnit"), width);
+	descriptor.putUnitDouble(s2t("height"), s2t("percentUnit"), height);
+	executeAction(s2t("placeEvent"), descriptor, DialogModes.NO);
+}
+
+function loadActionMask() {
+	try { doc.selection.load(activeDocument.channels.getByName(selection)) } catch (error) { }
+	saveHistory();
+	if (doc.selection.bounds[3] != doc.height) {
+		doc.selection.expand(5);
+		doc.selection.feather(.5);
+		doc.selection.invert();
+		action("CpTL");
+		dust(8, 5);
+		merge();
+	} else {
+		doc.selection.deselect()
+	}
+
+
+}
+
+function addNoise(noise, monochromatic, FlRs) {
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+
+	descriptor.putEnumerated(c2t("Dstr"), c2t("Dstr"), s2t("gaussianDistribution"));
+	descriptor.putUnitDouble(s2t("noise"), s2t("percentUnit"), noise);
+	descriptor.putBoolean(s2t("monochromatic"), monochromatic);
+	descriptor.putInteger(c2t("FlRs"), FlRs);
+	executeAction(s2t("addNoise"), descriptor, DialogModes.NO);
+}
+
+function layerViaCopy() {
+	var idCpTL = charIDToTypeID("CpTL");
+	executeAction(idCpTL, undefined, DialogModes.NO);
+}
+function filter() {
+	try {
+		var idLqFy = charIDToTypeID("DstS");
+		executeAction(idLqFy, undefined, DialogModes.ALL);
+	} catch (error) { }
+}
+
+//check mask Product vairant
+function existMaskProductVariant(number) {
+	// body...
+	doc.activeLayer = doc.layerSets["Variant " + number].layerSets["Item " + number];
+	var lengthItemCurent = doc.activeLayer.layers.length;
+	for (var i = 0; i < lengthItemCurent; i++) {
+		if (doc.activeLayer.artLayers[i].name.search("Product") == 0) {
+			doc.activeLayer = doc.activeLayer.artLayers[i];
+			if (hasMask()) {
+				loadSelectionMask();
+				try { doc.channels.getByName(selection).remove(); } catch (err) { }
+				selectionMask = saveChannel(selection);
+				doc.selection.deselect();
+				break;
+			} else if (hasVectorMask()) {
+				loadSelectionVectorMask();
+				try { doc.channels.getByName(selection).remove(); } catch (err) { }
+				selectionMask = saveChannel(selection);
+				doc.selection.deselect();
+				break;
+			}
+		}
+	}
+}
+
+function visibleGroup(Group) {
+	totalVar = doc.layerSets.length - 2
+	if (!Group) {
+		for (var i = 1; i < totalVar; i++) {
+			setSelectedLayer("Variant " + String(i + 1)) == true ? doc.activeLayer.visible = false : "";
+		}
+	} else {
+		setSelectedLayer(Group);
+		doc.activeLayer.visible = false;
+	}
+}
+
+function enableGroup(Group) {
+	selectLayer(Group);
+	doc.activeLayer.visible = true;
+}
+
+//save history
+function saveHistory() {
+	var idsetd = charIDToTypeID("setd");
+	var desc976 = new ActionDescriptor();
+	var idnull = charIDToTypeID("null");
+	var ref407 = new ActionReference();
+	var idHstS = charIDToTypeID("HstS");
+	var idHstB = charIDToTypeID("HstB");
+	ref407.putProperty(idHstS, idHstB);
+	desc976.putReference(idnull, ref407);
+	var idT = charIDToTypeID("T   ");
+	var ref408 = new ActionReference();
+	var idHstS = charIDToTypeID("HstS");
+	var idCrnH = charIDToTypeID("CrnH");
+	ref408.putProperty(idHstS, idCrnH);
+	desc976.putReference(idT, ref408);
+	executeAction(idsetd, desc976, DialogModes.NO);
+}
+
+function slectColorCurentVariant() {
+	try {
+		activeDocument.activeLayer = activeDocument.activeLayer.parent;
+	} catch (error) {
+		if (activeDocument.activeLayer.name.search("Variant") == (-1)) {
+			setSelectedLayer("Color 1");
+		}
+	}
+	var foderChange = activeDocument.activeLayer.name;
+	var endVar = foderChange.slice(foderChange.length - 1);
+	setSelectedLayer("Color " + String(endVar));
+}
+function deselectPath() {
+	var idDslc = charIDToTypeID("Dslc");
+	var desc2657 = new ActionDescriptor();
+	var idnull = charIDToTypeID("null");
+	var ref325 = new ActionReference();
+	var idPath = charIDToTypeID("Path");
+	var idOrdn = charIDToTypeID("Ordn");
+	var idTrgt = charIDToTypeID("Trgt");
+	ref325.putEnumerated(idPath, idOrdn, idTrgt);
+	desc2657.putReference(idnull, ref325);
+	executeAction(idDslc, desc2657, DialogModes.NO);
+}
+
+function mergeLayer() {
+	var idMrgV = charIDToTypeID("MrgV");
+	var desc2921 = new ActionDescriptor();
+	var idDplc = charIDToTypeID("Dplc");
+	desc2921.putBoolean(idDplc, true);
+	executeAction(idMrgV, desc2921, DialogModes.NO);
+}
+
+function merge() {
+	var idMrgtwo = charIDToTypeID("Mrg2");
+	var desc662 = new ActionDescriptor();
+	executeAction(idMrgtwo, desc662, DialogModes.NO);
+}
+
+
+//
+function checkSelectionName(nameChannel) {
+	var result = false;
+	try {
+		var channelRef = app.activeDocument.channels.getByName(nameChannel);
+		if (channelRef) {
+			// app.activeDocument.selection.load(channelRef);
+			result = true;
+		}
+	} catch (error) { }
+	return result;
+}
+
+//Fill colo layer.
+function fillColor(red, green, blue) {
+	var idslct = charIDToTypeID("slct");
+	var desc2135 = new ActionDescriptor();
+	var idnull = charIDToTypeID("null");
+	var ref918 = new ActionReference();
+	var idChnl = charIDToTypeID("Chnl");
+	var idChnl = charIDToTypeID("Chnl");
+	var idMsk = charIDToTypeID("Msk ");
+	ref918.putEnumerated(idChnl, idChnl, idMsk);
+	desc2135.putReference(idnull, ref918);
+	var idMkVs = charIDToTypeID("MkVs");
+	desc2135.putBoolean(idMkVs, false);
+	executeAction(idslct, desc2135, DialogModes.NO);
+
+	var myColor = new SolidColor();
+	myColor.rgb.red = red; // 0 - 255
+	myColor.rgb.green = green;
+	myColor.rgb.blue = blue;
+	activeDocument.selection.fill(myColor);
+
+}
+//select subject
+function autoCutout(sampleAllLayers) {
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+
+	descriptor.putBoolean(s2t("sampleAllLayers"), sampleAllLayers);
+	executeAction(s2t("autoCutout"), descriptor, DialogModes.NO);
+}
+
+function pasteFoder() {
+	try {
+		var idpast = charIDToTypeID("past");
+		var desc262 = new ActionDescriptor();
+		var idinPlace = stringIDToTypeID("inPlace");
+		desc262.putBoolean(idinPlace, true);
+		var idAntA = charIDToTypeID("AntA");
+		var idAnnt = charIDToTypeID("Annt");
+		var idAnno = charIDToTypeID("Anno");
+		desc262.putEnumerated(idAntA, idAnnt, idAnno);
+		var idAs = charIDToTypeID("As  ");
+		var idPxel = charIDToTypeID("Pxel");
+		desc262.putClass(idAs, idPxel);
+		executeAction(idpast, desc262, DialogModes.NO);
+
+	} catch (e) {
+		//alert("err");
+	}
+}
+
+function deleteMask(params) {
+	var idDlt = charIDToTypeID("Dlt ");
+	var desc4950 = new ActionDescriptor();
+	var idnull = charIDToTypeID("null");
+	var ref1060 = new ActionReference();
+	var idChnl = charIDToTypeID("Chnl");
+	var idChnl = charIDToTypeID("Chnl");
+	var idMsk = charIDToTypeID("Msk ");
+	ref1060.putEnumerated(idChnl, idChnl, idMsk);
+	desc4950.putReference(idnull, ref1060);
+	executeAction(idDlt, desc4950, DialogModes.NO);
+}
+
+//add mask
+function addMask() {
+	var idMk = charIDToTypeID("Mk  ");
+	var desc358 = new ActionDescriptor();
+	var idNw = charIDToTypeID("Nw  ");
+	var idChnl = charIDToTypeID("Chnl");
+	desc358.putClass(idNw, idChnl);
+	var idAt = charIDToTypeID("At  ");
+	var ref208 = new ActionReference();
+	var idChnl = charIDToTypeID("Chnl");
+	var idChnl = charIDToTypeID("Chnl");
+	var idMsk = charIDToTypeID("Msk ");
+	ref208.putEnumerated(idChnl, idChnl, idMsk);
+	desc358.putReference(idAt, ref208);
+	var idUsng = charIDToTypeID("Usng");
+	var idUsrM = charIDToTypeID("UsrM");
+	var idRvlS = charIDToTypeID("RvlS");
+	desc358.putEnumerated(idUsng, idUsrM, idRvlS);
+	executeAction(idMk, desc358, DialogModes.NO);
+}
+
+function addMaskWhiteAll() {
+	var idMk = charIDToTypeID("Mk  ");
+	var desc1612 = new ActionDescriptor();
+	var idNw = charIDToTypeID("Nw  ");
+	var idChnl = charIDToTypeID("Chnl");
+	desc1612.putClass(idNw, idChnl);
+	var idAt = charIDToTypeID("At  ");
+	var ref655 = new ActionReference();
+	var idChnl = charIDToTypeID("Chnl");
+	var idChnl = charIDToTypeID("Chnl");
+	var idMsk = charIDToTypeID("Msk ");
+	ref655.putEnumerated(idChnl, idChnl, idMsk);
+	desc1612.putReference(idAt, ref655);
+	var idUsng = charIDToTypeID("Usng");
+	var idUsrM = charIDToTypeID("UsrM");
+	var idRvlA = charIDToTypeID("RvlA");
+	desc1612.putEnumerated(idUsng, idUsrM, idRvlA);
+	executeAction(idMk, desc1612, DialogModes.NO);
+
+
+}
+
+function makeLayer(name) {
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+	var descriptor2 = new ActionDescriptor();
+	var reference = new ActionReference();
+
+	reference.putClass(s2t("layer"));
+	descriptor.putReference(c2t("null"), reference);
+	descriptor2.putString(s2t("name"), name);
+	descriptor.putObject(s2t("using"), s2t("layer"), descriptor2);
+	descriptor.putInteger(s2t("layerID"), 208);
+	executeAction(s2t("make"), descriptor, DialogModes.NO);
+}
+
+function selectRGB() {
+	var idslct = charIDToTypeID("slct");
+	var desc7 = new ActionDescriptor();
+	var idnull = charIDToTypeID("null");
+	var ref2 = new ActionReference();
+	var idChnl = charIDToTypeID("Chnl");
+	var idChnl = charIDToTypeID("Chnl");
+	var idRGB = charIDToTypeID("RGB ");
+	ref2.putEnumerated(idChnl, idChnl, idRGB);
+	desc7.putReference(idnull, ref2);
+	var idMkVs = charIDToTypeID("MkVs");
+	desc7.putBoolean(idMkVs, false);
+	executeAction(idslct, desc7, DialogModes.NO);
+}
+
+//check Mask
+function hasMask() {
+	var ref = new ActionReference();
+	ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
+	var desGet = executeActionGet(ref);
+	return desGet.getBoolean(stringIDToTypeID("hasUserMask"));
+}
+
+//load selection mask
+function loadSelectionMask() {
+	var idsetd = charIDToTypeID("setd");
+	var desc32 = new ActionDescriptor();
+	var idnull = charIDToTypeID("null");
+	var ref14 = new ActionReference();
+	var idChnl = charIDToTypeID("Chnl");
+	var idfsel = charIDToTypeID("fsel");
+	ref14.putProperty(idChnl, idfsel);
+	desc32.putReference(idnull, ref14);
+	var idT = charIDToTypeID("T   ");
+	var ref15 = new ActionReference();
+	var idChnl = charIDToTypeID("Chnl");
+	var idChnl = charIDToTypeID("Chnl");
+	var idMsk = charIDToTypeID("Msk ");
+	ref15.putEnumerated(idChnl, idChnl, idMsk);
+	desc32.putReference(idT, ref15);
+	executeAction(idsetd, desc32, DialogModes.NO);
+}
+
+//Check vectormask
+function hasVectorMask() {
+	var ref = new ActionReference();
+	ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
+	var desget = executeActionGet(ref);
+	return desget.getBoolean(stringIDToTypeID("hasVectorMask"));
+}
+//NẾU TỒN TẠI SELECTION
+function hasSelection() {
+	var hasSelection = false;
+	try {
+		var ref = new ActionReference();
+		ref.putProperty(stringIDToTypeID("property"), stringIDToTypeID("selection"));
+		ref.putEnumerated(stringIDToTypeID("document"), stringIDToTypeID("ordinal"), stringIDToTypeID("targetEnum"));
+		var desc = executeActionGet(ref);
+		if (desc.count) {
+			hasSelection = true;
+		}
+	} catch (e) { }
+	return hasSelection;
+}
+//Loa selection vectormask
+function loadSelectionVectorMask() {
+	var idsetd = charIDToTypeID("setd");
+	var desc48 = new ActionDescriptor();
+	var idnull = charIDToTypeID("null");
+	var ref27 = new ActionReference();
+	var idChnl = charIDToTypeID("Chnl");
+	var idfsel = charIDToTypeID("fsel");
+	ref27.putProperty(idChnl, idfsel);
+	desc48.putReference(idnull, ref27);
+	var idT = charIDToTypeID("T   ");
+	var ref28 = new ActionReference();
+	var idPath = charIDToTypeID("Path");
+	var idPath = charIDToTypeID("Path");
+	var idvectorMask = stringIDToTypeID("vectorMask");
+	ref28.putEnumerated(idPath, idPath, idvectorMask);
+	var idLyr = charIDToTypeID("Lyr ");
+	var idOrdn = charIDToTypeID("Ordn");
+	var idTrgt = charIDToTypeID("Trgt");
+	ref28.putEnumerated(idLyr, idOrdn, idTrgt);
+	desc48.putReference(idT, ref28);
+	var idVrsn = charIDToTypeID("Vrsn");
+	desc48.putInteger(idVrsn, 1);
+	var idvectorMaskParams = stringIDToTypeID("vectorMaskParams");
+	desc48.putBoolean(idvectorMaskParams, true);
+	executeAction(idsetd, desc48, DialogModes.NO);
+}
+function disableMask() {
+	var idsetd = charIDToTypeID("setd");
+	var desc112 = new ActionDescriptor();
+	var idnull = charIDToTypeID("null");
+	var ref63 = new ActionReference();
+	var idLyr = charIDToTypeID("Lyr ");
+	var idOrdn = charIDToTypeID("Ordn");
+	var idTrgt = charIDToTypeID("Trgt");
+	ref63.putEnumerated(idLyr, idOrdn, idTrgt);
+	desc112.putReference(idnull, ref63);
+	var idT = charIDToTypeID("T   ");
+	var desc113 = new ActionDescriptor();
+	var idUsrM = charIDToTypeID("UsrM");
+	desc113.putBoolean(idUsrM, false);
+	var idLyr = charIDToTypeID("Lyr ");
+	desc112.putObject(idT, idLyr, desc113);
+	executeAction(idsetd, desc112, DialogModes.NO);
+}
+
+function disableVectorMask() {
+	var idsetd = charIDToTypeID("setd");
+	var desc106 = new ActionDescriptor();
+	var idnull = charIDToTypeID("null");
+	var ref60 = new ActionReference();
+	var idLyr = charIDToTypeID("Lyr ");
+	var idOrdn = charIDToTypeID("Ordn");
+	var idTrgt = charIDToTypeID("Trgt");
+	ref60.putEnumerated(idLyr, idOrdn, idTrgt);
+	desc106.putReference(idnull, ref60);
+	var idT = charIDToTypeID("T   ");
+	var desc107 = new ActionDescriptor();
+	var idvectorMaskEnabled = stringIDToTypeID("vectorMaskEnabled");
+	desc107.putBoolean(idvectorMaskEnabled, false);
+	var idLyr = charIDToTypeID("Lyr ");
+	desc106.putObject(idT, idLyr, desc107);
+	executeAction(idsetd, desc106, DialogModes.NO);
+}
+//save selection Channel
+function saveChannel(name) {
+	var desc977 = new ActionDescriptor();
+	var ref38 = new ActionReference();
+	ref38.putProperty(charIDToTypeID("Chnl"), charIDToTypeID("fsel"));
+	desc977.putReference(charIDToTypeID("null"), ref38);
+	desc977.putString(charIDToTypeID("Nm  "), name);
+	executeAction(charIDToTypeID("Dplc"), desc977, DialogModes.NO);
+	return activeDocument.channels.getByName(name);
+}
+
+
+function moveLayer(n) {
+	for (var index = 0; index < n; index++) {
+		var idmove = charIDToTypeID("move");
+		var desc553 = new ActionDescriptor();
+		var idnull = charIDToTypeID("null");
+		var ref107 = new ActionReference();
+		var idLyr = charIDToTypeID("Lyr ");
+		var idOrdn = charIDToTypeID("Ordn");
+		var idTrgt = charIDToTypeID("Trgt");
+		ref107.putEnumerated(idLyr, idOrdn, idTrgt);
+		desc553.putReference(idnull, ref107);
+		var idT = charIDToTypeID("T   ");
+		var ref108 = new ActionReference();
+		var idLyr = charIDToTypeID("Lyr ");
+		var idOrdn = charIDToTypeID("Ordn");
+		var idNxt = charIDToTypeID("Nxt ");
+		ref108.putEnumerated(idLyr, idOrdn, idNxt);
+		desc553.putReference(idT, ref108);
+		executeAction(idmove, desc553, DialogModes.NO);
+	}
+}
+
+function cameraRaw(lumi, lumiDetail) {
+	var idAdobeCameraRawFilter = stringIDToTypeID("Adobe Camera Raw Filter");
+	var desc501 = new ActionDescriptor();
+	var idCMod = charIDToTypeID("CMod");
+	desc501.putString(idCMod, """Filter""");
+	var idSett = charIDToTypeID("Sett");
+	var idSett = charIDToTypeID("Sett");
+	var idCst = charIDToTypeID("Cst ");
+	desc501.putEnumerated(idSett, idSett, idCst);
+	var idWBal = charIDToTypeID("WBal");
+	var idWBal = charIDToTypeID("WBal");
+	var idAsSh = charIDToTypeID("AsSh");
+	desc501.putEnumerated(idWBal, idWBal, idAsSh);
+	var idTemp = charIDToTypeID("Temp");
+	desc501.putInteger(idTemp, 0);
+	var idTint = charIDToTypeID("Tint");
+	desc501.putInteger(idTint, 0);
+	var idCtoG = charIDToTypeID("CtoG");
+	desc501.putBoolean(idCtoG, false);
+	var idStrt = charIDToTypeID("Strt");
+	desc501.putInteger(idStrt, 0);
+	var idShrp = charIDToTypeID("Shrp");
+	desc501.putInteger(idShrp, 0);
+	var idLNR = charIDToTypeID("LNR ");
+	desc501.putInteger(idLNR, lumi);
+	var idCNR = charIDToTypeID("CNR ");
+	desc501.putInteger(idCNR, 0);
+	var idVigA = charIDToTypeID("VigA");
+	desc501.putInteger(idVigA, 0);
+	var idBlkB = charIDToTypeID("BlkB");
+	desc501.putInteger(idBlkB, 0);
+	var idRHue = charIDToTypeID("RHue");
+	desc501.putInteger(idRHue, 0);
+	var idRSat = charIDToTypeID("RSat");
+	desc501.putInteger(idRSat, 0);
+	var idGHue = charIDToTypeID("GHue");
+	desc501.putInteger(idGHue, 0);
+	var idGSat = charIDToTypeID("GSat");
+	desc501.putInteger(idGSat, 0);
+	var idBHue = charIDToTypeID("BHue");
+	desc501.putInteger(idBHue, 0);
+	var idBSat = charIDToTypeID("BSat");
+	desc501.putInteger(idBSat, 0);
+	var idVibr = charIDToTypeID("Vibr");
+	desc501.putInteger(idVibr, 0);
+	var idHA_R = charIDToTypeID("HA_R");
+	desc501.putInteger(idHA_R, 0);
+	var idHA_O = charIDToTypeID("HA_O");
+	desc501.putInteger(idHA_O, 0);
+	var idHA_Y = charIDToTypeID("HA_Y");
+	desc501.putInteger(idHA_Y, 0);
+	var idHA_G = charIDToTypeID("HA_G");
+	desc501.putInteger(idHA_G, 0);
+	var idHA_A = charIDToTypeID("HA_A");
+	desc501.putInteger(idHA_A, 0);
+	var idHA_B = charIDToTypeID("HA_B");
+	desc501.putInteger(idHA_B, 0);
+	var idHA_P = charIDToTypeID("HA_P");
+	desc501.putInteger(idHA_P, 0);
+	var idHA_M = charIDToTypeID("HA_M");
+	desc501.putInteger(idHA_M, 0);
+	var idSA_R = charIDToTypeID("SA_R");
+	desc501.putInteger(idSA_R, 0);
+	var idSA_O = charIDToTypeID("SA_O");
+	desc501.putInteger(idSA_O, 0);
+	var idSA_Y = charIDToTypeID("SA_Y");
+	desc501.putInteger(idSA_Y, 0);
+	var idSA_G = charIDToTypeID("SA_G");
+	desc501.putInteger(idSA_G, 0);
+	var idSA_A = charIDToTypeID("SA_A");
+	desc501.putInteger(idSA_A, 0);
+	var idSA_B = charIDToTypeID("SA_B");
+	desc501.putInteger(idSA_B, 0);
+	var idSA_P = charIDToTypeID("SA_P");
+	desc501.putInteger(idSA_P, 0);
+	var idSA_M = charIDToTypeID("SA_M");
+	desc501.putInteger(idSA_M, 0);
+	var idLA_R = charIDToTypeID("LA_R");
+	desc501.putInteger(idLA_R, 0);
+	var idLA_O = charIDToTypeID("LA_O");
+	desc501.putInteger(idLA_O, 0);
+	var idLA_Y = charIDToTypeID("LA_Y");
+	desc501.putInteger(idLA_Y, 0);
+	var idLA_G = charIDToTypeID("LA_G");
+	desc501.putInteger(idLA_G, 0);
+	var idLA_A = charIDToTypeID("LA_A");
+	desc501.putInteger(idLA_A, 0);
+	var idLA_B = charIDToTypeID("LA_B");
+	desc501.putInteger(idLA_B, 0);
+	var idLA_P = charIDToTypeID("LA_P");
+	desc501.putInteger(idLA_P, 0);
+	var idLA_M = charIDToTypeID("LA_M");
+	desc501.putInteger(idLA_M, 0);
+	var idSTSH = charIDToTypeID("STSH");
+	desc501.putInteger(idSTSH, 0);
+	var idSTSS = charIDToTypeID("STSS");
+	desc501.putInteger(idSTSS, 0);
+	var idSTHH = charIDToTypeID("STHH");
+	desc501.putInteger(idSTHH, 0);
+	var idSTHS = charIDToTypeID("STHS");
+	desc501.putInteger(idSTHS, 0);
+	var idSTB = charIDToTypeID("STB ");
+	desc501.putInteger(idSTB, 0);
+	var idPC_S = charIDToTypeID("PC_S");
+	desc501.putInteger(idPC_S, 0);
+	var idPC_D = charIDToTypeID("PC_D");
+	desc501.putInteger(idPC_D, 0);
+	var idPC_L = charIDToTypeID("PC_L");
+	desc501.putInteger(idPC_L, 0);
+	var idPC_H = charIDToTypeID("PC_H");
+	desc501.putInteger(idPC_H, 0);
+	var idPC_one = charIDToTypeID("PC_1");
+	desc501.putInteger(idPC_one, 25);
+	var idPC_two = charIDToTypeID("PC_2");
+	desc501.putInteger(idPC_two, 50);
+	var idPC_three = charIDToTypeID("PC_3");
+	desc501.putInteger(idPC_three, 75);
+	var idShpR = charIDToTypeID("ShpR");
+	desc501.putDouble(idShpR, 1.000000);
+	var idShpD = charIDToTypeID("ShpD");
+	desc501.putInteger(idShpD, 25);
+	var idShpM = charIDToTypeID("ShpM");
+	desc501.putInteger(idShpM, 0);
+	var idPCVA = charIDToTypeID("PCVA");
+	desc501.putInteger(idPCVA, 0);
+	var idGRNA = charIDToTypeID("GRNA");
+	desc501.putInteger(idGRNA, 0);
+	var idLNRD = charIDToTypeID("LNRD");
+	desc501.putInteger(idLNRD, lumiDetail);
+	var idLNRC = charIDToTypeID("LNRC");
+	desc501.putInteger(idLNRC, 0);
+	var idLPEn = charIDToTypeID("LPEn");
+	desc501.putInteger(idLPEn, 0);
+	var idMDis = charIDToTypeID("MDis");
+	desc501.putInteger(idMDis, 0);
+	var idPerV = charIDToTypeID("PerV");
+	desc501.putInteger(idPerV, 0);
+	var idPerH = charIDToTypeID("PerH");
+	desc501.putInteger(idPerH, 0);
+	var idPerR = charIDToTypeID("PerR");
+	desc501.putDouble(idPerR, 0.000000);
+	var idPerS = charIDToTypeID("PerS");
+	desc501.putInteger(idPerS, 100);
+	var idPerA = charIDToTypeID("PerA");
+	desc501.putInteger(idPerA, 0);
+	var idPerU = charIDToTypeID("PerU");
+	desc501.putInteger(idPerU, 0);
+	var idPerX = charIDToTypeID("PerX");
+	desc501.putDouble(idPerX, 0.000000);
+	var idPerY = charIDToTypeID("PerY");
+	desc501.putDouble(idPerY, 0.000000);
+	var idAuCA = charIDToTypeID("AuCA");
+	desc501.putInteger(idAuCA, 0);
+	var idExonetwo = charIDToTypeID("Ex12");
+	desc501.putDouble(idExonetwo, 0.000000);
+	var idCronetwo = charIDToTypeID("Cr12");
+	desc501.putInteger(idCronetwo, 0);
+	var idHionetwo = charIDToTypeID("Hi12");
+	desc501.putInteger(idHionetwo, 0);
+	var idShonetwo = charIDToTypeID("Sh12");
+	desc501.putInteger(idShonetwo, 0);
+	var idWhonetwo = charIDToTypeID("Wh12");
+	desc501.putInteger(idWhonetwo, 0);
+	var idBkonetwo = charIDToTypeID("Bk12");
+	desc501.putInteger(idBkonetwo, 0);
+	var idClonetwo = charIDToTypeID("Cl12");
+	desc501.putInteger(idClonetwo, 0);
+	var idDfPA = charIDToTypeID("DfPA");
+	desc501.putInteger(idDfPA, 0);
+	var idDPHL = charIDToTypeID("DPHL");
+	desc501.putInteger(idDPHL, 30);
+	var idDPHH = charIDToTypeID("DPHH");
+	desc501.putInteger(idDPHH, 70);
+	var idDfGA = charIDToTypeID("DfGA");
+	desc501.putInteger(idDfGA, 0);
+	var idDPGL = charIDToTypeID("DPGL");
+	desc501.putInteger(idDPGL, 40);
+	var idDPGH = charIDToTypeID("DPGH");
+	desc501.putInteger(idDPGH, 60);
+	var idDhze = charIDToTypeID("Dhze");
+	desc501.putInteger(idDhze, 0);
+	var idCrTx = charIDToTypeID("CrTx");
+	desc501.putInteger(idCrTx, 5);
+	var idTMMs = charIDToTypeID("TMMs");
+	desc501.putInteger(idTMMs, 0);
+	var idCrv = charIDToTypeID("Crv ");
+	var list120 = new ActionList();
+	list120.putInteger(0);
+	list120.putInteger(0);
+	list120.putInteger(255);
+	list120.putInteger(255);
+	desc501.putList(idCrv, list120);
+	var idCrvR = charIDToTypeID("CrvR");
+	var list121 = new ActionList();
+	list121.putInteger(0);
+	list121.putInteger(0);
+	list121.putInteger(255);
+	list121.putInteger(255);
+	desc501.putList(idCrvR, list121);
+	var idCrvG = charIDToTypeID("CrvG");
+	var list122 = new ActionList();
+	list122.putInteger(0);
+	list122.putInteger(0);
+	list122.putInteger(255);
+	list122.putInteger(255);
+	desc501.putList(idCrvG, list122);
+	var idCrvB = charIDToTypeID("CrvB");
+	var list123 = new ActionList();
+	list123.putInteger(0);
+	list123.putInteger(0);
+	list123.putInteger(255);
+	list123.putInteger(255);
+	desc501.putList(idCrvB, list123);
+	var idCamP = charIDToTypeID("CamP");
+	desc501.putString(idCamP, """Embedded""");
+	var idCP_D = charIDToTypeID("CP_D");
+	desc501.putString(idCP_D, """54650A341B5B5CCAE8442D0B43A92BCE""");
+	var idPrVe = charIDToTypeID("PrVe");
+	desc501.putInteger(idPrVe, 184549376);
+	var idRtch = charIDToTypeID("Rtch");
+	desc501.putString(idRtch, """""");
+	var idREye = charIDToTypeID("REye");
+	desc501.putString(idREye, """""");
+	var idLCs = charIDToTypeID("LCs ");
+	desc501.putString(idLCs, """""");
+	var idUpri = charIDToTypeID("Upri");
+	desc501.putString(idUpri, """<x:xmpmeta xmlns:x="adobe: ns: meta / " x:xmptk="Adobe XMP Core 5.6 - c140 79.160451, 2017 / 05 / 06 - 01: 08: 21        ">
+		< rdf: RDF xmlns: rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+		<rdf:Description rdf:about=""
+			xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
+			crs:UprightVersion="151388160"
+			crs:UprightCenterMode="0"
+			crs:UprightCenterNormX="0.5"
+			crs:UprightCenterNormY="0.5"
+			crs:UprightFocalMode="0"
+			crs:UprightFocalLength35mm="35"
+			crs:UprightPreview="False"
+			crs:UprightTransformCount="6" />
+ </rdf: RDF >
+</x: xmpmeta >
+	""" );
+    var idGuUr = charIDToTypeID("GuUr");
+	desc501.putString(idGuUr, """<x:xmpmeta xmlns:x="adobe: ns: meta / " x:xmptk="Adobe XMP Core 5.6 - c140 79.160451, 2017 / 05 / 06 - 01: 08: 21        ">
+		< rdf: RDF xmlns: rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+		<rdf:Description rdf:about=""
+			xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
+			crs:UprightFourSegmentsCount="0" />
+ </rdf: RDF >
+</x: xmpmeta >
+	""" );
+    var idLook = charIDToTypeID("Look");
+	desc501.putString(idLook, """""");
+	var idPset = charIDToTypeID("Pset");
+	desc501.putString(idPset, """""");
+	executeAction(idAdobeCameraRawFilter, desc501, DialogModes.NO);
+
+}
+
+function dust(radius, threshold) {
+	// body...
+	var idDstS = charIDToTypeID("DstS");
+	var desc593 = new ActionDescriptor();
+	var idRds = charIDToTypeID("Rds ");
+	desc593.putInteger(idRds, radius);
+	var idThsh = charIDToTypeID("Thsh");
+	desc593.putInteger(idThsh, threshold);
+	executeAction(idDstS, desc593, DialogModes.NO);
+
+}
+
+
+//select layer
+function selectLayer(nameLayer) {
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+	var reference = new ActionReference();
+
+	reference.putName(s2t("layer"), nameLayer);
+	descriptor.putReference(c2t("null"), reference);
+	executeAction(s2t("select"), descriptor, DialogModes.NO);
+}
+
+function setSelectedLayer(layerName) {
+	var result = false;
+	try {
+		var idslct = charIDToTypeID("slct");
+		var desc19 = new ActionDescriptor();
+		var idnull = charIDToTypeID("null");
+		var ref1 = new ActionReference();
+		var idLyr = charIDToTypeID("Lyr ");
+		ref1.putName(idLyr, layerName);
+		desc19.putReference(idnull, ref1);
+		var idMkVs = charIDToTypeID("MkVs");
+		desc19.putBoolean(idMkVs, false);
+		var idLyrI = charIDToTypeID("LyrI");
+		var list2 = new ActionList();
+		list2.putInteger(10);
+		desc19.putList(idLyrI, list2);
+		executeAction(idslct, desc19, DialogModes.NO);
+		result = true;
+	} catch (error) {
+	}
+	return result;
+}
+
+//xoa layer
+function deleteLayer(layer) {
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+	var list = new ActionList();
+	var reference = new ActionReference();
+
+	reference.putName(s2t("layer"), layer);
+	descriptor.putReference(c2t("null"), reference);
+	list.putInteger(90);
+	descriptor.putList(s2t("layerID"), list);
+	executeAction(s2t("delete"), descriptor, DialogModes.NO);
+}
+
+//kiem tra ton tai selection với tên .....
+function checkSelectionName(nameChannel) {
+	var result = false;
+	try {
+		var channelRef = app.activeDocument.channels.getByName(nameChannel);
+		if (channelRef) {
+			// app.activeDocument.selection.load(channelRef);
+			result = true;
+		}
+	} catch (error) { }
+	return result;
+}
+function applyMask() {
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+	var reference = new ActionReference();
+
+	reference.putEnumerated(s2t("channel"), s2t("ordinal"), s2t("targetEnum"));
+	descriptor.putReference(c2t("null"), reference);
+	descriptor.putBoolean(s2t("apply"), true);
+	executeAction(s2t("delete"), descriptor, DialogModes.NO);
+}
+
+//save vung chon
+function saveSelection(name2) {
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+	var reference = new ActionReference();
+
+	reference.putProperty(s2t("channel"), s2t("selection"));
+	descriptor.putReference(c2t("null"), reference);
+	descriptor.putString(s2t("name"), name2);
+	executeAction(s2t("duplicate"), descriptor, DialogModes.NO);
+}
+
+function verifyPathNameExists(pathname) {
+	var result = false;
+	for (var a = 0; a < activeDocument.pathItems.length; a++) {
+		if (String(activeDocument.pathItems[a].name) == pathname) {
+			result = true;
+			break;
+		}
+	}
+	return result;
+}
+
+function setColorHueBG(colorize, hue, Strt, lightness, file, width, hight) {
+	//tạo layer color balance từ vùng chọn
+	activeDocument.selection.load(activeDocument.channels.getByName(selection));
+	doc.selection.expand(1);
+	doc.selection.feather(1);
+	doc.selection.invert();
+
+	setHue(colorize, hue, Strt, lightness);
+	activeDocument.activeLayer.name = "Color BG";
+	selectLayer("Resources");
+	placeEvent(new File(fileImages + file), width, hight);
+	moveDown();
+	// moveLayer(3);
+	// app.activeDocument.activeLayer.move( currentLayer, ElementPlacement.PLACEATEND ); // move i
+	// var currentLayer = app.activeDocument.activeLayer; // get just moved layer
+	// app.activeDocument.activeLayer.move( currentLayer, ElementPlacement.PLACEATEND ); // move it
+
+	// doc.activeLayer.move(doc.layerSets.getByname("Resources"), ElementPlacement.INSIDE);
+
+	// doc.activeLayer.move();
+}
+
+function placeEvent(null2, width, height) {
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+	var descriptor2 = new ActionDescriptor();
+
+	//descriptor.putInteger( s2t( "ID" ), ID );
+	descriptor.putPath(c2t("null"), null2);
+	descriptor.putEnumerated(s2t("freeTransformCenterState"), s2t("quadCenterState"), s2t("QCSAverage"));
+	descriptor2.putUnitDouble(s2t("horizontal"), s2t("percentUnit"), 0);
+	descriptor2.putUnitDouble(s2t("vertical"), s2t("percentUnit"), 0);
+	descriptor.putObject(s2t("offset"), s2t("offset"), descriptor2);
+	descriptor.putUnitDouble(s2t("width"), s2t("percentUnit"), width);
+	descriptor.putUnitDouble(s2t("height"), s2t("percentUnit"), height);
+	executeAction(s2t("placeEvent"), descriptor, DialogModes.NO);
+}
+
+//Tạo layer Hue
+function makeHueColor() {
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+	var descriptor2 = new ActionDescriptor();
+	var descriptor3 = new ActionDescriptor();
+	var reference = new ActionReference();
+
+	reference.putClass(s2t("adjustmentLayer"));
+	descriptor.putReference(c2t("null"), reference);
+	descriptor2.putEnumerated(s2t("color"), s2t("color"), s2t("red"));
+	descriptor3.putEnumerated(s2t("presetKind"), s2t("presetKindType"), s2t("presetKindDefault"));
+	descriptor3.putBoolean(s2t("colorize"), false);
+	descriptor2.putObject(s2t("type"), s2t("hueSaturation"), descriptor3);
+	descriptor.putObject(s2t("using"), s2t("adjustmentLayer"), descriptor2);
+	executeAction(s2t("make"), descriptor, DialogModes.NO);
+}
+
+function setHue(colorize, hue, Strt, lightness) {
+	makeHueColor();
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+	var descriptor2 = new ActionDescriptor();
+	var descriptor3 = new ActionDescriptor();
+	var list = new ActionList();
+	var reference = new ActionReference();
+
+	reference.putEnumerated(s2t("adjustmentLayer"), s2t("ordinal"), s2t("targetEnum"));
+	descriptor.putReference(c2t("null"), reference);
+	descriptor2.putEnumerated(s2t("presetKind"), s2t("presetKindType"), s2t("presetKindCustom"));
+	descriptor2.putBoolean(s2t("colorize"), colorize);
+	descriptor3.putEnumerated(s2t("channel"), s2t("channel"), s2t("composite"));
+	descriptor3.putInteger(s2t("hue"), hue);
+	descriptor3.putInteger(c2t("Strt"), Strt);
+	descriptor3.putInteger(s2t("lightness"), lightness);
+	list.putObject(s2t("hueSatAdjustmentV2"), descriptor3);
+	descriptor2.putList(s2t("adjustment"), list);
+	descriptor.putObject(s2t("to"), s2t("hueSaturation"), descriptor2);
+	executeAction(s2t("set"), descriptor, DialogModes.NO);
+}
+
+
+function moveUp() {
+	var idslct = charIDToTypeID("slct");
+	var desc1388 = new ActionDescriptor();
+	var idnull = charIDToTypeID("null");
+	var ref155 = new ActionReference();
+	var idLyr = charIDToTypeID("Lyr ");
+	var idOrdn = charIDToTypeID("Ordn");
+	var idFrwr = charIDToTypeID("Frwr");
+	ref155.putEnumerated(idLyr, idOrdn, idFrwr);
+	desc1388.putReference(idnull, ref155);
+	var idMkVs = charIDToTypeID("MkVs");
+	desc1388.putBoolean(idMkVs, false);
+	var idLyrI = charIDToTypeID("LyrI");
+	var list18 = new ActionList();
+	list18.putInteger(30);
+	desc1388.putList(idLyrI, list18);
+	executeAction(idslct, desc1388, DialogModes.NO);
+}
+function moveDown() {
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+	var reference = new ActionReference();
+	var reference2 = new ActionReference();
+
+	reference.putEnumerated(s2t("layer"), s2t("ordinal"), s2t("targetEnum"));
+	descriptor.putReference(c2t("null"), reference);
+	reference2.putEnumerated(s2t("layer"), s2t("ordinal"), s2t("previous"));
+	descriptor.putReference(s2t("to"), reference2);
+	executeAction(s2t("move"), descriptor, DialogModes.NO);
+}
+
+//function check History colorCopy
+function makeHistoryRandum() {
+	var randumHistory = Math.random();
+	makeHistory(randumHistory);
+	return randumHistory;
+}
+
+//Save History
+function makeHistory(name2) {
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+	var reference = new ActionReference();
+	var reference2 = new ActionReference();
+
+	reference.putClass(s2t("snapshotClass"));
+	descriptor.putReference(c2t("null"), reference);
+	reference2.putProperty(c2t("HstS"), s2t("currentHistoryState"));
+	descriptor.putReference(s2t("from"), reference2);
+	descriptor.putString(s2t("name"), name2);
+	descriptor.putEnumerated(s2t("using"), c2t("HstS"), s2t("fullDocument"));
+	executeAction(s2t("make"), descriptor, DialogModes.NO);
+}
+
+//select history
+function selectHistory(nameHistory) {
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+	var reference = new ActionReference();
+
+	reference.putName(s2t("snapshotClass"), nameHistory);
+	descriptor.putReference(c2t("null"), reference);
+	executeAction(s2t("select"), descriptor, DialogModes.NO);
+}
+
+function action(action) {
+	var idCpTL = charIDToTypeID(action);
+	executeAction(idCpTL, undefined, DialogModes.NO);
+}
+
+function setSelectionLayer() {
+	var c2t = function (s) {
+		return app.charIDToTypeID(s);
+	};
+
+	var s2t = function (s) {
+		return app.stringIDToTypeID(s);
+	};
+
+	var descriptor = new ActionDescriptor();
+	var reference = new ActionReference();
+	var reference2 = new ActionReference();
+
+	reference.putProperty(s2t("channel"), s2t("selection"));
+	descriptor.putReference(c2t("null"), reference);
+	reference2.putEnumerated(s2t("channel"), s2t("channel"), s2t("transparencyEnum"));
+	descriptor.putReference(s2t("to"), reference2);
+	executeAction(s2t("set"), descriptor, DialogModes.NO);
+}
+
+
+//clipping mask layer
+function clippingMask(params) {
+	var idGrpL = charIDToTypeID("GrpL");
+	var desc14721 = new ActionDescriptor();
+	var idnull = charIDToTypeID("null");
+	var ref4637 = new ActionReference();
+	var idLyr = charIDToTypeID("Lyr ");
+	var idOrdn = charIDToTypeID("Ordn");
+	var idTrgt = charIDToTypeID("Trgt");
+	ref4637.putEnumerated(idLyr, idOrdn, idTrgt);
+	desc14721.putReference(idnull, ref4637);
+	executeAction(idGrpL, desc14721, DialogModes.NO);
+
+}
+function toSelection(left, right, top, bottom) {
+	try {
+		//eftTop, leftBottom, rightBottom rightTop
+		var shapeRef = [[left, top], [left, bottom], [right, bottom], [right, top]];
+		doc.selection.select(shapeRef)
+	} catch (error) {
+	}
+}
+
+//trừ vung chon
+function subtractSelection(selection) {
+	var idSbtr = charIDToTypeID("Sbtr");
+	var desc14706 = new ActionDescriptor();
+	var idnull = charIDToTypeID("null");
+	var ref4628 = new ActionReference();
+	var idChnl = charIDToTypeID("Chnl");
+	ref4628.putName(idChnl, selection);
+	desc14706.putReference(idnull, ref4628);
+	var idFrom = charIDToTypeID("From");
+	var ref4629 = new ActionReference();
+	var idChnl = charIDToTypeID("Chnl");
+	var idfsel = charIDToTypeID("fsel");
+	ref4629.putProperty(idChnl, idfsel);
+	desc14706.putReference(idFrom, ref4629);
+	executeAction(idSbtr, desc14706, DialogModes.NO);
+
+}
+
+function newLayerEmpty(params) {
+	var idMk = charIDToTypeID("Mk  ");
+	var desc214 = new ActionDescriptor();
+	var idnull = charIDToTypeID("null");
+	var ref83 = new ActionReference();
+	var idLyr = charIDToTypeID("Lyr ");
+	ref83.putClass(idLyr);
+	desc214.putReference(idnull, ref83);
+	var idLyrI = charIDToTypeID("LyrI");
+	desc214.putInteger(idLyrI, 986);
+	executeAction(idMk, desc214, DialogModes.NO);
+}
+
+function logAction(params) {
+	var logNameAct = new File("//172.16.2.2/Public Data/Academy/LogAction/" + params + ".log");
+	if (logNameAct.exists) {
+		logNameAct.open("r")
+		logText = logNameAct.read()
+		const y = Number(logText)
+		var addText = y + 1
+		logNameAct.close()
+		logNameAct.remove()
+		logNameAct.open("w")
+		logNameAct.write(addText)
+		logNameAct.close()
+	} else {
+		logNameAct.open("w")
+		logNameAct.write(1)
+		logNameAct.close()
+	}
+}

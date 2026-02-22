@@ -1,0 +1,125 @@
+doc.activeLayer = doc.artLayers[0];
+maskall();
+// createAlphaChannelBlack("Details");
+// selectRGB();
+var lengthGroup = doc.layerSets.length;
+var checkLengGroupNew = doc.layerSets.length;
+for (var i = 0; i < lengthGroup; i++) {
+    if (doc.layerSets[i].name == "Darken" || doc.layerSets[i].name == "HighDarken") {
+        break;
+    }
+    try {
+        loadSelectionByMask(doc.layerSets[i].id);
+    } catch (error) {
+    }
+    if (lengthGroup == 1) {
+        saveAlphaChnl("San");
+        doc.layerSets[i].remove();
+        doc.selection.deselect();
+        break;
+    }
+    if (lengthGroup == checkLengGroupNew) {
+        try {
+            saveAlphaChnl("Details")
+        } catch (error) {
+
+        }
+    }
+    else {
+        try {
+            addSelectionToChannelName("Details");
+        } catch (error) {
+
+        }
+    }
+
+    doc.layerSets[i].remove();
+    lengthGroup--;
+    i--;
+    doc.selection.deselect();
+}
+// doc.selection.load(doc.channels.getByName("Details"));
+// doc.channels.getByName("Details").remove();
+
+// if (activeDocument.quickMaskMode == false) { activeDocument.quickMaskMode = true; }
+
+function maskall() {
+    // Mask All Objects
+    cTID = function (s) { return app.charIDToTypeID(s); };
+    sTID = function (s) { return app.stringIDToTypeID(s); };
+    function step1(enabled, withDialog) {
+        if (enabled != undefined && !enabled)
+            return;
+        var dialogMode = (withDialog ? DialogModes.ALL : DialogModes.NO);
+        var desc1 = new ActionDescriptor();
+        desc1.putBoolean(sTID("sampleAllLayers"), false);
+        desc1.putBoolean(sTID("hardEdge"), true);
+        executeAction(sTID('autoMaskGenerate'), desc1, dialogMode);
+    };
+
+    step1();
+};
+
+function saveAlphaChnl(name) {
+    var desc977 = new ActionDescriptor();
+    var ref38 = new ActionReference();
+    ref38.putProperty(charIDToTypeID("Chnl"), charIDToTypeID("fsel"));
+    desc977.putReference(charIDToTypeID("null"), ref38);
+    desc977.putString(charIDToTypeID("Nm  "), name);
+    executeAction(charIDToTypeID("Dplc"), desc977, DialogModes.NO);
+    return activeDocument.channels.getByName(name);
+}
+
+
+function addSelectionToChannelName(channelName) {
+    var ch = doc.channels.getByName(channelName);
+    doc.selection.store(ch, SelectionType.EXTEND);
+}
+
+function selectRGB() {
+    // activeDocument.activeLayer = lyr;
+    var idslct = charIDToTypeID("slct");
+    var desc219 = new ActionDescriptor();
+    var idnull = charIDToTypeID("null");
+    var ref138 = new ActionReference();
+    var idChnl = charIDToTypeID("Chnl");
+    var idChnl = charIDToTypeID("Chnl");
+    var idRGB = charIDToTypeID("RGB ");
+    ref138.putEnumerated(idChnl, idChnl, idRGB);
+    desc219.putReference(idnull, ref138);
+    var idMkVs = charIDToTypeID("MkVs");
+    desc219.putBoolean(idMkVs, false);
+    executeAction(idslct, desc219, DialogModes.NO);
+}
+
+
+
+function createAlphaChannelBlack(name) {
+    var idMk = charIDToTypeID("Mk  ");
+    var desc44916 = new ActionDescriptor();
+    var idNw = charIDToTypeID("Nw  ");
+    var desc44917 = new ActionDescriptor();
+    var idNm = charIDToTypeID("Nm  ");
+    desc44917.putString(idNm, name);
+    var idClrI = charIDToTypeID("ClrI");
+    var idMskI = charIDToTypeID("MskI");
+    var idMskA = charIDToTypeID("MskA");
+    desc44917.putEnumerated(idClrI, idMskI, idMskA);
+    var idClr = charIDToTypeID("Clr ");
+    var desc44918 = new ActionDescriptor();
+    var idRd = charIDToTypeID("Rd  ");
+    desc44918.putDouble(idRd, 255.000000);
+    var idGrn = charIDToTypeID("Grn ");
+    desc44918.putDouble(idGrn, 0.000000);
+    var idBl = charIDToTypeID("Bl  ");
+    desc44918.putDouble(idBl, 0.000000);
+    var idRGBC = charIDToTypeID("RGBC");
+    desc44917.putObject(idClr, idRGBC, desc44918);
+    var idOpct = charIDToTypeID("Opct");
+    desc44917.putInteger(idOpct, 50);
+    var idalphaChannelId = stringIDToTypeID("alphaChannelId");
+    desc44917.putInteger(idalphaChannelId, 54);
+    var idChnl = charIDToTypeID("Chnl");
+    desc44916.putObject(idNw, idChnl, desc44917);
+    executeAction(idMk, desc44916, DialogModes.NO);
+}

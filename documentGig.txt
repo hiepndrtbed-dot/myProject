@@ -1,0 +1,60 @@
+Sổ tay Git cơ bản
+🔹 1. Cấu hình lần đầu
+git config --global user.name "Tên của bạn"
+git config --global user.email "email@example.com"
+
+🔹 2. Bắt đầu với repo mới
+git init                          # Khởi tạo repo trong thư mục hiện tại
+git clone <url>                   # Tải repo từ GitHub về máy
+
+🔹 3. Thao tác với file
+git status                        # Kiểm tra trạng thái file
+git add .                         # Thêm tất cả thay đổi
+git add <file>                    # Thêm file cụ thể
+git commit -m "Mô tả thay đổi"    # Ghi lại thay đổi (commit)
+
+🔹 4. Làm việc với remote (GitHub)
+git remote -v                     # Kiểm tra remote đang liên kết
+git remote add origin <url>       # Thêm remote mới
+git remote set-url origin <url>   # Sửa URL remote
+
+🔹 5. Push / Pull
+git push -u origin main           # Push lần đầu, set upstream
+git push                          # Push các commit mới
+git pull                          # Kéo code mới nhất từ GitHub về
+
+🔹 6. Quản lý nhánh (branch)
+git branch                        # Liệt kê nhánh hiện có
+git branch -vv                    # Xem nhánh + tracking
+git checkout -b <branch-name>     # Tạo và chuyển sang nhánh mới
+git checkout <branch-name>        # Chuyển nhánh
+git merge <branch-name>           # Gộp nhánh vào nhánh hiện tại
+git branch -d <branch-name>       # Xóa nhánh đã gộp
+
+🔹 7. Xử lý file / folder không cần push
+# Thêm vào file .gitignore
+node_modules/
+dist/
+*.log
+
+git rm -r --cached <folder>       # Ngừng theo dõi folder
+git commit -m "Update .gitignore"
+git push
+
+🔹 8. Undo & Reset
+git checkout -- <file>            # Khôi phục file về commit gần nhất
+git reset HEAD <file>             # Bỏ staged file (đã add nhưng chưa commit)
+git reset --hard HEAD             # Hủy mọi thay đổi, quay về commit gần nhất
+
+🔹 9. Git LFS (khi dùng file lớn)
+git lfs install
+git lfs track "*.csv"
+git add .gitattributes
+git commit -m "Track CSV with LFS"
+git push
+git lfs ls-files                   # Kiểm tra file đang được quản lý bằng LFS
+
+🔹 10. Các lệnh kiểm tra hữu ích
+git log --oneline --graph --all   # Xem lịch sử commit ngắn gọn
+git diff                          # Xem khác biệt chưa staged
+git show <commit-id>              # Xem chi tiết 1 commit

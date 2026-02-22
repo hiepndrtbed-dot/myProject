@@ -1,0 +1,18 @@
+# Bỏ các file lớn, thư viện HDR
+# HDR/Library PE/
+*.zip
+*.jpg
+*.png
+*.rad
+*.cclibs
+*.tif
+
+# Bỏ thư mục build / node
+node_modules/
+dist/
+build/
+
+# Bỏ tạm & IDE
+.vscode/
+.idea/
+*.log

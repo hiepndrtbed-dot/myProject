@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionManifest Version="7.0" ExtensionBundleId="com.hiep.mysimpleextension"
+    ExtensionBundleName="My Simple Extension" ExtensionBundleVersion="1.0">
+    <ExtensionList>
+        <Extension Id="com.hiep.panel" Version="1.0"/>
+    </ExtensionList>
+    <ExecutionEnvironment>
+        <HostList>
+            <Host Name="PHXS" Version="[0.0,99.9]"/>
+        </HostList>
+        <LocaleList>
+            <Locale Code="All"/>
+        </LocaleList>
+        <RequiredRuntimeList>
+            <RequiredRuntime Name="CSXS" Version="9.0"/>
+        </RequiredRuntimeList>
+    </ExecutionEnvironment>
+    <DispatchInfoList>
+        <Extension Id="com.hiep.panel">
+            <DispatchInfo>
+                <Resources>
+                    <MainPath>./index.html</MainPath>
+                </Resources>
+                <UI>
+                    <Type>ModalDialog</Type>
+                    <Menu>My Simple Extension</Menu>
+                    <Geometry>
+                        <Size>
+                            <Height>300</Height>
+                            <Width>200</Width>
+                            <MaxSize>
+                                <Height>300</Height>
+                                <Width>1200</Width>
+                            </MaxSize>
+                            <MinSize>
+                                <Height>300</Height>
+                                <Width>500</Width>
+                            </MinSize>
+                        </Size>
+                    </Geometry>
+                </UI>
+            </DispatchInfo>
+        </Extension>
+    </DispatchInfoList>
+</ExtensionManifest>
