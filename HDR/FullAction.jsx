@@ -819,7 +819,6 @@ function cameraRawFilter(temp, tint) {
     executeAction(idAdobeCameraRawFilter, desc, DialogModes.NO);
 
 }
-
 function showLevels() { executeAction(charIDToTypeID("Lvls"), undefined, DialogModes.ALL); }
 
 //AutoVertical: 4:doc 3:ngang 5:canh tay 2:Ngang doc
