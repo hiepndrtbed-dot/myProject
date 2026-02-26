@@ -76,7 +76,7 @@ var withDialog = false;
         doc.activeLayer.move(doc.layers.getByName("Sky"), ElementPlacement.PLACEAFTER);
         doc.layers.getByName("Sky").visible = true;
         doc.activeLayer.name = "CHECK";
-        showCurves();
+        try { showCurves(); } catch (error) { }
         processPreset(temp, withDialog);
         doc.activeLayer = doc.layers[0];
         mergeVisible();
@@ -87,7 +87,7 @@ var withDialog = false;
     } catch (error) {
         mergeVisible();
         doc.activeLayer.name = "FINALIZE";
-        showCurves();
+        try { showCurves(); } catch (error) { }
         processPreset(temp, withDialog);
         alert("Check VERTICAL && CAMERA!!");
         // cameraRawIndor(2, true);

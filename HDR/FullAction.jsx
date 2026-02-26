@@ -1,8 +1,7 @@
 //By Duc Hiep - Acad DN Version 1.0 -- HDR
-#include "json/json2.js";
+$.evalFile(new File(new File($.fileName).parent + "/json/json2.js"));
 const versionTo = " By Duc Hiep (Version -- 1.0.1 --) ";
-preferences.rulerUnits = Units.PIXELS
-app.preferences.typeunits = TypeUnits.PIXELS
+preferences.rulerUnits = Units.PIXELS;
 const doc = activeDocument;
 var currentFolder = File($.fileName).parent + "/jsx";
 var scriptFolder = File($.fileName).parent;
