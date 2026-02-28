@@ -1,31 +1,42 @@
 
 (function main() {
     try {
-        doc.activeLayer = doc.artLayers["MERGE 1"];
+        if (!selectLayer("Not delete")) {
+            var newLayer = doc.artLayers.add();
+            newLayer.name = "Not delete";
+            newLayer.move(doc.artLayers["MERGE 1"], ElementPlacement.PLACEBEFORE);
+        }
     } catch (error) {
-        doc.activeLayer = doc.backgroundLayer;
+        if (!selectLayer("Not delete")) {
+            var newLayer = doc.artLayers.add();
+            newLayer.name = "Not delete";
+            newLayer.move(doc.artLayers["MERGE 1"], ElementPlacement.PLACEBEFORE);
+        }
     }
     if (activeDocument.quickMaskMode == true) { activeDocument.quickMaskMode = false; }
-    if (!hasSelection()) { alert("Chua co vung chon!"); return; }
-    if (selectLayer("replaceColor")) {
-        try {
-            doc.artLayers["Color"].visible = false;
-            mergeVisible();
-            doc.artLayers["Color"].visible = true;
-        } catch (error) {
-            mergeVisible();
-        }
-        action("hueSaturation");
-        addMask(); applyMask();
-        // doc.activeLayer.merge();
+    var newLayer1 = doc.artLayers.add();
+    newLayer1.name = "Hue Saturation";
+    newLayer1.move(doc.artLayers["Not delete"], ElementPlacement.PLACEAFTER);
+    try {
+        doc.artLayers["Color"].visible = false;
+        mergeVisible();
+        doc.artLayers["Color"].visible = true;
+    } catch (error) {
+        mergeVisible();
+    }
+    
+    action("hueSaturation");
+
+    if (!hasSelection()) {
+        doc.selection.selectAll();
+        addMask(); invert();
+        return;
     } else {
-        layerViaCopy("replaceColor");
-        action("hueSaturation");
+        addMask(); applyMask();
     }
 })();
-
 function layerViaCopy(nameLayer) {
-    var idCpTL = charIDToTypeID("CpTL");    
+    var idCpTL = charIDToTypeID("CpTL");
     executeAction(idCpTL, undefined, DialogModes.NO);
     activeDocument.activeLayer.name = nameLayer;
 }

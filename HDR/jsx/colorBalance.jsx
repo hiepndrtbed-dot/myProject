@@ -1,26 +1,37 @@
 (function main() {
-    //  checkNameLayerToMger();
     try {
-        doc.activeLayer = doc.artLayers["MERGE 1"];
+        if (!selectLayer("Not delete")) {
+            var newLayer = doc.artLayers.add();
+            newLayer.name = "Not delete";
+            newLayer.move(doc.artLayers["MERGE 1"], ElementPlacement.PLACEBEFORE);
+        }
     } catch (error) {
-        doc.activeLayer = doc.backgroundLayer;
+        if (!selectLayer("Not delete")) {
+            var newLayer = doc.artLayers.add();
+            newLayer.name = "Not delete";
+            newLayer.move(doc.artLayers["MERGE 1"], ElementPlacement.PLACEBEFORE);
+        }
     }
     if (activeDocument.quickMaskMode == true) { activeDocument.quickMaskMode = false; }
-    if (!hasSelection()) { alert("Chua co vung chon!"); return; }
-    if (selectLayer("replaceColor")) {
-        try {
-            doc.artLayers["Color"].visible = false;
-            mergeVisible();
-            doc.artLayers["Color"].visible = true;
-        } catch (error) {
-            mergeVisible();
-        }
-        actionCharID("ClrB");
-        addMask();
-        // doc.activeLayer.merge();
+    var newLayer1 = doc.artLayers.add();
+    newLayer1.name = "Color Balance";
+    newLayer1.move(doc.artLayers["Not delete"], ElementPlacement.PLACEAFTER);
+    try {
+        doc.artLayers["Color"].visible = false;
+        mergeVisible();
+        doc.artLayers["Color"].visible = true;
+    } catch (error) {
+        mergeVisible();
+    }
+    //thay vao day
+    actionCharID("ClrB");
+
+    if (!hasSelection()) {
+        doc.selection.selectAll();
+        addMask(); invert();
+        return;
     } else {
-        layerViaCopy("replaceColor");
-        actionCharID("ClrB");
+        addMask(); applyMask();
     }
 })();
 

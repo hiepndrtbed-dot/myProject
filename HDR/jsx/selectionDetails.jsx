@@ -16,6 +16,7 @@ for (var i = 0; i < lengthGroup; i++) {
         saveAlphaChnl("San");
         doc.layerSets[i].remove();
         doc.selection.deselect();
+        selecTool("quickSelectTool");   
         break;
     }
     if (lengthGroup == checkLengGroupNew) {

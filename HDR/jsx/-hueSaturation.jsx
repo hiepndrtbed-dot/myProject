@@ -6,33 +6,35 @@ app.preferences.typeunits = TypeUnits.PIXELS
 const doc = activeDocument;
 
 (function main() {
-    // checkNameLayerToMger(); 
+    if (!hasSelection()) { alert("Chua co vung chon!"); return; }
     try {
-        doc.activeLayer = doc.artLayers["MERGE 1"];
+        if (!selectLayer("Not delete")) {
+            var newLayer = doc.artLayers.add();
+            newLayer.name = "Not delete";
+            newLayer.move(doc.artLayers["MERGE 1"], ElementPlacement.PLACEBEFORE);
+        }
     } catch (error) {
-        doc.activeLayer = doc.backgroundLayer;
+        if (!selectLayer("Not delete")) {
+            var newLayer = doc.artLayers.add();
+            newLayer.name = "Not delete";
+            newLayer.move(doc.artLayers["MERGE 1"], ElementPlacement.PLACEBEFORE);
+        }
     }
     if (activeDocument.quickMaskMode == true) { activeDocument.quickMaskMode = false; }
-    if (!hasSelection()) { alert("Chua co vung chon!"); return; }
-    if (selectLayer("replaceColor")) {
-        try {
-            doc.artLayers["Color"].visible = false;
-            mergeVisible();
-            doc.artLayers["Color"].visible = true;
-        } catch (error) {
-            mergeVisible();
-        }
-        addMask(); applyMask();
-        hueSaturation(0, -90, 0);
-        cameraRawFilter(10, 5);
-        hueSaturation(-4, 0, 0);
-        doc.activeLayer.merge();
-    } else {
-        layerViaCopy("replaceColor");
-        hueSaturation(0, -90, 0);
-        cameraRawFilter(10, 5);
-        hueSaturation(-4, 0, 0);
+    var newLayer1 = doc.artLayers.add();
+    newLayer1.name = "Dong bo tham";
+    newLayer1.move(doc.artLayers["Not delete"], ElementPlacement.PLACEAFTER);
+    try {
+        doc.artLayers["Color"].visible = false;
+        mergeVisible();
+        doc.artLayers["Color"].visible = true;
+    } catch (error) {
+        mergeVisible();
     }
+    addMask(); applyMask();
+    hueSaturation(0, -90, 0);
+    cameraRawFilter(10, 5);
+    hueSaturation(-4, 0, 0);
 })();
 
 function layerViaCopy(nameLayer) {

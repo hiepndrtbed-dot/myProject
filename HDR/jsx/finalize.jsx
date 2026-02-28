@@ -76,22 +76,32 @@ var withDialog = false;
         doc.activeLayer.move(doc.layers.getByName("Sky"), ElementPlacement.PLACEAFTER);
         doc.layers.getByName("Sky").visible = true;
         doc.activeLayer.name = "CHECK";
-        try { showCurves(); } catch (error) { }
-        processPreset(temp, withDialog);
-        doc.activeLayer = doc.layers[0];
-        mergeVisible();
-        doc.activeLayer.name = "FINALIZE";
-        alert("Check VERTICAL && CAMERA!!");
-        cameraRawFilterALL(0, 0, 0, 0, 4, true);
-        doc.artLayers.getByName("CHECK").remove();
+        try {
+            showCurves();
+            processPreset(temp, withDialog);
+            doc.activeLayer = doc.layers[0];
+            mergeVisible();
+            doc.activeLayer.name = "FINALIZE";
+            alert("Check VERTICAL && CAMERA!!");
+            cameraRawFilterALL(0, 0, 0, 0, 4, true);
+            doc.artLayers.getByName("CHECK").remove();
+        } catch (error) {
+            doc.artLayers.getByName("CHECK").remove();
+        }
+
     } catch (error) {
         mergeVisible();
         doc.activeLayer.name = "FINALIZE";
-        try { showCurves(); } catch (error) { }
-        processPreset(temp, withDialog);
-        alert("Check VERTICAL && CAMERA!!");
-        // cameraRawIndor(2, true);
-        cameraRawFilterALL(0, 0, 0, 0, 4, true);
+        try {
+            showCurves();
+            processPreset(temp, withDialog);
+            alert("Check VERTICAL && CAMERA!!");
+            // cameraRawIndor(2, true);
+            cameraRawFilterALL(0, 0, 0, 0, 4, true);
+        } catch (error) { 
+            doc.artLayers.getByName("FINALIZE").remove();
+        }
+
     }
 })();
 
