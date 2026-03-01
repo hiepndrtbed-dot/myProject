@@ -114,7 +114,7 @@ function run() {
 
     //ColorBalance
     var buttonReduceHueSaturation = group1.add("button", undefined, undefined, { name: "Hue Color(5)" });
-    buttonReduceHueSaturation.text = "(-) HueSaturation + yellow (F9)";
+    buttonReduceHueSaturation.text = "Carpet synchronization (F9)";
     buttonReduceHueSaturation.preferredSize.width = 170;
 
 

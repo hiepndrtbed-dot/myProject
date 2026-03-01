@@ -1,5 +1,5 @@
 var nameTxt = "/Preset.txt";
-var temp = 1;
+var valuePreset = null;
 var withDialog = false;
 (function main() {
     var txtFile = new File(scriptFolder.fsName + "/Data" + nameTxt);
@@ -8,7 +8,7 @@ var withDialog = false;
         txtFile.open("r"); // "r" = read
         var contentFile = txtFile.read();
         txtFile.close();
-        temp = contentFile;
+        valuePreset = contentFile;
     } else {
         // Tạo file TXT cùng thư mục
         // Tạo một cửa sổ dialog
@@ -56,7 +56,7 @@ var withDialog = false;
                 }
             }
             // Lưu lựa chọn vào file TXT
-            temp = chosenPreset;
+            valuePreset = chosenPreset;
             var txtFile = new File(scriptFolder.fsName + "/Data" + nameTxt);
             txtFile.encoding = "UTF8";
             txtFile.open("w");
@@ -78,7 +78,7 @@ var withDialog = false;
         doc.activeLayer.name = "CHECK";
         try {
             showCurves();
-            processPreset(temp, withDialog);
+            processPreset(valuePreset, withDialog);
             doc.activeLayer = doc.layers[0];
             mergeVisible();
             doc.activeLayer.name = "FINALIZE";
@@ -94,7 +94,7 @@ var withDialog = false;
         doc.activeLayer.name = "FINALIZE";
         try {
             showCurves();
-            processPreset(temp, withDialog);
+            processPreset(valuePreset, withDialog);
             alert("Check VERTICAL && CAMERA!!");
             // cameraRawIndor(2, true);
             cameraRawFilterALL(0, 0, 0, 0, 4, true);
@@ -104,7 +104,6 @@ var withDialog = false;
 
     }
 })();
-
 
 function mergeVisible() {
     var idMrgV = charIDToTypeID("MrgV");
@@ -248,6 +247,7 @@ function cameraRawOutdoorBWPD(withDialog) {
     a.putInteger(charIDToTypeID('DPGH'), 60);//Green Hue (out)
     executeAction(stringIDToTypeID('Adobe Camera Raw Filter'), a, withDialog ? DialogModes.ALL : DialogModes.NO);
 }
+
 // Preset Outdoor
 function cameraRawOutdoor(withDialog) {
     var a = new ActionDescriptor();

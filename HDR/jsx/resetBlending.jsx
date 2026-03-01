@@ -60,15 +60,3 @@ var destWhiteMin = 180;
     }
 })();
 
-function hasLayerStyle(layer) {
-    // alert(layer)
-    var ref = new ActionReference();
-    ref.putProperty(stringIDToTypeID("property"), stringIDToTypeID("layerEffects"));
-    ref.putIdentifier(stringIDToTypeID("layer"), layer.id);
-    try {
-        var desc = executeActionGet(ref);
-        return desc.hasKey(stringIDToTypeID("layerEffects"));
-    } catch (e) {
-        return false;
-    }
-}
