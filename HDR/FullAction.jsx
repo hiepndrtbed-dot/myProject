@@ -60,19 +60,19 @@ function run() {
 
     //Fill white Ceiling, molding
     var buttonFillCeilingMolding = group1.add("button", undefined, undefined, { name: "Ceiling, molding" });
-    buttonFillCeilingMolding.text = "Fill white Ceiling, molding (3)";
+    buttonFillCeilingMolding.text = "Fill white Ceiling, molding (1)";
     buttonFillCeilingMolding.alignment = ["left", "center"];
     buttonFillCeilingMolding.preferredSize.width = 170;
 
     //Fill color Wall
     var buttonFillWall = group1.add("button", undefined, undefined, { name: "Wall color 1" });
-    buttonFillWall.text = "Wall color 1 (4)";
+    buttonFillWall.text = "Wall color - LV 1.2 (2)";
     buttonFillWall.alignment = ["left", "center"];
     buttonFillWall.preferredSize.width = 170;
 
     //Wall coloring 2
     var buttonFillWall2 = group1.add("button", undefined, undefined, { name: "Wall color 2" });
-    buttonFillWall2.text = "Wall color 2 (0)"
+    buttonFillWall2.text = "Wall color - LV 1 (3)"
     buttonFillWall2.alignment = ["left", "center"]
     buttonFillWall2.preferredSize.width = 170
 
@@ -172,7 +172,7 @@ function run() {
 
     //Copy Path
     var buttonRunActionPath = group2.add("button", undefined, undefined, { name: "Run action path" });
-    buttonRunActionPath.text = "Run action Path (F4)"
+    buttonRunActionPath.text = "Run action Path (F10)"
     buttonRunActionPath.preferredSize.width = 170;
 
     //Replace color Red + yellow
@@ -197,13 +197,18 @@ function run() {
 
     //FINALIZE
     var buttonFinalize = group2.add("button", undefined, undefined, { name: "FINALIZE" });
-    buttonFinalize.text = "MERGE (FINALIZE) (1)"
+    buttonFinalize.text = "MERGE (FINALIZE) (4)"
     buttonFinalize.preferredSize.width = 170;
 
     //RESET DATA
     var buttonResetData = group2.add("button", undefined, undefined, { name: "Reset Data" });
     buttonResetData.text = "Reset Data (R)"
     buttonResetData.preferredSize.width = 170;
+
+    //RESET DATA
+    var buttonResetDataBlending = group2.add("button", undefined, undefined, { name: "Reset Blending" });
+    buttonResetDataBlending.text = "Reset Blending (B)"
+    buttonResetDataBlending.preferredSize.width = 170;
 
     //Save tif and jpg
     var buttonSaveTif = group2.add("button", undefined, undefined, { name: "Hair Fly" });
@@ -272,6 +277,7 @@ function run() {
     bindBtn(buttonCameraRaw, currentFolder + "/cameraRaw.jsx");
     bindBtn(buttonReduceHueSaturation, currentFolder + "/-hueSaturation.jsx");
     bindBtn(buttonResetData, currentFolder + "/removeDataTxt.jsx");
+    bindBtn(buttonResetDataBlending, currentFolder + "/resetBlending.jsx");
     bindBtn(buttonSelectionDetail, currentFolder + "/selectionDetails.jsx");
     bindBtn(buttonCopyPath, currentFolder + "/copyPathTodocument.jsx");
     bindBtn(buttonRunActionPath, currentFolder + "/autoAction.jsx");
@@ -305,7 +311,7 @@ function run() {
         }
     });
 
-  
+
     // Merge L
     buttonMerge.addEventListener("click", function () {
         dialog.close();
@@ -355,9 +361,9 @@ function run() {
         const actions = {
             "F1": buttonCopyExposure,
             "F2": buttonMergeExposure,
-            "3": buttonFillCeilingMolding,
-            "4": buttonFillWall,
-            "0": buttonFillWall2,
+            "1": buttonFillCeilingMolding,
+            "2": buttonFillWall,
+            "3": buttonFillWall2,
             "5": buttonSky,
             "6": buttonDTD,
             "7": buttonAddSkyDTD,
@@ -366,6 +372,7 @@ function run() {
             "W": buttonWindow,
             "Y": buttonAddRed,
             "R": buttonResetData,
+            "B": buttonResetDataBlending,
             "L": buttonAddLight,
             "D": buttonSaveSelectionDetail,
             "J": buttonSelectionDetail,
@@ -382,8 +389,8 @@ function run() {
             "C": buttonCameraRaw,
             "F9": buttonReduceHueSaturation,
             "F8": buttonCopyPath,
-            "F4": buttonRunActionPath,
-            "1": buttonFinalize,
+            "F10": buttonRunActionPath,
+            "4": buttonFinalize,
             "Escape": buttonClose
         };
 
@@ -1015,6 +1022,54 @@ function layerExists(layerName) {
     }
 }
 
+// blendingOptions(0, 0, 255, 255, 0, 0, 180, 255);
+function blendingOptions(srcBlackMin, srcBlackMax, srcWhiteMin, srcWhiteMax, destBlackMin, destBlackMax, destWhiteMin, Dstt) {
+    var c2t = function (s) {
+        return app.charIDToTypeID(s);
+    };
+
+    var s2t = function (s) {
+        return app.stringIDToTypeID(s);
+    };
+
+    var descriptor = new ActionDescriptor();
+    var descriptor2 = new ActionDescriptor();
+    var descriptor3 = new ActionDescriptor();
+    var list = new ActionList();
+    var reference = new ActionReference();
+    var reference2 = new ActionReference();
+
+    reference.putEnumerated(s2t("layer"), s2t("ordinal"), s2t("targetEnum"));
+    descriptor.putReference(c2t("null"), reference);
+    reference2.putEnumerated(s2t("channel"), s2t("channel"), s2t("gray"));
+    descriptor3.putReference(s2t("channel"), reference2);
+    descriptor3.putInteger(s2t("srcBlackMin"), srcBlackMin);
+    descriptor3.putInteger(s2t("srcBlackMax"), srcBlackMax);
+    descriptor3.putInteger(s2t("srcWhiteMin"), srcWhiteMin);
+    descriptor3.putInteger(s2t("srcWhiteMax"), srcWhiteMax);
+    descriptor3.putInteger(s2t("destBlackMin"), destBlackMin);
+    descriptor3.putInteger(s2t("destBlackMax"), destBlackMax);
+    descriptor3.putInteger(s2t("destWhiteMin"), destWhiteMin);
+    descriptor3.putInteger(c2t("Dstt"), Dstt);
+    list.putObject(s2t("blendRange"), descriptor3);
+    descriptor2.putList(s2t("blendRange"), list);
+    descriptor.putObject(s2t("to"), s2t("layer"), descriptor2);
+    executeAction(s2t("set"), descriptor, DialogModes.NO);
+}
+
+
+function hasLayerStyle(layer) {
+    // alert(layer)
+    var ref = new ActionReference();
+    ref.putProperty(stringIDToTypeID("property"), stringIDToTypeID("layerEffects"));
+    ref.putIdentifier(stringIDToTypeID("layer"), layer.id);
+    try {
+        var desc = executeActionGet(ref);
+        return desc.hasKey(stringIDToTypeID("layerEffects"));
+    } catch (e) {
+        return false;
+    }
+}
 
 function loadAction(actionName, action) {
     //--------------------------------------------------------------------------------------------------------

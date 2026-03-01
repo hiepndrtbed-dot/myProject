@@ -1,27 +1,37 @@
 (function main() {
-    // checkNameLayerToMger();
-    try {
-        doc.activeLayer = doc.artLayers["MERGE 1"];
-    } catch (error) {
-        doc.activeLayer = doc.backgroundLayer;
+    if (!selectLayer("Not delete")) {
+        var newLayer = doc.artLayers.add();
+        newLayer.name = "Not delete";
+        try {
+            newLayer.move(doc.artLayers["MERGE 1"], ElementPlacement.PLACEBEFORE);
+        } catch (error) {
+            newLayer.move(doc.artLayers["Background"], ElementPlacement.PLACEBEFORE);
+        } finally {
+            doc.activeLayer.allLocked = true;
+        }
     }
     if (activeDocument.quickMaskMode == true) { activeDocument.quickMaskMode = false; }
-    if (!hasSelection()) { alert("Chua co vung chon!"); return; }
-    if (selectLayer("replaceColor")) {
-        try {
-            doc.artLayers["Color"].visible = false;
-            mergeVisible();
-            doc.artLayers["Color"].visible = true;
-        } catch (error) {
-            mergeVisible();
-        }
-        action("replaceColor");
-        addMask();
-        // doc.activeLayer.merge();
-    } else {
-        layerViaCopy("replaceColor");
-        action("replaceColor");
+    var newLayer1 = doc.artLayers.add();
+    newLayer1.name = "Camera Raw";
+    newLayer1.move(doc.artLayers["Not delete"], ElementPlacement.PLACEAFTER);
+    try {
+        doc.artLayers["Color"].visible = false;
+        mergeVisible();
+        doc.artLayers["Color"].visible = true;
+    } catch (error) {
+        mergeVisible();
     }
+    //thay vao day
+    action("replaceColor");
+    //Xu ly vung chon
+    if (!hasSelection()) {
+        doc.selection.selectAll();
+        addMask(); invert();
+        return;
+    } else {
+        addMask(); applyMask();
+    }
+
 })();
 function layerViaCopy(nameLayer) {
     var idCpTL = charIDToTypeID("CpTL");

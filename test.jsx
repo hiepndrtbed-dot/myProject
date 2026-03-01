@@ -1,17 +1,23 @@
-function layerExists(layerName) {
-    var ref = new ActionReference();
-    ref.putName(charIDToTypeID("Lyr "), layerName);
-    try {
-        var desc = executeActionGet(ref);
-        return true; // Tìm thấy layer
-    } catch (e) {
-        return false; // Không có layer
-    }
-}
+#target photoshop
+activeDocument.activeLayer = activeDocument.artLayers[2];
 
-// Gọi hàm
-if (layerExists("Layer 1")) {
-    alert("Layer 'abc' tồn tại!");
-} else {
-    alert("Layer 'abc' không tồn tại!");
-}
+// function hasLayerStyle(layer) {
+//     var ref = new ActionReference();
+//     ref.putProperty(stringIDToTypeID("property"), stringIDToTypeID("layerEffects"));
+//     ref.putIdentifier(stringIDToTypeID("layer"), layer.id);
+
+//     try {
+//         var desc = executeActionGet(ref);
+//         return desc.hasKey(stringIDToTypeID("layerEffects"));
+//     } catch (e) {
+//         return false;
+//     }
+// }
+// // alert(activeDocument.artLayers[0].id)
+// var layer = activeDocument.artLayers[2];
+
+// if (hasLayerStyle(layer)) {
+//     alert("Layer đã có Blending Options");
+// } else {
+//     alert("Layer chưa có Blending Options");
+// }

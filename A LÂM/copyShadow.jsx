@@ -22,3 +22,4 @@ if (doc.activeLayer.artLayers.length != 0) {
     doc.activeLayer.duplicate(grShadow2, ElementPlacement.PLACEATEND)
 }else{ 
 }
+blendingOptions

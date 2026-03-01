@@ -1,15 +1,13 @@
 (function main() {
-    try {
-        if (!selectLayer("Not delete")) {
-            var newLayer = doc.artLayers.add();
-            newLayer.name = "Not delete";
+    if (!selectLayer("Not delete")) {
+        var newLayer = doc.artLayers.add();
+        newLayer.name = "Not delete";
+        try {
             newLayer.move(doc.artLayers["MERGE 1"], ElementPlacement.PLACEBEFORE);
-        }
-    } catch (error) {
-        if (!selectLayer("Not delete")) {
-            var newLayer = doc.artLayers.add();
-            newLayer.name = "Not delete";
-            newLayer.move(doc.artLayers["MERGE 1"], ElementPlacement.PLACEBEFORE);
+        } catch (error) {
+            newLayer.move(doc.artLayers["Background"], ElementPlacement.PLACEBEFORE);
+        } finally {
+            doc.activeLayer.allLocked = true;
         }
     }
     if (activeDocument.quickMaskMode == true) { activeDocument.quickMaskMode = false; }
